@@ -99,6 +99,68 @@
     textarea{ min-height:86px; resize:vertical; }
     .two { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
     a { color: var(--accent); }
+
+
+
+/* motion */
+* { -webkit-tap-highlight-color: transparent; }
+
+.card, .btn, .btn2, .pill {
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, opacity .18s ease;
+}
+
+.card:active { transform: scale(.99); }
+.btn:active, .btn2:active { transform: scale(.98); }
+
+@media (hover:hover){
+  .card:hover { transform: translateY(-2px); box-shadow: 0 18px 50px rgba(20,20,23,.10); }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 14px 32px rgba(20,20,23,.22); }
+}
+
+/* cart pill bump */
+@keyframes bump {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+.bump { animation: bump .28s ease; }
+
+/* soft screen transitions */
+.view {
+  transition: opacity .18s ease, transform .18s ease;
+}
+.view.hidden {
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  position: absolute;
+  left: -9999px; /* чтобы не занимало место */
+}
+
+/* toast */
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 86px;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(20,20,23,.92);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity .18s ease, transform .18s ease;
+  box-shadow: 0 12px 30px rgba(0,0,0,.18);
+  z-index: 9999;
+}
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
+    
   </style>
 </head>
 
@@ -114,11 +176,11 @@
 </header>
 
 <main>
-  <div id="viewCatalog">
+  <div id="viewCatalog" class="view">
     <div class="grid" id="catalog"></div>
   </div>
 
-  <div id="viewCart" style="display:none;">
+  <div id="viewCart" class="view hidden">
     <div class="card">
       <h3>Корзина</h3>
       <div class="muted" id="cartList"></div>
@@ -152,7 +214,7 @@
 <div class="bar">
   <button class="btn" id="mainBtn" onclick="goCart()">Открыть корзину</button>
 </div>
-
+<div id="toast">Добавлено в корзину</div>
 <script>
   // 1) Фейковые товары (потом заменим на реальные)
 const PRODUCTS = [
@@ -167,11 +229,30 @@ const PRODUCTS = [
   function getCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || "{}"); }
   function setCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); updateUI(); }
 
-  function addToCart(id){
-    const c = getCart();
-    c[id] = (c[id] || 0) + 1;
-    setCart(c);
-  }
+  function showToast(text="Добавлено в корзину"){
+  const t = document.getElementById("toast");
+  t.textContent = text;
+  t.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>t.classList.remove("show"), 1200);
+}
+
+function bumpCart(){
+  const pill = document.getElementById("cartPill");
+  pill.classList.remove("bump"); // перезапуск анимации
+  void pill.offsetWidth;
+  pill.classList.add("bump");
+}
+
+function addToCart(id){
+  const c = getCart();
+  c[id] = (c[id] || 0) + 1;
+  setCart(c);
+
+  bumpCart();
+  const p = PRODUCTS.find(x=>x.id===id);
+  showToast(p ? `В корзине: ${p.name}` : "Добавлено в корзину");
+}
   function removeFromCart(id){
     const c = getCart();
     if (!c[id]) return;
@@ -230,19 +311,30 @@ const PRODUCTS = [
       document.getElementById("cartList").innerHTML = list;
       document.getElementById("cartTotal").textContent = lines.length ? `Итого: ${total}₽` : "";
     }
+    if (window.__lastCartCount !== cartCount()){
+  window.__lastCartCount = cartCount();
+  bumpCart();
+}
   }
 
   // 4) Навигация
-  function goCart(){
-    document.getElementById("viewCatalog").style.display="none";
-    document.getElementById("viewCart").style.display="block";
-    updateUI();
-  }
-  function goCatalog(){
-    document.getElementById("viewCatalog").style.display="block";
-    document.getElementById("viewCart").style.display="none";
-    updateUI();
-  }
+function goCart(){
+  const cat = document.getElementById("viewCatalog");
+  const cart = document.getElementById("viewCart");
+
+  cat.classList.add("hidden");
+  cart.classList.remove("hidden");
+  updateUI();
+}
+
+function goCatalog(){
+  const cat = document.getElementById("viewCatalog");
+  const cart = document.getElementById("viewCart");
+
+  cart.classList.add("hidden");
+  cat.classList.remove("hidden");
+  updateUI();
+}
 
   // 5) Отправка заказа владельцу без сервера:
   // Откроем чат @USERNAME и подставим текст сообщения (deep link).
@@ -286,4 +378,5 @@ const PRODUCTS = [
 </script>
 </body>
 </html>
+
 
