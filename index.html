@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dancewear Demo</title>
+  <style>
+    :root { --bg:#0b0b0c; --card:#141417; --text:#f2f2f3; --muted:#a7a7ad; --accent:#7c5cff; }
+    body { margin:0; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text); }
+    header { padding:16px 16px 8px; position:sticky; top:0; background:linear-gradient(#0b0b0c, rgba(11,11,12,.7)); backdrop-filter: blur(6px); }
+    .row { display:flex; gap:10px; align-items:center; }
+    .title { font-size:18px; font-weight:700; }
+    .pill { margin-left:auto; background:var(--card); padding:8px 10px; border-radius:999px; font-size:13px; color:var(--muted); }
+    main { padding:12px 16px 90px; }
+    .grid { display:grid; grid-template-columns: 1fr; gap:10px; }
+    .card { background:var(--card); border-radius:16px; padding:12px; }
+    .card h3 { margin:0 0 6px; font-size:16px; }
+    .muted { color:var(--muted); font-size:13px; }
+    .price { font-size:16px; font-weight:700; margin-top:10px; }
+    button { width:100%; margin-top:10px; border:0; border-radius:12px; padding:12px; font-weight:700; cursor:pointer; }
+    .btn { background:var(--accent); color:white; }
+    .btn2 { background:#232329; color:var(--text); }
+    .bar { position:fixed; left:0; right:0; bottom:0; padding:12px 16px; background:rgba(11,11,12,.85); backdrop-filter: blur(10px); border-top:1px solid rgba(255,255,255,.06); }
+    input, textarea { width:100%; box-sizing:border-box; border-radius:12px; border:1px solid rgba(255,255,255,.10); padding:12px; background:#0f0f12; color:var(--text); }
+    textarea { min-height:80px; resize:vertical; }
+    .two { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    a { color: var(--accent); }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="row">
+    <div class="title">Dancewear • Demo</div>
+    <div class="pill" id="cartPill">Корзина: 0</div>
+  </div>
+  <div class="muted" style="margin-top:6px;">Минималистичный магазин внутри Telegram (демо без оплаты)</div>
+</header>
+
+<main>
+  <div id="viewCatalog">
+    <div class="grid" id="catalog"></div>
+  </div>
+
+  <div id="viewCart" style="display:none;">
+    <div class="card">
+      <h3>Корзина</h3>
+      <div class="muted" id="cartList"></div>
+      <div class="price" id="cartTotal"></div>
+      <button class="btn2" onclick="goCatalog()">← Назад к каталогу</button>
+    </div>
+
+    <div class="card" style="margin-top:10px;">
+      <h3>Оформление (демо)</h3>
+      <div class="two">
+        <div>
+          <div class="muted" style="margin:6px 0;">Имя</div>
+          <input id="name" placeholder="Например: Маша" />
+        </div>
+        <div>
+          <div class="muted" style="margin:6px 0;">Телефон</div>
+          <input id="phone" placeholder="+7 ..." />
+        </div>
+      </div>
+      <div class="muted" style="margin:10px 0 6px;">Комментарий (размер/цвет/доставка)</div>
+      <textarea id="comment" placeholder="Например: размер M, доставка СДЭК"></textarea>
+
+      <button class="btn" onclick="sendOrder()">Отправить заказ в Telegram</button>
+      <div class="muted" style="margin-top:10px;">
+        * В демо оплата не подключена. После “ОК” заказ улетит сообщением владельцу.
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="bar">
+  <button class="btn" id="mainBtn" onclick="goCart()">Открыть корзину</button>
+</div>
+
+<script>
+  // 1) Фейковые товары (потом заменим на реальные)
+  const PRODUCTS = [
+    { id:"set1", name:"Комплект 'Neon Flow'", desc:"Топ + легинсы • 3 цвета", price: 3490 },
+    { id:"leo1", name:"Купальник 'Stage'", desc:"Сетчатая вставка • XS–L", price: 2590 },
+    { id:"top1", name:"Топ 'Pulse'", desc:"Поддержка • чашки", price: 1490 },
+    { id:"leg1", name:"Легинсы 'High Rise'", desc:"Высокая посадка • плотные", price: 1990 }
+  ];
+
+  // 2) Корзина в localStorage
+  const CART_KEY = "demo_cart_v1";
+  function getCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || "{}"); }
+  function setCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); updateUI(); }
+
+  function addToCart(id){
+    const c = getCart();
+    c[id] = (c[id] || 0) + 1;
+    setCart(c);
+  }
+  function removeFromCart(id){
+    const c = getCart();
+    if (!c[id]) return;
+    c[id] -= 1;
+    if (c[id] <= 0) delete c[id];
+    setCart(c);
+  }
+
+  function cartCount(){
+    const c = getCart();
+    return Object.values(c).reduce((a,b)=>a+b,0);
+  }
+
+  function cartSummary(){
+    const c = getCart();
+    let lines = [];
+    let total = 0;
+    for (const [id, qty] of Object.entries(c)){
+      const p = PRODUCTS.find(x=>x.id===id);
+      if (!p) continue;
+      total += p.price * qty;
+      lines.push(`${p.name} × ${qty} = ${p.price*qty}₽`);
+    }
+    return { lines, total };
+  }
+
+  // 3) Рендер
+  function renderCatalog(){
+    const el = document.getElementById("catalog");
+    el.innerHTML = "";
+    PRODUCTS.forEach(p=>{
+      const card = document.createElement("div");
+      card.className="card";
+      card.innerHTML = `
+        <h3>${p.name}</h3>
+        <div class="muted">${p.desc}</div>
+        <div class="price">${p.price}₽</div>
+        <button class="btn" onclick="addToCart('${p.id}')">Добавить в корзину</button>
+      `;
+      el.appendChild(card);
+    });
+  }
+
+  function updateUI(){
+    document.getElementById("cartPill").textContent = `Корзина: ${cartCount()}`;
+    const inCartView = document.getElementById("viewCart").style.display !== "none";
+    document.getElementById("mainBtn").textContent = inCartView ? "Отправить заказ (демо)" : "Открыть корзину";
+
+    if (inCartView){
+      const { lines, total } = cartSummary();
+      const list = lines.length ? lines.map((x,i)=>`
+        <div style="display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.06);">
+          <div>${x}</div>
+        </div>
+      `).join("") : `<div class="muted">Корзина пустая.</div>`;
+      document.getElementById("cartList").innerHTML = list;
+      document.getElementById("cartTotal").textContent = lines.length ? `Итого: ${total}₽` : "";
+    }
+  }
+
+  // 4) Навигация
+  function goCart(){
+    document.getElementById("viewCatalog").style.display="none";
+    document.getElementById("viewCart").style.display="block";
+    updateUI();
+  }
+  function goCatalog(){
+    document.getElementById("viewCatalog").style.display="block";
+    document.getElementById("viewCart").style.display="none";
+    updateUI();
+  }
+
+  // 5) Отправка заказа владельцу без сервера:
+  // Откроем чат @USERNAME и подставим текст сообщения (deep link).
+  // Работает через t.me/<username>?text=... (через Telegram).
+  // Документация по deep links есть у Telegram. :contentReference[oaicite:1]{index=1}
+  const OWNER_USERNAME = "egorkram"; // <-- заменишь на её @username (без @)
+
+  function sendOrder(){
+    const c = getCart();
+    const { lines, total } = cartSummary();
+    if (!lines.length) { alert("Корзина пустая 😅"); return; }
+
+    const name = document.getElementById("name").value.trim() || "—";
+    const phone = document.getElementById("phone").value.trim() || "—";
+    const comment = document.getElementById("comment").value.trim() || "—";
+
+    const text =
+`🛍️ Заказ (демо)
+Имя: ${name}
+Телефон: ${phone}
+
+Товары:
+- ${lines.join("\n- ")}
+
+Итого: ${total}₽
+Комментарий: ${comment}`;
+
+    const url = `https://t.me/${OWNER_USERNAME}?text=${encodeURIComponent(text)}`;
+
+    // Если открыто внутри Telegram Mini App — используем openTelegramLink, иначе обычный переход.
+    if (window.Telegram?.WebApp?.openTelegramLink) {
+      window.Telegram.WebApp.openTelegramLink(url);
+    } else {
+      window.open(url, "_blank");
+    }
+  }
+
+  // init
+  renderCatalog();
+  updateUI();
+</script>
+</body>
+</html>
