@@ -40,7 +40,56 @@
   color:var(--muted);
 }
     main { padding:12px 16px 90px; }
-    .grid { display:grid; grid-template-columns: 1fr; gap:10px; }
+    .grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:12px;
+}
+
+@media (min-width: 520px){
+  .grid{ grid-template-columns: 1fr 1fr 1fr; }
+}
+.productCard{
+  background: rgba(255,255,255,.9);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  overflow:hidden;
+  box-shadow: 0 14px 40px rgba(20,20,23,.08);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.productCard:active{ transform: scale(.99); }
+
+.pImg{
+  height: 140px;
+  background: linear-gradient(135deg, rgba(20,20,23,.10), rgba(20,20,23,.02));
+  display:flex;
+  align-items:flex-end;
+  padding:12px;
+}
+.pBadge{
+  background: rgba(255,255,255,.75);
+  border: 1px solid var(--line);
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+}
+.pBody{ padding:12px; }
+.pName{ font-weight:900; letter-spacing:.2px; }
+.pDesc{ margin-top:6px; color:var(--muted); font-size:12.5px; line-height:1.35; }
+.pBottom{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; }
+.pPrice{ font-weight:900; }
+.pAdd{
+  width:auto;
+  margin:0;
+  padding:10px 12px;
+  border-radius:14px;
+  background: rgba(20,20,23,.06);
+  color: var(--text);
+  font-weight:900;
+}
+
+    
     .card{
   background: rgba(255,255,255,.85);
   border: 1px solid var(--line);
@@ -176,20 +225,74 @@
 </header>
 
 <main>
+  <!-- CATALOG -->
   <div id="viewCatalog" class="view">
+    <div class="card" style="margin-bottom:12px;">
+      <div class="row" style="gap:8px;">
+        <input id="search" placeholder="Поиск: топ, легинсы, комплект…" oninput="applyFilters()" />
+      </div>
+
+      <div class="row" style="gap:8px; margin-top:10px; flex-wrap:wrap;">
+        <button class="btn2" style="width:auto; padding:10px 12px;" onclick="setCategory('all')">Все</button>
+        <button class="btn2" style="width:auto; padding:10px 12px;" onclick="setCategory('sets')">Комплекты</button>
+        <button class="btn2" style="width:auto; padding:10px 12px;" onclick="setCategory('tops')">Топы</button>
+        <button class="btn2" style="width:auto; padding:10px 12px;" onclick="setCategory('leggings')">Легинсы</button>
+        <button class="btn2" style="width:auto; padding:10px 12px;" onclick="setCategory('leotards')">Купальники</button>
+      </div>
+    </div>
+
     <div class="grid" id="catalog"></div>
   </div>
 
+  <!-- PRODUCT PAGE -->
+  <div id="viewProduct" class="view hidden">
+    <div class="card">
+      <button class="btn2" onclick="go('catalog')" style="margin-top:0;">← Назад</button>
+
+      <div class="pImg" id="pImg" style="height:220px; border-radius:18px; margin-top:12px;">
+        <div class="pBadge" id="pBadge">Studio</div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <div style="font-size:20px; font-weight:950; letter-spacing:.2px;" id="pName">—</div>
+        <div class="muted" style="margin-top:6px;" id="pDesc">—</div>
+
+        <div class="row" style="margin-top:14px; gap:10px;">
+          <div class="pill" id="pPrice">—</div>
+          <div class="pill" id="pMeta">XS–L • 2 цвета</div>
+        </div>
+
+        <button class="btn" onclick="addToCart(window.__currentProductId)" style="margin-top:14px;">
+          Добавить в корзину
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CART -->
   <div id="viewCart" class="view hidden">
     <div class="card">
-      <h3>Корзина</h3>
-      <div class="muted" id="cartList"></div>
-      <div class="price" id="cartTotal"></div>
-      <button class="btn2" onclick="goCatalog()">← Назад к каталогу</button>
-    </div>
+      <div class="row">
+        <div style="font-size:18px; font-weight:900;">Корзина</div>
+        <div class="pill" id="cartTotal" style="margin-left:auto;"></div>
+      </div>
 
-    <div class="card" style="margin-top:10px;">
-      <h3>Оформление (демо)</h3>
+      <div id="cartList" style="margin-top:10px;"></div>
+
+      <button class="btn" onclick="go('checkout')" style="margin-top:12px;">
+        Перейти к оформлению
+      </button>
+      <button class="btn2" onclick="go('catalog')">← Назад в каталог</button>
+    </div>
+  </div>
+
+  <!-- CHECKOUT -->
+  <div id="viewCheckout" class="view hidden">
+    <div class="card">
+      <button class="btn2" onclick="go('cart')" style="margin-top:0;">← Назад</button>
+
+      <h3 style="margin:12px 0 6px;">Оформление (демо)</h3>
+
       <div class="two">
         <div>
           <div class="muted" style="margin:6px 0;">Имя</div>
@@ -200,28 +303,30 @@
           <input id="phone" placeholder="+7 ..." />
         </div>
       </div>
+
       <div class="muted" style="margin:10px 0 6px;">Комментарий (размер/цвет/доставка)</div>
       <textarea id="comment" placeholder="Например: размер M, доставка СДЭК"></textarea>
 
       <button class="btn" onclick="sendOrder()">Отправить заказ в Telegram</button>
       <div class="muted" style="margin-top:10px;">
-        * В демо оплата не подключена. После “ОК” заказ улетит сообщением владельцу.
+        * Пока демо: без оплаты. Дальше подключим эквайринг/СБП.
       </div>
     </div>
   </div>
 </main>
 
+
 <div class="bar">
-  <button class="btn" id="mainBtn" onclick="goCart()">Открыть корзину</button>
+  <button class="btn" id="mainBtn" onclick="go('cart')">Корзина</button>
 </div>
 <div id="toast">Добавлено в корзину</div>
 <script>
   // 1) Фейковые товары (потом заменим на реальные)
 const PRODUCTS = [
-  { id:"set1", name:"Silk Line Set", desc:"Комплект • тренировки / студия", price: 3490 },
-  { id:"leo1", name:"Contour Leotard", desc:"Купальник • посадка по фигуре", price: 2590 },
-  { id:"top1", name:"Studio Top", desc:"Топ • мягкая поддержка", price: 1490 },
-  { id:"leg1", name:"High Waist Leggings", desc:"Легинсы • высокая посадка", price: 1990 }
+  { id:"set1", cat:"sets", badge:"Studio", name:"Silk Line Set", desc:"Комплект • тренировки / студия", price:3490, meta:"XS–L • 2 цвета" },
+  { id:"leo1", cat:"leotards", badge:"Elegant", name:"Contour Leotard", desc:"Купальник • посадка по фигуре", price:2590, meta:"XS–L • black" },
+  { id:"top1", cat:"tops", badge:"Soft", name:"Studio Top", desc:"Топ • мягкая поддержка", price:1490, meta:"XS–M • 3 цвета" },
+  { id:"leg1", cat:"leggings", badge:"Core", name:"High Waist Leggings", desc:"Легинсы • высокая посадка", price:1990, meta:"XS–L • black" },
 ];
 
   // 2) Корзина в localStorage
@@ -280,42 +385,125 @@ function addToCart(id){
   }
 
   // 3) Рендер
-  function renderCatalog(){
-    const el = document.getElementById("catalog");
-    el.innerHTML = "";
-    PRODUCTS.forEach(p=>{
-      const card = document.createElement("div");
-      card.className="card";
-      card.innerHTML = `
-        <h3>${p.name}</h3>
-        <div class="muted">${p.desc}</div>
-        <div class="price">${p.price}₽</div>
-        <button class="btn" onclick="addToCart('${p.id}')">Добавить в корзину</button>
-      `;
-      el.appendChild(card);
-    });
-  }
+ let currentCategory = "all";
+
+function setCategory(cat){
+  currentCategory = cat;
+  applyFilters();
+}
+
+function applyFilters(){
+  const q = (document.getElementById("search")?.value || "").trim().toLowerCase();
+  const filtered = PRODUCTS.filter(p=>{
+    const matchCat = currentCategory === "all" || p.cat === currentCategory;
+    const matchQ = !q || (p.name + " " + p.desc).toLowerCase().includes(q);
+    return matchCat && matchQ;
+  });
+  renderCatalog(filtered);
+}
+
+function renderCatalog(list = PRODUCTS){
+  const el = document.getElementById("catalog");
+  el.innerHTML = "";
+
+  list.forEach(p=>{
+    const card = document.createElement("div");
+    card.className = "productCard";
+    card.innerHTML = `
+      <div class="pImg" onclick="openProduct('${p.id}')">
+        <div class="pBadge">${p.badge}</div>
+      </div>
+      <div class="pBody">
+        <div class="pName">${p.name}</div>
+        <div class="pDesc">${p.desc}</div>
+        <div class="pBottom">
+          <div class="pPrice">${p.price}₽</div>
+          <button class="pAdd" onclick="event.stopPropagation(); addToCart('${p.id}')">+ В корзину</button>
+        </div>
+      </div>
+    `;
+    el.appendChild(card);
+  });
+}
+
+  function showView(name){
+  const map = {
+    catalog: "viewCatalog",
+    product: "viewProduct",
+    cart: "viewCart",
+    checkout: "viewCheckout",
+  };
+
+  Object.values(map).forEach(id=>{
+    document.getElementById(id).classList.add("hidden");
+  });
+  document.getElementById(map[name]).classList.remove("hidden");
+  updateUI();
+}
+
+function go(name){
+  location.hash = name === "catalog" ? "#/" : `#/${name}`;
+}
+
+function openProduct(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  window.__currentProductId = id;
+
+  document.getElementById("pBadge").textContent = p.badge;
+  document.getElementById("pName").textContent = p.name;
+  document.getElementById("pDesc").textContent = p.desc;
+  document.getElementById("pPrice").textContent = `${p.price}₽`;
+  document.getElementById("pMeta").textContent = p.meta;
+
+  go("product");
+}
+
+function handleRoute(){
+  const h = (location.hash || "#/").replace("#/","");
+  const page = h || "catalog";
+  if(page === "product") showView("product");
+  else if(page === "cart") showView("cart");
+  else if(page === "checkout") showView("checkout");
+  else showView("catalog");
+}
+window.addEventListener("hashchange", handleRoute);
+
 
   function updateUI(){
-    document.getElementById("cartPill").textContent = `Корзина: ${cartCount()}`;
-    const inCartView = document.getElementById("viewCart").style.display !== "none";
-    document.getElementById("mainBtn").textContent = inCartView ? "Отправить заказ (демо)" : "Открыть корзину";
+  document.getElementById("cartPill").textContent = `Корзина: ${cartCount()}`;
 
-    if (inCartView){
-      const { lines, total } = cartSummary();
-      const list = lines.length ? lines.map((x,i)=>`
-        <div style="display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.06);">
-          <div>${x}</div>
-        </div>
-      `).join("") : `<div class="muted">Корзина пустая.</div>`;
-      document.getElementById("cartList").innerHTML = list;
-      document.getElementById("cartTotal").textContent = lines.length ? `Итого: ${total}₽` : "";
+  // Cart list
+  const cartList = document.getElementById("cartList");
+  if(cartList){
+    const { lines, total } = cartSummary();
+    document.getElementById("cartTotal").textContent = lines.length ? `Итого: ${total}₽` : "";
+
+    const c = getCart();
+    if(!Object.keys(c).length){
+      cartList.innerHTML = `<div class="muted">Корзина пустая.</div>`;
+    } else {
+      cartList.innerHTML = Object.entries(c).map(([id, qty])=>{
+        const p = PRODUCTS.find(x=>x.id===id);
+        if(!p) return "";
+        return `
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 0; border-bottom:1px solid var(--line);">
+            <div style="min-width:0;">
+              <div style="font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.name}</div>
+              <div class="muted">${p.price}₽</div>
+            </div>
+            <div class="row" style="gap:8px; flex:0 0 auto;">
+              <button class="btn2" style="width:auto; padding:10px 12px;" onclick="removeFromCart('${id}')">−</button>
+              <div class="pill">${qty}</div>
+              <button class="btn2" style="width:auto; padding:10px 12px;" onclick="addToCart('${id}')">+</button>
+            </div>
+          </div>
+        `;
+      }).join("");
     }
-    if (window.__lastCartCount !== cartCount()){
-  window.__lastCartCount = cartCount();
-  bumpCart();
-}
   }
+}
+
 
   // 4) Навигация
 function goCart(){
@@ -372,11 +560,14 @@ function goCatalog(){
     }
   }
 
-  // init
-  renderCatalog();
-  updateUI();
+renderCatalog(PRODUCTS);
+applyFilters();
+handleRoute();
+updateUI();
+
 </script>
 </body>
 </html>
+
 
 
