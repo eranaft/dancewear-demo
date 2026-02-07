@@ -46,7 +46,7 @@
     .head{
       padding: 14px 0 10px;
       display:flex;
-      gap:10px;
+      gap:12px;
       align-items:flex-start;
       justify-content:space-between;
     }
@@ -67,32 +67,58 @@
       font-size: 13px;
       line-height: 1.35;
     }
-    .pill{
+
+    .topActions{
+      display:flex;
+      gap:10px;
+      align-items:center;
       flex: 0 0 auto;
-      background: rgba(20,20,23,.06);
-      border: 1px solid rgba(20,20,23,.08);
-      padding: 8px 10px;
+    }
+
+    .iconBtn{
+      position:relative;
+      width: 40px;
+      height: 40px;
       border-radius: 999px;
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--text);
+      border: 1px solid rgba(20,20,23,.10);
+      background: rgba(255,255,255,.75);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 30px rgba(20,20,23,.10);
+      cursor:pointer;
       display:flex;
       align-items:center;
-      gap:8px;
+      justify-content:center;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
       user-select:none;
-      transition: transform .18s ease;
-      white-space: nowrap;
     }
-    .pill small{
-      font-weight: 900;
-      color: rgba(20,20,23,.55);
+    .iconBtn:active{ transform: scale(.96); }
+    @media (hover:hover){
+      .iconBtn:hover{ transform: translateY(-1px); box-shadow: 0 18px 44px rgba(20,20,23,.12); }
     }
+
+    .badge{
+      position:absolute;
+      top:-6px;
+      right:-6px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: rgba(20,20,23,.92);
+      color:#fff;
+      font-size: 11px;
+      font-weight: 950;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 10px 22px rgba(20,20,23,.18);
+      border: 2px solid rgba(246,245,243,.95);
+    }
+
     .bump{ animation: bump .28s ease; }
     @keyframes bump{ 0%{transform:scale(1)} 35%{transform:scale(1.11)} 100%{transform:scale(1)} }
 
-    main{
-      padding: 14px 0 96px;
-    }
+    main{ padding: 14px 0 96px; }
 
     /* toolbar */
     .toolbar{
@@ -131,9 +157,9 @@
       border: 1px solid var(--line);
       background: rgba(20,20,23,.04);
       color: var(--text);
-      padding: 10px 12px;
+      padding: 9px 12px;
       border-radius: 999px;
-      font-weight: 900;
+      font-weight: 950;
       cursor:pointer;
       transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
       user-select:none;
@@ -150,13 +176,14 @@
     .grid{
       margin-top: 12px;
       display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       gap: 12px;
       align-items: stretch;
     }
 
     /* product cards */
     .productCard{
+      position: relative;
       background: rgba(255,255,255,.88);
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -166,6 +193,7 @@
       display:flex;
       flex-direction:column;
       min-width: 0;
+      will-change: transform;
     }
     @media (hover:hover){
       .productCard:hover{
@@ -185,7 +213,9 @@
       display:flex;
       align-items:flex-end;
       padding: 12px;
+      cursor:pointer;
     }
+
     .pBadge{
       background: rgba(255,255,255,.78);
       border: 1px solid var(--line);
@@ -195,7 +225,9 @@
       font-weight: 950;
       letter-spacing:.2px;
       backdrop-filter: blur(10px);
+      user-select:none;
     }
+
     .pBody{
       padding: 12px;
       display:flex;
@@ -211,6 +243,7 @@
       line-height: 1.2;
       overflow:hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .pDesc{
       color: var(--muted);
@@ -233,11 +266,11 @@
 
     .btnSmall{
       width:auto;
-      border: 1px solid var(--line);
+      border: 1px solid rgba(20,20,23,.10);
       background: rgba(20,20,23,.06);
       color: var(--text);
-      border-radius: 16px;
-      padding: 10px 12px;
+      border-radius: 14px;
+      padding: 9px 10px;
       font-weight: 950;
       cursor:pointer;
       transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
@@ -246,10 +279,35 @@
     }
     .btnSmall:active{ transform: scale(.98); }
 
-    /* pages */
-    .view{
-      transition: opacity .18s ease, transform .18s ease;
+    /* wishlist heart */
+    .wishBtn{
+      position:absolute;
+      top:10px;
+      right:10px;
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      border: 1px solid rgba(20,20,23,.10);
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 26px rgba(20,20,23,.10);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition: transform .18s ease, background .18s ease;
+      user-select:none;
     }
+    .wishBtn:active{ transform: scale(.95); }
+    .wishBtn svg{ opacity:.85; }
+    .wishBtn.on{
+      background: rgba(20,20,23,.92);
+      border-color: rgba(20,20,23,.92);
+    }
+    .wishBtn.on svg{ opacity:1; }
+
+    /* pages */
+    .view{ transition: opacity .18s ease, transform .18s ease; }
     .hidden{
       opacity: 0;
       transform: translateY(8px);
@@ -317,6 +375,9 @@
     .barInner{
       max-width: 980px;
       margin: 0 auto;
+      display:flex;
+      gap: 10px;
+      align-items:center;
     }
     .barHint{
       text-align:center;
@@ -335,7 +396,7 @@
       color: #fff;
       padding: 10px 14px;
       border-radius: 999px;
-      font-weight: 900;
+      font-weight: 950;
       font-size: 13px;
       opacity: 0;
       transition: opacity .18s ease, transform .18s ease;
@@ -356,9 +417,7 @@
       from{ opacity:0; transform: translateY(10px); }
       to{ opacity:1; transform: translateY(0); }
     }
-    .appear{
-      animation: fadeUp .28s ease both;
-    }
+    .appear{ animation: fadeUp .28s ease both; }
 
     /* flying dot */
     .flyDot{
@@ -371,6 +430,72 @@
       pointer-events: none;
       box-shadow: 0 8px 18px rgba(20,20,23,.20);
     }
+
+    /* tiny modal */
+    .modalWrap{
+      position: fixed;
+      inset: 0;
+      background: rgba(20,20,23,.22);
+      backdrop-filter: blur(6px);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      z-index: 20000;
+      padding: 14px;
+    }
+    .modalWrap.show{ display:flex; }
+    .sheet{
+      width: min(520px, 100%);
+      background: rgba(255,255,255,.92);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 22px 80px rgba(20,20,23,.18);
+      padding: 14px;
+      transform: translateY(14px);
+      opacity: 0;
+      animation: sheetIn .18s ease forwards;
+    }
+    @keyframes sheetIn{
+      to{ transform: translateY(0); opacity:1; }
+    }
+    .sheetTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 10px;
+    }
+    .profile{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      min-width: 0;
+    }
+    .avatar{
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(20,20,23,.10), rgba(20,20,23,.02));
+      border: 1px solid var(--line);
+      flex: 0 0 auto;
+    }
+    .pName2{
+      font-weight: 950;
+      line-height: 1.2;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .pUser2{
+      color: var(--muted);
+      font-size: 12.5px;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* svg icons */
+    .icon{ width: 20px; height: 20px; }
   </style>
 </head>
 
@@ -382,14 +507,40 @@
         <div class="title">Studio Wear</div>
         <div class="subtitle">Elegant dancewear • витрина в Telegram (демо)</div>
       </div>
-      <div class="pill" id="cartPill" role="button" onclick="go('cart')">
-        <small>Корзина</small> <span id="cartCount">0</span>
+
+      <div class="topActions">
+        <!-- account -->
+        <button class="iconBtn" id="accountBtn" onclick="openAccount()" aria-label="Аккаунт">
+          <!-- user icon -->
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21a8 8 0 0 0-16 0"></path>
+            <circle cx="12" cy="8" r="4"></circle>
+          </svg>
+        </button>
+
+        <!-- wishlist -->
+        <button class="iconBtn" id="wishTopBtn" onclick="toggleWishlistView()" aria-label="Избранное">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 21s-7-4.6-9.5-8.5C.6 9.3 2.4 6 6 6c2 0 3.2 1 4 2 0.8-1 2-2 4-2 3.6 0 5.4 3.3 3.5 6.5C19 16.4 12 21 12 21z"></path>
+          </svg>
+        </button>
+
+        <!-- cart -->
+        <button class="iconBtn" id="cartBtn" onclick="go('cart')" aria-label="Корзина">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 6h15l-2 9H8L6 6z"></path>
+            <path d="M6 6 5 3H2"></path>
+            <circle cx="9" cy="20" r="1.6"></circle>
+            <circle cx="18" cy="20" r="1.6"></circle>
+          </svg>
+          <div class="badge" id="cartBadge" style="display:none;">0</div>
+        </button>
       </div>
     </div>
   </div>
 </header>
 
-<div id="toast">Добавлено в корзину</div>
+<div id="toast">Добавлено</div>
 
 <main class="container">
   <!-- CATALOG -->
@@ -404,6 +555,10 @@
         <button class="chip" id="chip_tops" onclick="setCategory('tops')">Топы</button>
         <button class="chip" id="chip_leggings" onclick="setCategory('leggings')">Легинсы</button>
         <button class="chip" id="chip_leotards" onclick="setCategory('leotards')">Купальники</button>
+      </div>
+
+      <div class="subtitle" id="catalogHint" style="margin-top:10px;">
+        Подбор размеров • доставка • оплата будет подключена на следующем шаге
       </div>
     </div>
 
@@ -424,8 +579,17 @@
         <div class="subtitle" style="margin-top:6px;" id="pDesc">—</div>
 
         <div class="row" style="margin-top:14px;">
-          <div class="pill" id="pPrice" style="margin-left:0;">—</div>
-          <div class="pill" id="pMeta" style="margin-left:0;">—</div>
+          <div class="chip active" style="cursor:default;" id="pPrice">—</div>
+          <div class="chip" style="cursor:default;" id="pMeta">—</div>
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+          <button class="btnSmall" id="pWishBtn" onclick="toggleWish(window.__currentProductId)">
+            ♡ В избранное
+          </button>
+          <button class="btnSmall" onclick="showToast('Подбор размера: напишите в комментарии')">
+            Размеры
+          </button>
         </div>
 
         <button class="btn" onclick="addToCart(window.__currentProductId, true)" style="margin-top:14px;">
@@ -440,7 +604,7 @@
     <div class="card">
       <div class="row" style="justify-content:space-between;">
         <div style="font-size:18px; font-weight:950;">Корзина</div>
-        <div class="pill" id="cartTotal">Итого: 0₽</div>
+        <div class="chip active" id="cartTotal" style="cursor:default;">Итого: 0₽</div>
       </div>
 
       <div id="cartList" style="margin-top:10px;"></div>
@@ -449,7 +613,7 @@
         Перейти к оформлению
       </button>
       <button class="btn2" onclick="go('catalog')" style="margin-top:10px;">
-        ← Назад в каталог
+        ← Продолжить покупки
       </button>
     </div>
   </div>
@@ -478,7 +642,7 @@
       <button class="btn" onclick="sendOrder()">Отправить заказ в Telegram</button>
 
       <div class="subtitle" style="margin-top:10px;">
-        * Пока демо: без оплаты. Дальше подключим СБП/карты и подтверждение оплаты.
+        * Демо. Реальная оплата и подтверждение подключаются на следующем шаге (СБП/карты).
       </div>
     </div>
   </div>
@@ -486,8 +650,39 @@
 
 <div class="bar">
   <div class="barInner">
-    <button class="btn" onclick="go('cart')">Корзина</button>
-    <div class="barHint">Без сайта и регистрации • прямо в Telegram</div>
+    <button class="btn" onclick="go('cart')">Открыть корзину</button>
+  </div>
+  <div class="barHint">Без сайта и регистрации • прямо в Telegram</div>
+</div>
+
+<!-- account modal -->
+<div class="modalWrap" id="accountModal" onclick="closeAccount(event)">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheetTop">
+      <div class="profile">
+        <div class="avatar" id="avatar"></div>
+        <div style="min-width:0;">
+          <div class="pName2" id="accName">Гость</div>
+          <div class="pUser2" id="accUser">Откройте внутри Telegram</div>
+        </div>
+      </div>
+      <button class="iconBtn" style="width:38px;height:38px;box-shadow:none;" onclick="closeAccount()">
+        ✕
+      </button>
+    </div>
+
+    <div class="subtitle">
+      Авторизация в демо берётся из Telegram профиля (если магазин открыт внутри Telegram).
+      Для “настоящей” авторизации мы потом добавим серверную проверку подписи.
+    </div>
+
+    <button class="btn2" style="margin-top:12px;" onclick="tryFillCheckoutFromProfile()">
+      Заполнить оформление данными профиля
+    </button>
+
+    <button class="btn2" style="margin-top:10px;" onclick="clearLocal()">
+      Очистить демо-данные (корзина/избранное)
+    </button>
   </div>
 </div>
 
@@ -501,57 +696,74 @@
   // ДАННЫЕ (демо)
   // =============================
   const PRODUCTS = [
-    { id:"set1", cat:"sets", badge:"Studio", name:"Silk Line Set", desc:"Комплект • мягкая посадка", price:3490, meta:"XS–L • ivory/black" },
-    { id:"set2", cat:"sets", badge:"Elegant", name:"Contour Set", desc:"Комплект • подчёркивает линию", price:3790, meta:"XS–L • black" },
-    { id:"set3", cat:"sets", badge:"Core", name:"Minimal Set", desc:"Комплект • базовый студийный", price:3290, meta:"XS–L • sand" },
+    { id:"set1", cat:"sets", badge:"Studio",  name:"Silk Line Set",        desc:"Комплект • мягкая посадка",             price:3490, meta:"XS–L • ivory/black" },
+    { id:"set2", cat:"sets", badge:"Elegant", name:"Contour Set",          desc:"Комплект • подчёркивает линию",         price:3790, meta:"XS–L • black" },
+    { id:"set3", cat:"sets", badge:"Core",    name:"Minimal Set",          desc:"Комплект • базовый студийный",          price:3290, meta:"XS–L • sand" },
 
-    { id:"leo1", cat:"leotards", badge:"Elegant", name:"Contour Leotard", desc:"Купальник • посадка по фигуре", price:2590, meta:"XS–L • black" },
-    { id:"leo2", cat:"leotards", badge:"Studio", name:"Line Leotard", desc:"Купальник • комфортная ткань", price:2390, meta:"XS–L • ivory" },
+    { id:"leo1", cat:"leotards", badge:"Elegant", name:"Contour Leotard",  desc:"Купальник • посадка по фигуре",         price:2590, meta:"XS–L • black" },
+    { id:"leo2", cat:"leotards", badge:"Studio",  name:"Line Leotard",     desc:"Купальник • комфортная ткань",          price:2390, meta:"XS–L • ivory" },
+    { id:"leo3", cat:"leotards", badge:"Soft",    name:"Air Leotard",      desc:"Купальник • мягкая поддержка",          price:2290, meta:"XS–M • sand" },
 
-    { id:"top1", cat:"tops", badge:"Soft", name:"Studio Top", desc:"Топ • мягкая поддержка", price:1490, meta:"XS–M • 3 цвета" },
-    { id:"top2", cat:"tops", badge:"Core", name:"Classic Top", desc:"Топ • базовый силуэт", price:1390, meta:"XS–L • black" },
+    { id:"top1", cat:"tops", badge:"Soft",    name:"Studio Top",           desc:"Топ • мягкая поддержка",                price:1490, meta:"XS–M • 3 цвета" },
+    { id:"top2", cat:"tops", badge:"Core",    name:"Classic Top",          desc:"Топ • базовый силуэт",                  price:1390, meta:"XS–L • black" },
+    { id:"top3", cat:"tops", badge:"Elegant", name:"Line Top",             desc:"Топ • чистая линия",                    price:1590, meta:"XS–L • ivory" },
 
-    { id:"leg1", cat:"leggings", badge:"Core", name:"High Waist Leggings", desc:"Легинсы • высокая посадка", price:1990, meta:"XS–L • black" },
-    { id:"leg2", cat:"leggings", badge:"Studio", name:"Second Skin Leggings", desc:"Легинсы • как вторая кожа", price:2190, meta:"XS–L • sand" },
-    { id:"leg3", cat:"leggings", badge:"Soft", name:"Smooth Leggings", desc:"Легинсы • мягкая ткань", price:1890, meta:"XS–L • ivory" },
+    { id:"leg1", cat:"leggings", badge:"Core",    name:"High Waist Leggings",  desc:"Легинсы • высокая посадка",       price:1990, meta:"XS–L • black" },
+    { id:"leg2", cat:"leggings", badge:"Studio",  name:"Second Skin Leggings",desc:"Легинсы • как вторая кожа",         price:2190, meta:"XS–L • sand" },
+    { id:"leg3", cat:"leggings", badge:"Soft",    name:"Smooth Leggings",      desc:"Легинсы • мягкая ткань",           price:1890, meta:"XS–L • ivory" },
   ];
 
   // =============================
-  // КОРЗИНА
+  // STORAGE KEYS
   // =============================
-  const CART_KEY = "studio_shop_cart_v2";
+  const CART_KEY = "studio_shop_cart_v3";
+  const WISH_KEY = "studio_shop_wish_v3";
+
   function getCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || "{}"); }
   function setCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); updateUI(); }
 
-  function cartCount(){
-    const c = getCart();
-    return Object.values(c).reduce((a,b)=>a+b,0);
+  function getWish(){ return JSON.parse(localStorage.getItem(WISH_KEY) || "[]"); }
+  function setWish(arr){ localStorage.setItem(WISH_KEY, JSON.stringify(arr)); updateUI(); }
+
+  // =============================
+  // PROFILE (Telegram WebApp)
+  // =============================
+  function getTelegramUser(){
+    try{
+      return window.Telegram?.WebApp?.initDataUnsafe?.user || null;
+    }catch(e){ return null; }
   }
 
-  function cartSummary(){
-    const c = getCart();
-    let total = 0;
-    const items = [];
-    for (const [id, qty] of Object.entries(c)){
-      const p = PRODUCTS.find(x=>x.id===id);
-      if(!p) continue;
-      total += p.price * qty;
-      items.push({ p, qty });
+  function formatName(u){
+    const f = (u?.first_name || "").trim();
+    const l = (u?.last_name || "").trim();
+    return (f + " " + l).trim() || "Покупатель";
+  }
+
+  function fillAccountUI(){
+    const u = getTelegramUser();
+    const accName = document.getElementById("accName");
+    const accUser = document.getElementById("accUser");
+    if(u){
+      accName.textContent = formatName(u);
+      accUser.textContent = u.username ? ("@" + u.username) : ("id: " + u.id);
+    } else {
+      accName.textContent = "Гость";
+      accUser.textContent = "Откройте внутри Telegram";
     }
-    return { items, total };
   }
 
-  function removeFromCart(id){
-    const c = getCart();
-    if (!c[id]) return;
-    c[id] -= 1;
-    if (c[id] <= 0) delete c[id];
-    setCart(c);
-    haptic("impact");
+  function tryFillCheckoutFromProfile(){
+    const u = getTelegramUser();
+    if(!u){ showToast("Откройте магазин внутри Telegram"); return; }
+    const name = document.getElementById("name");
+    if(name) name.value = formatName(u);
+    showToast("Заполнил имя из профиля");
+    haptic("success");
   }
 
   // =============================
-  // UI HELPERS
+  // HELPERS
   // =============================
   function haptic(type){
     try{
@@ -562,7 +774,7 @@
     }catch(e){}
   }
 
-  function showToast(text="Добавлено в корзину"){
+  function showToast(text="Готово"){
     const t = document.getElementById("toast");
     t.textContent = text;
     t.classList.add("show");
@@ -570,19 +782,18 @@
     window.__toastTimer = setTimeout(()=>t.classList.remove("show"), 1200);
   }
 
-  function bumpCart(){
-    const pill = document.getElementById("cartPill");
-    pill.classList.remove("bump");
-    void pill.offsetWidth;
-    pill.classList.add("bump");
+  function bump(el){
+    if(!el) return;
+    el.classList.remove("bump");
+    void el.offsetWidth;
+    el.classList.add("bump");
   }
 
   function flyToCart(fromEl){
     if(!fromEl) return;
-
-    const pill = document.getElementById("cartPill");
+    const cartBtn = document.getElementById("cartBtn");
     const a = fromEl.getBoundingClientRect();
-    const b = pill.getBoundingClientRect();
+    const b = cartBtn.getBoundingClientRect();
 
     const dot = document.createElement("div");
     dot.className = "flyDot";
@@ -603,15 +814,10 @@
 
     function step(t){
       const p = Math.min(1, (t - start)/duration);
-      // easeOutCubic
       const e = 1 - Math.pow(1 - p, 3);
-
-      // лёгкая дуга
       const arc = Math.sin(p * Math.PI) * -60;
-
       dot.style.transform = `translate(${dx*e}px, ${dy*e + arc}px) scale(${1 - 0.4*p})`;
       dot.style.opacity = String(1 - 0.2*p);
-
       if(p < 1) requestAnimationFrame(step);
       else dot.remove();
     }
@@ -619,7 +825,7 @@
   }
 
   // =============================
-  // НАВИГАЦИЯ (страницы)
+  // NAV (pages)
   // =============================
   function showView(name){
     const map = {
@@ -649,9 +855,10 @@
   window.addEventListener("hashchange", handleRoute);
 
   // =============================
-  // КАТАЛОГ / ФИЛЬТРЫ
+  // CATALOG FILTERS + WISHLIST VIEW
   // =============================
   let currentCategory = "all";
+  let wishlistView = false;
 
   function setCategory(cat){
     currentCategory = cat;
@@ -659,33 +866,94 @@
       const el = document.getElementById("chip_"+x);
       if(el) el.classList.toggle("active", x===cat);
     });
+    wishlistView = false;
     applyFilters();
+    haptic("impact");
+  }
+
+  function toggleWishlistView(){
+    wishlistView = !wishlistView;
+    const hint = document.getElementById("catalogHint");
+    hint.textContent = wishlistView ? "Избранное • сохранено на устройстве" : "Подбор размеров • доставка • оплата будет подключена на следующем шаге";
+    applyFilters();
+    showToast(wishlistView ? "Открыто избранное" : "Каталог");
     haptic("impact");
   }
 
   function applyFilters(){
     const q = (document.getElementById("search")?.value || "").trim().toLowerCase();
+    const wish = new Set(getWish());
+
     const filtered = PRODUCTS.filter(p=>{
+      const matchWish = !wishlistView || wish.has(p.id);
       const matchCat = currentCategory === "all" || p.cat === currentCategory;
       const matchQ = !q || (p.name + " " + p.desc + " " + p.badge).toLowerCase().includes(q);
-      return matchCat && matchQ;
+      return matchWish && matchCat && matchQ;
     });
+
     renderCatalog(filtered);
   }
 
+  // =============================
+  // WISHLIST
+  // =============================
+  function isWished(id){
+    return getWish().includes(id);
+  }
+
+  function toggleWish(id){
+    const arr = getWish();
+    const i = arr.indexOf(id);
+    if(i >= 0) arr.splice(i,1);
+    else arr.push(id);
+    setWish(arr);
+    applyFilters();
+
+    const on = arr.includes(id);
+    showToast(on ? "Добавлено в избранное" : "Убрано из избранного");
+    haptic("success");
+
+    // обновим кнопку на product page
+    updateProductWishButton(id);
+  }
+
+  function updateProductWishButton(id){
+    const btn = document.getElementById("pWishBtn");
+    if(!btn) return;
+    const on = isWished(id);
+    btn.textContent = on ? "♥ В избранном" : "♡ В избранное";
+  }
+
+  // =============================
+  // RENDER CATALOG
+  // =============================
   function renderCatalog(list = PRODUCTS){
     const el = document.getElementById("catalog");
     el.innerHTML = "";
 
+    if(!list.length){
+      el.innerHTML = `<div class="subtitle" style="padding: 12px 6px;">Ничего не найдено.</div>`;
+      return;
+    }
+
     list.forEach((p, i)=>{
       const card = document.createElement("div");
       card.className = "productCard appear";
-      card.style.animationDelay = (Math.min(i, 12) * 22) + "ms";
+      card.style.animationDelay = (Math.min(i, 14) * 18) + "ms";
+
+      const wished = isWished(p.id);
 
       card.innerHTML = `
+        <button class="wishBtn ${wished ? "on" : ""}" data-wish="${p.id}" aria-label="Избранное">
+          <svg class="icon" viewBox="0 0 24 24" fill="${wished ? "white" : "none"}" stroke="${wished ? "white" : "currentColor"}" stroke-width="2">
+            <path d="M12 21s-7-4.6-9.5-8.5C.6 9.3 2.4 6 6 6c2 0 3.2 1 4 2 0.8-1 2-2 4-2 3.6 0 5.4 3.3 3.5 6.5C19 16.4 12 21 12 21z"></path>
+          </svg>
+        </button>
+
         <div class="pImg" data-open="${p.id}">
           <div class="pBadge">${p.badge}</div>
         </div>
+
         <div class="pBody">
           <div class="pName" title="${p.name}">${p.name}</div>
           <div class="pDesc">${p.desc}</div>
@@ -699,10 +967,12 @@
       el.appendChild(card);
     });
 
-    // делегирование кликов
+    // open product
     el.querySelectorAll("[data-open]").forEach(img=>{
       img.addEventListener("click", ()=> openProduct(img.getAttribute("data-open")));
     });
+
+    // add to cart
     el.querySelectorAll("[data-add]").forEach(btn=>{
       btn.addEventListener("click", (e)=>{
         e.stopPropagation();
@@ -710,10 +980,19 @@
         addToCart(id, false, btn);
       });
     });
+
+    // wishlist
+    el.querySelectorAll("[data-wish]").forEach(btn=>{
+      btn.addEventListener("click", (e)=>{
+        e.stopPropagation();
+        const id = btn.getAttribute("data-wish");
+        toggleWish(id);
+      });
+    });
   }
 
   // =============================
-  // ТОВАР
+  // PRODUCT PAGE
   // =============================
   function openProduct(id){
     const p = PRODUCTS.find(x=>x.id===id);
@@ -727,37 +1006,61 @@
     document.getElementById("pPrice").textContent = `${p.price}₽`;
     document.getElementById("pMeta").textContent = p.meta;
 
+    updateProductWishButton(id);
+
     go("product");
     haptic("impact");
   }
 
   // =============================
-  // ADD TO CART
+  // CART
   // =============================
+  function cartCount(){
+    const c = getCart();
+    return Object.values(c).reduce((a,b)=>a+b,0);
+  }
+
+  function cartSummary(){
+    const c = getCart();
+    let total = 0;
+    const items = [];
+    for (const [id, qty] of Object.entries(c)){
+      const p = PRODUCTS.find(x=>x.id===id);
+      if(!p) continue;
+      total += p.price * qty;
+      items.push({ p, qty });
+    }
+    return { items, total };
+  }
+
   function addToCart(id, fromProductPage=false, fromEl=null){
     const c = getCart();
     c[id] = (c[id] || 0) + 1;
     setCart(c);
 
     const p = PRODUCTS.find(x=>x.id===id);
-    showToast(p ? `В корзине: ${p.name}` : "Добавлено в корзину");
-    bumpCart();
+    showToast(p ? `В корзине: ${p.name}` : "Добавлено");
+    bump(document.getElementById("cartBtn"));
     haptic("success");
 
-    // летящая точка (если есть откуда лететь)
     if(fromEl) flyToCart(fromEl);
-    else if(fromProductPage){
-      // если с product page — летим от большой картинки
-      flyToCart(document.getElementById("pImg"));
-    }
+    else if(fromProductPage) flyToCart(document.getElementById("pImg"));
   }
 
-  // =============================
-  // UPDATE UI
-  // =============================
+  function removeFromCart(id){
+    const c = getCart();
+    if (!c[id]) return;
+    c[id] -= 1;
+    if (c[id] <= 0) delete c[id];
+    setCart(c);
+    haptic("impact");
+  }
+
   function updateUI(){
     const count = cartCount();
-    document.getElementById("cartCount").textContent = String(count);
+    const badge = document.getElementById("cartBadge");
+    badge.textContent = String(count);
+    badge.style.display = count > 0 ? "flex" : "none";
 
     const cartList = document.getElementById("cartList");
     const cartTotal = document.getElementById("cartTotal");
@@ -778,7 +1081,7 @@
               </div>
               <div class="row" style="gap:8px; flex:0 0 auto; flex-wrap:nowrap;">
                 <button class="btnSmall" onclick="removeFromCart('${p.id}')">−</button>
-                <div class="pill" style="margin:0;">${qty}</div>
+                <div class="chip active" style="padding:8px 10px; cursor:default;">${qty}</div>
                 <button class="btnSmall" onclick="addToCart('${p.id}')">+</button>
               </div>
             </div>
@@ -789,7 +1092,7 @@
   }
 
   // =============================
-  // SEND ORDER (демо)
+  // SEND ORDER
   // =============================
   function sendOrder(){
     const { items, total } = cartSummary();
@@ -814,23 +1117,51 @@
 
     const url = `https://t.me/${OWNER_USERNAME}?text=${encodeURIComponent(text)}`;
 
-    if (window.Telegram?.WebApp?.openTelegramLink) {
-      window.Telegram.WebApp.openTelegramLink(url);
-    } else {
-      window.open(url, "_blank");
-    }
+    if (window.Telegram?.WebApp?.openTelegramLink) window.Telegram.WebApp.openTelegramLink(url);
+    else window.open(url, "_blank");
 
     haptic("success");
   }
 
   // =============================
+  // ACCOUNT MODAL
+  // =============================
+  function openAccount(){
+    fillAccountUI();
+    document.getElementById("accountModal").classList.add("show");
+    haptic("impact");
+  }
+  function closeAccount(e){
+    document.getElementById("accountModal").classList.remove("show");
+  }
+
+  function clearLocal(){
+    localStorage.removeItem(CART_KEY);
+    localStorage.removeItem(WISH_KEY);
+    applyFilters();
+    updateUI();
+    showToast("Демо очищено");
+  }
+
+  // =============================
   // INIT
   // =============================
-  renderCatalog(PRODUCTS);
-  applyFilters();
-  handleRoute();
-  updateUI();
+  function init(){
+    // Telegram WebApp cosmetics
+    try{
+      window.Telegram?.WebApp?.ready?.();
+      window.Telegram?.WebApp?.expand?.();
+    }catch(e){}
+
+    // initial
+    renderCatalog(PRODUCTS);
+    applyFilters();
+    handleRoute();
+    updateUI();
+    fillAccountUI();
+  }
+
+  init();
 </script>
 </body>
 </html>
-
