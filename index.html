@@ -5,24 +5,98 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dancewear Demo</title>
   <style>
-    :root { --bg:#0b0b0c; --card:#141417; --text:#f2f2f3; --muted:#a7a7ad; --accent:#7c5cff; }
-    body { margin:0; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text); }
-    header { padding:16px 16px 8px; position:sticky; top:0; background:linear-gradient(#0b0b0c, rgba(11,11,12,.7)); backdrop-filter: blur(6px); }
+    :root{
+  --bg:#f6f5f3;        /* тёплый белый, как студия */
+  --card:#ffffff;
+  --text:#141417;
+  --muted:#6e6e77;
+  --accent:#1b1b1f;    /* “fashion black” */
+  --line: rgba(20,20,23,.10);
+}
+    body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial;
+  background: radial-gradient(900px 600px at 20% -10%, rgba(0,0,0,.05), transparent 60%),
+              radial-gradient(700px 500px at 90% 10%, rgba(0,0,0,.04), transparent 55%),
+              var(--bg);
+  color:var(--text);
+}
+    header{
+  padding:16px 16px 10px;
+  position:sticky;
+  top:0;
+  background: rgba(246,245,243,.75);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--line);
+}
     .row { display:flex; gap:10px; align-items:center; }
     .title { font-size:18px; font-weight:700; }
-    .pill { margin-left:auto; background:var(--card); padding:8px 10px; border-radius:999px; font-size:13px; color:var(--muted); }
+    .pill{
+  margin-left:auto;
+  background: rgba(20,20,23,.06);
+  padding:8px 10px;
+  border-radius:999px;
+  font-size:13px;
+  color:var(--muted);
+}
     main { padding:12px 16px 90px; }
     .grid { display:grid; grid-template-columns: 1fr; gap:10px; }
-    .card { background:var(--card); border-radius:16px; padding:12px; }
+    .card{
+  background: rgba(255,255,255,.85);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 14px;
+  box-shadow: 0 14px 40px rgba(20,20,23,.08);
+}
     .card h3 { margin:0 0 6px; font-size:16px; }
-    .muted { color:var(--muted); font-size:13px; }
-    .price { font-size:16px; font-weight:700; margin-top:10px; }
-    button { width:100%; margin-top:10px; border:0; border-radius:12px; padding:12px; font-weight:700; cursor:pointer; }
-    .btn { background:var(--accent); color:white; }
-    .btn2 { background:#232329; color:var(--text); }
-    .bar { position:fixed; left:0; right:0; bottom:0; padding:12px 16px; background:rgba(11,11,12,.85); backdrop-filter: blur(10px); border-top:1px solid rgba(255,255,255,.06); }
-    input, textarea { width:100%; box-sizing:border-box; border-radius:12px; border:1px solid rgba(255,255,255,.10); padding:12px; background:#0f0f12; color:var(--text); }
-    textarea { min-height:80px; resize:vertical; }
+    .muted{ color:var(--muted); font-size:13px; line-height:1.35; }
+   .price{
+  font-size:18px;
+  font-weight:800;
+  margin-top:12px;
+  letter-spacing:.2px;
+}
+    button{
+  width:100%;
+  margin-top:10px;
+  border:0;
+  border-radius:16px;
+  padding:14px;
+  font-weight:800;
+  cursor:pointer;
+}
+    .btn{
+  background: linear-gradient(180deg, #1b1b1f, #0f0f12);
+  color:#fff;
+  box-shadow: 0 10px 26px rgba(20,20,23,.18);
+}
+    .btn2{
+  background: rgba(20,20,23,.06);
+  color:var(--text);
+}
+   .bar{
+  position:fixed;
+  left:0; right:0; bottom:0;
+  padding:12px 16px;
+  background: rgba(246,245,243,.8);
+  backdrop-filter: blur(12px);
+  border-top:1px solid var(--line);
+}
+   input, textarea{
+  width:100%;
+  box-sizing:border-box;
+  border-radius:16px;
+  border:1px solid var(--line);
+  padding:12px 14px;
+  background: rgba(255,255,255,.9);
+  color:var(--text);
+  outline:none;
+}
+    input:focus, textarea:focus{
+  border-color: rgba(20,20,23,.28);
+  box-shadow: 0 0 0 4px rgba(20,20,23,.06);
+}
+    textarea{ min-height:86px; resize:vertical; }
     .two { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
     a { color: var(--accent); }
   </style>
@@ -31,10 +105,12 @@
 <body>
 <header>
   <div class="row">
-    <div class="title">Dancewear • Demo</div>
+   <div class="title">Studio Wear</div>
     <div class="pill" id="cartPill">Корзина: 0</div>
   </div>
-  <div class="muted" style="margin-top:6px;">Минималистичный магазин внутри Telegram (демо без оплаты)</div>
+  <div class="muted" style="margin-top:6px;">
+  Elegant dancewear • пример витрины в Telegram
+</div>
 </header>
 
 <main>
@@ -79,12 +155,12 @@
 
 <script>
   // 1) Фейковые товары (потом заменим на реальные)
-  const PRODUCTS = [
-    { id:"set1", name:"Комплект 'Neon Flow'", desc:"Топ + легинсы • 3 цвета", price: 3490 },
-    { id:"leo1", name:"Купальник 'Stage'", desc:"Сетчатая вставка • XS–L", price: 2590 },
-    { id:"top1", name:"Топ 'Pulse'", desc:"Поддержка • чашки", price: 1490 },
-    { id:"leg1", name:"Легинсы 'High Rise'", desc:"Высокая посадка • плотные", price: 1990 }
-  ];
+const PRODUCTS = [
+  { id:"set1", name:"Silk Line Set", desc:"Комплект • тренировки / студия", price: 3490 },
+  { id:"leo1", name:"Contour Leotard", desc:"Купальник • посадка по фигуре", price: 2590 },
+  { id:"top1", name:"Studio Top", desc:"Топ • мягкая поддержка", price: 1490 },
+  { id:"leg1", name:"High Waist Leggings", desc:"Легинсы • высокая посадка", price: 1990 }
+];
 
   // 2) Корзина в localStorage
   const CART_KEY = "demo_cart_v1";
@@ -210,3 +286,4 @@
 </script>
 </body>
 </html>
+
