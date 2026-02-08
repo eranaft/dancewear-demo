@@ -4,48 +4,55 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Studio Wear • Demo</title>
+
   <style>
     :root{
-      --bg0:#07070a;
-      --bg1:#0b0b10;
-      --glass: rgba(255,255,255,.06);
-      --glass2: rgba(255,255,255,.08);
-      --line: rgba(255,255,255,.10);
-      --line2: rgba(255,255,255,.14);
-      --text:#f5f6fa;
-      --muted: rgba(245,246,250,.68);
-      --accent:#8b5cff;     /* techno purple */
-      --accent2:#25f4ff;    /* cyan */
-      --shadow: 0 18px 70px rgba(0,0,0,.55);
+      --bg0:#070a10;
+      --bg1:#0b1220;
+
+      /* liquid glass */
+      --glass: rgba(255,255,255,.08);
+      --glass2: rgba(255,255,255,.12);
+      --line: rgba(255,255,255,.14);
+      --line2: rgba(255,255,255,.22);
+
+      --text:#f6f8ff;
+      --muted: rgba(246,248,255,.68);
+
+      /* accents */
+      --cyan:#21e6ff;
+      --orange:#ff7a18;
+
+      --shadow: 0 26px 90px rgba(0,0,0,.55);
       --radius: 22px;
     }
 
     *{ box-sizing:border-box; }
-    html, body{ height:100%; }
+    html,body{ height:100%; }
     body{
       margin:0;
       font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial;
       color:var(--text);
       background:
-        radial-gradient(900px 520px at 15% -10%, rgba(139,92,255,.25), transparent 60%),
-        radial-gradient(750px 520px at 95% 0%, rgba(37,244,255,.16), transparent 60%),
-        radial-gradient(700px 420px at 60% 120%, rgba(139,92,255,.16), transparent 60%),
+        radial-gradient(900px 520px at 15% -10%, rgba(33,230,255,.28), transparent 60%),
+        radial-gradient(750px 520px at 95% 0%, rgba(255,122,24,.22), transparent 60%),
+        radial-gradient(700px 420px at 55% 120%, rgba(33,230,255,.14), transparent 60%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
       -webkit-tap-highlight-color: transparent;
       overflow-x:hidden;
     }
 
-    /* subtle tech grid overlay */
+    /* subtle iOS-like caustics */
     body:before{
       content:"";
       position:fixed;
-      inset:0;
+      inset:-20%;
       pointer-events:none;
       background:
-        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
-      background-size: 44px 44px;
-      mask-image: radial-gradient(800px 520px at 50% 0%, black 55%, transparent 100%);
+        radial-gradient(900px 420px at 40% 10%, rgba(255,255,255,.08), transparent 60%),
+        radial-gradient(700px 360px at 70% 40%, rgba(255,255,255,.05), transparent 62%),
+        conic-gradient(from 180deg at 50% 35%, rgba(33,230,255,.08), rgba(255,122,24,.06), rgba(33,230,255,.08));
+      filter: blur(22px);
       opacity:.55;
       z-index:0;
     }
@@ -53,18 +60,19 @@
     .container{
       position:relative;
       z-index:1;
-      max-width: 1020px;
+      max-width: 1040px;
       margin: 0 auto;
       padding: 0 14px;
     }
 
+    /* ===== Header ===== */
     header{
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(7,7,10,.62);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(10,14,22,.55);
+      backdrop-filter: blur(16px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,.10);
     }
 
     .head{
@@ -75,13 +83,7 @@
       justify-content:space-between;
     }
 
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:5px;
-      min-width:0;
-    }
-
+    .brand{ display:flex; flex-direction:column; gap:5px; min-width:0; }
     .brand a{
       color:var(--text);
       text-decoration:none;
@@ -93,18 +95,18 @@
 
     .logoDot{
       width:10px; height:10px; border-radius:999px;
-      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.2));
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.15));
       box-shadow:
-        0 0 0 6px rgba(139,92,255,.12),
-        0 0 30px rgba(139,92,255,.25),
-        0 0 18px rgba(37,244,255,.18);
+        0 0 0 6px rgba(33,230,255,.12),
+        0 0 28px rgba(33,230,255,.22),
+        0 0 22px rgba(255,122,24,.18);
       flex:0 0 auto;
     }
 
     .title{
       font-size: clamp(18px, 3.8vw, 22px);
       font-weight: 980;
-      letter-spacing: .4px;
+      letter-spacing: .45px;
       line-height: 1.05;
     }
     .subtitle{
@@ -113,45 +115,33 @@
       line-height: 1.35;
     }
 
-    .topActions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex: 0 0 auto;
-    }
+    .topActions{ display:flex; gap:10px; align-items:center; flex:0 0 auto; }
 
     .iconBtn{
       position:relative;
       width: 40px;
       height: 40px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
-      box-shadow: 0 16px 44px rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      box-shadow: 0 18px 52px rgba(0,0,0,.38);
       cursor:pointer;
       display:flex;
       align-items:center;
       justify-content:center;
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
       user-select:none;
+      overflow:hidden;
     }
     .iconBtn:active{ transform: scale(.95); }
     @media (hover:hover){
-      .iconBtn:hover{
-        transform: translateY(-1px);
-        border-color: rgba(255,255,255,.18);
-        box-shadow: 0 22px 58px rgba(0,0,0,.42);
-      }
+      .iconBtn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); box-shadow: 0 26px 70px rgba(0,0,0,.44); }
     }
 
-    .icon{
-      width: 20px;
-      height: 20px;
-      display:block;
-      color: rgba(245,246,250,.92);
-    }
+    /* icons */
+    .icon{ width: 20px; height: 20px; display:block; color: rgba(246,248,255,.92); }
 
-    /* BADGE fixed: top center */
+    /* cart badge centered */
     .badge{
       position:absolute;
       top:-7px;
@@ -161,26 +151,31 @@
       height: 18px;
       padding: 0 6px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.82));
-      color:#0b0b10;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.96), rgba(255,255,255,.78));
+      color:#0a0e16;
       font-size: 11px;
       font-weight: 980;
       display:flex;
       align-items:center;
       justify-content:center;
-      box-shadow: 0 12px 26px rgba(0,0,0,.35);
-      border: 2px solid rgba(7,7,10,.72);
+      box-shadow: 0 14px 30px rgba(0,0,0,.40);
+      border: 2px solid rgba(10,14,22,.75);
+      will-change: transform;
     }
 
-    /* bump animation */
-    @keyframes bump{ 0%{transform:translateX(-50%) scale(1)} 35%{transform:translateX(-50%) scale(1.18)} 100%{transform:translateX(-50%) scale(1)} }
-    .bumpBadge{ animation: bump .28s ease; }
+    @keyframes bumpBadge{
+      0%{ transform: translateX(-50%) scale(1); }
+      35%{ transform: translateX(-50%) scale(1.18); }
+      100%{ transform: translateX(-50%) scale(1); }
+    }
+    .bumpBadge{ animation: bumpBadge .28s ease; }
 
-    main{ padding: 14px 0 110px; }
+    /* ===== Layout ===== */
+    main{ padding: 14px 0 120px; }
 
     .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
-      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.14);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 12px;
@@ -191,24 +186,20 @@
       content:"";
       position:absolute;
       inset:-2px;
-      background: radial-gradient(600px 240px at 20% 0%, rgba(139,92,255,.22), transparent 55%),
-                  radial-gradient(600px 240px at 80% 0%, rgba(37,244,255,.18), transparent 55%);
-      opacity:.55;
+      background:
+        radial-gradient(520px 220px at 20% 0%, rgba(33,230,255,.20), transparent 58%),
+        radial-gradient(520px 220px at 80% 0%, rgba(255,122,24,.16), transparent 58%);
+      opacity:.7;
       pointer-events:none;
     }
     .panel > *{ position:relative; }
 
-    .row{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap: wrap;
-    }
+    .row{ display:flex; gap:10px; align-items:center; flex-wrap: wrap; }
 
     input, textarea{
       width:100%;
       border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.14);
       background: rgba(0,0,0,.18);
       padding: 12px 14px;
       color: var(--text);
@@ -217,19 +208,19 @@
       min-width: 0;
       transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
     }
-    input::placeholder, textarea::placeholder{ color: rgba(245,246,250,.45); }
+    input::placeholder, textarea::placeholder{ color: rgba(246,248,255,.45); }
     input:focus, textarea:focus{
-      border-color: rgba(139,92,255,.45);
-      box-shadow: 0 0 0 4px rgba(139,92,255,.18);
+      border-color: rgba(33,230,255,.45);
+      box-shadow: 0 0 0 4px rgba(33,230,255,.18);
       background: rgba(0,0,0,.22);
     }
     textarea{ min-height: 90px; resize: vertical; }
 
     .chip{
-      width: auto;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      color: rgba(245,246,250,.90);
+      width:auto;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+      color: rgba(246,248,255,.92);
       padding: 9px 12px;
       border-radius: 999px;
       font-weight: 950;
@@ -239,14 +230,14 @@
     }
     .chip:active{ transform: scale(.98); }
     .chip.active{
-      background: linear-gradient(135deg, rgba(139,92,255,.70), rgba(37,244,255,.18));
-      border-color: rgba(255,255,255,.18);
-      box-shadow: 0 18px 50px rgba(139,92,255,.18);
+      background: linear-gradient(135deg, rgba(33,230,255,.45), rgba(255,122,24,.20));
+      border-color: rgba(255,255,255,.24);
+      box-shadow: 0 18px 60px rgba(33,230,255,.14);
     }
 
     .hint{
       margin-top:10px;
-      color: rgba(245,246,250,.60);
+      color: rgba(246,248,255,.60);
       font-size: 12.5px;
       display:flex;
       gap:10px;
@@ -255,8 +246,8 @@
     .hint span{
       padding: 6px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.16);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
     }
 
     .grid{
@@ -269,22 +260,22 @@
 
     .productCard{
       position: relative;
-      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
-      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.14);
       border-radius: var(--radius);
       overflow:hidden;
-      box-shadow: 0 20px 70px rgba(0,0,0,.35);
+      box-shadow: 0 22px 90px rgba(0,0,0,.40);
       transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
       display:flex;
       flex-direction:column;
-      min-width: 0;
+      min-width:0;
       will-change: transform;
     }
     @media (hover:hover){
       .productCard:hover{
         transform: translateY(-2px);
-        border-color: rgba(255,255,255,.18);
-        box-shadow: 0 26px 90px rgba(0,0,0,.42);
+        border-color: rgba(255,255,255,.22);
+        box-shadow: 0 28px 120px rgba(0,0,0,.46);
       }
     }
     .productCard:active{ transform: scale(.99); }
@@ -293,9 +284,9 @@
       position: relative;
       height: 150px;
       background:
-        radial-gradient(220px 120px at 30% 25%, rgba(139,92,255,.28), transparent 60%),
-        radial-gradient(180px 120px at 70% 60%, rgba(37,244,255,.18), transparent 55%),
-        linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+        radial-gradient(220px 120px at 25% 25%, rgba(33,230,255,.25), transparent 62%),
+        radial-gradient(200px 120px at 75% 60%, rgba(255,122,24,.18), transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
       display:flex;
       align-items:flex-end;
       padding: 12px;
@@ -303,14 +294,14 @@
     }
 
     .pBadge{
-      background: rgba(0,0,0,.22);
-      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.20);
+      border: 1px solid rgba(255,255,255,.14);
       padding: 6px 10px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 980;
       letter-spacing:.2px;
-      color: rgba(245,246,250,.92);
+      color: rgba(246,248,255,.92);
       backdrop-filter: blur(10px);
       user-select:none;
     }
@@ -321,7 +312,7 @@
       flex-direction:column;
       gap: 6px;
       flex: 1 1 auto;
-      min-width: 0;
+      min-width:0;
     }
     .pName{
       font-weight: 980;
@@ -333,18 +324,17 @@
       white-space: nowrap;
     }
     .pDesc{
-      color: rgba(245,246,250,.66);
+      color: rgba(246,248,255,.70);
       font-size: 12.5px;
       line-height: 1.35;
       min-height: 34px;
     }
-
     .pBottom{
-      margin-top: auto;
+      margin-top:auto;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 10px;
+      gap:10px;
     }
     .pPrice{
       font-weight: 980;
@@ -352,13 +342,13 @@
       white-space: nowrap;
     }
 
-    /* icon-only add to cart */
+    /* icon-only add-to-cart */
     .miniBtn{
       width: 38px;
       height: 38px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -369,13 +359,10 @@
     }
     .miniBtn:active{ transform: scale(.95); }
     @media (hover:hover){
-      .miniBtn:hover{
-        border-color: rgba(255,255,255,.18);
-        box-shadow: 0 16px 40px rgba(0,0,0,.35);
-      }
+      .miniBtn:hover{ border-color: rgba(255,255,255,.22); box-shadow: 0 18px 60px rgba(0,0,0,.40); }
     }
 
-    /* Wishlist heart (fixed & centered) */
+    /* PERFECT HEART: single SVG + animation */
     .wishBtn{
       position:absolute;
       top:10px;
@@ -383,42 +370,55 @@
       width: 38px;
       height: 38px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.22);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      backdrop-filter: blur(12px) saturate(160%);
+      box-shadow: 0 22px 70px rgba(0,0,0,.45);
       display:flex;
       align-items:center;
       justify-content:center;
       cursor:pointer;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
       user-select:none;
       padding:0;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
     }
     .wishBtn:active{ transform: scale(.95); }
     .wishBtn svg{ width:20px; height:20px; display:block; }
+
+    /* stroke + fill animation */
+    .wishPath{
+      stroke: rgba(246,248,255,.92);
+      stroke-width: 2;
+      fill: rgba(33,230,255,0);
+      transition: fill .18s ease, stroke .18s ease;
+    }
     .wishBtn.on{
-      background: linear-gradient(135deg, rgba(139,92,255,.62), rgba(37,244,255,.14));
-      border-color: rgba(255,255,255,.18);
+      border-color: rgba(255,255,255,.22);
+      background: linear-gradient(135deg, rgba(33,230,255,.20), rgba(255,122,24,.14));
+    }
+    .wishBtn.on .wishPath{
+      fill: rgba(33,230,255,.92);
+      stroke: rgba(33,230,255,.92);
     }
 
-    /* pages */
-    .view{ transition: opacity .18s ease, transform .18s ease; }
-    .hidden{
-      opacity: 0;
-      transform: translateY(8px);
-      pointer-events: none;
-      position: absolute;
-      left: -9999px;
+    @keyframes heartPop{
+      0%{ transform: scale(1); }
+      45%{ transform: scale(1.22); }
+      100%{ transform: scale(1); }
     }
+    .heartPop{ animation: heartPop .22s ease; }
+
+    /* views */
+    .view{ transition: opacity .18s ease, transform .18s ease; }
+    .hidden{ opacity:0; transform: translateY(8px); pointer-events:none; position:absolute; left:-9999px; }
 
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
-      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.14);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 14px;
-      min-width: 0;
+      min-width:0;
     }
 
     .btn{
@@ -429,58 +429,27 @@
       font-weight: 980;
       letter-spacing: .2px;
       cursor:pointer;
-      background: linear-gradient(135deg, rgba(139,92,255,.85), rgba(37,244,255,.18));
-      color:#fff;
-      box-shadow: 0 18px 60px rgba(139,92,255,.18);
+      color:#0a0e16;
+      background:
+        radial-gradient(120% 120% at 20% 20%, rgba(255,255,255,.92), rgba(255,255,255,.72)),
+        linear-gradient(135deg, rgba(33,230,255,.85), rgba(255,122,24,.35));
+      box-shadow: 0 20px 80px rgba(33,230,255,.12);
       transition: transform .18s ease, box-shadow .18s ease;
     }
     .btn:active{ transform: scale(.98); }
 
     .btn2{
       width:100%;
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
       border-radius: 18px;
       padding: 14px;
       font-weight: 950;
       cursor:pointer;
-      background: rgba(0,0,0,.18);
-      color: rgba(245,246,250,.92);
+      background: rgba(0,0,0,.16);
+      color: rgba(246,248,255,.92);
       transition: transform .18s ease;
     }
     .btn2:active{ transform: scale(.98); }
-
-    .two{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    @media (max-width: 420px){
-      .two{ grid-template-columns: 1fr; }
-    }
-
-    /* bottom bar */
-    .bar{
-      position: fixed;
-      left:0; right:0; bottom:0;
-      z-index: 60;
-      padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
-      background: rgba(7,7,10,.65);
-      backdrop-filter: blur(14px);
-      border-top: 1px solid rgba(255,255,255,.08);
-    }
-    .barInner{
-      max-width: 1020px;
-      margin: 0 auto;
-      display:flex;
-      gap: 10px;
-      align-items:center;
-    }
-    .barHint{
-      text-align:center;
-      color: rgba(245,246,250,.55);
-      font-size: 12.5px;
-      margin-top: 8px;
-    }
 
     /* toast */
     #toast{
@@ -488,8 +457,8 @@
       left: 50%;
       bottom: calc(92px + env(safe-area-inset-bottom));
       transform: translateX(-50%) translateY(10px);
-      background: rgba(0,0,0,.72);
-      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.56);
+      border: 1px solid rgba(255,255,255,.14);
       color: #fff;
       padding: 10px 14px;
       border-radius: 999px;
@@ -497,23 +466,18 @@
       font-size: 13px;
       opacity: 0;
       transition: opacity .18s ease, transform .18s ease;
-      box-shadow: 0 18px 60px rgba(0,0,0,.50);
+      box-shadow: 0 26px 100px rgba(0,0,0,.55);
       z-index: 9999;
       white-space: nowrap;
       max-width: calc(100vw - 24px);
       overflow:hidden;
       text-overflow: ellipsis;
+      backdrop-filter: blur(12px);
     }
-    #toast.show{
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    #toast.show{ opacity: 1; transform: translateX(-50%) translateY(0); }
 
     /* appear */
-    @keyframes fadeUp{
-      from{ opacity:0; transform: translateY(10px); }
-      to{ opacity:1; transform: translateY(0); }
-    }
+    @keyframes fadeUp{ from{ opacity:0; transform: translateY(10px);} to{ opacity:1; transform: translateY(0);} }
     .appear{ animation: fadeUp .28s ease both; }
 
     /* flying dot */
@@ -522,18 +486,31 @@
       width: 10px;
       height: 10px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(139,92,255,.85));
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(33,230,255,.90));
       z-index: 10000;
       pointer-events: none;
-      box-shadow: 0 16px 44px rgba(139,92,255,.18);
+      box-shadow: 0 18px 70px rgba(33,230,255,.18);
     }
 
-    /* modal */
+    /* bottom bar */
+    .bar{
+      position: fixed;
+      left:0; right:0; bottom:0;
+      z-index: 60;
+      padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+      background: rgba(10,14,22,.55);
+      backdrop-filter: blur(16px) saturate(180%);
+      border-top: 1px solid rgba(255,255,255,.10);
+    }
+    .barInner{ max-width: 1040px; margin: 0 auto; display:flex; gap: 10px; align-items:center; }
+    .barHint{ text-align:center; color: rgba(246,248,255,.55); font-size: 12.5px; margin-top: 8px; }
+
+    /* ===== Modals (Account + QuickView) ===== */
     .modalWrap{
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.42);
-      backdrop-filter: blur(8px);
+      background: rgba(0,0,0,.44);
+      backdrop-filter: blur(10px);
       display:none;
       align-items:flex-end;
       justify-content:center;
@@ -541,16 +518,18 @@
       padding: 14px;
     }
     .modalWrap.show{ display:flex; }
+
     .sheet{
-      width: min(520px, 100%);
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 24px;
-      box-shadow: 0 26px 110px rgba(0,0,0,.55);
+      width: min(560px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.08));
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 26px;
+      box-shadow: 0 34px 140px rgba(0,0,0,.60);
       padding: 14px;
       transform: translateY(14px);
       opacity: 0;
       animation: sheetIn .18s ease forwards;
+      overflow:hidden;
     }
     @keyframes sheetIn{ to{ transform: translateY(0); opacity:1; } }
 
@@ -561,34 +540,75 @@
       gap:10px;
       margin-bottom: 10px;
     }
-    .profile{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      min-width: 0;
-    }
+
+    .profile{ display:flex; gap:10px; align-items:center; min-width: 0; }
     .avatar{
       width: 38px;
       height: 38px;
       border-radius: 999px;
-      background: linear-gradient(135deg, rgba(139,92,255,.22), rgba(37,244,255,.10));
-      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(135deg, rgba(33,230,255,.22), rgba(255,122,24,.16));
+      border: 1px solid rgba(255,255,255,.16);
       flex: 0 0 auto;
-      box-shadow: 0 18px 60px rgba(139,92,255,.12);
+      box-shadow: 0 22px 80px rgba(33,230,255,.12);
     }
-    .pName2{
-      font-weight: 980;
-      line-height: 1.2;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .pName2{ font-weight: 980; line-height: 1.2; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pUser2{ color: rgba(246,248,255,.65); font-size: 12.5px; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Quick View content */
+    .qvImg{
+      height: 210px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background:
+        radial-gradient(260px 140px at 25% 25%, rgba(33,230,255,.28), transparent 62%),
+        radial-gradient(240px 140px at 75% 60%, rgba(255,122,24,.18), transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+      display:flex;
+      align-items:flex-end;
+      padding: 12px;
     }
-    .pUser2{
-      color: rgba(245,246,250,.65);
-      font-size: 12.5px;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+
+    /* chip groups (sizes/colors) */
+    .chipGroup{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .opt{
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.14);
+      color: rgba(246,248,255,.92);
+      font-weight: 950;
+      cursor:pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      user-select:none;
+    }
+    .opt:active{ transform: scale(.98); }
+    .opt.on{
+      border-color: rgba(255,255,255,.22);
+      background: linear-gradient(135deg, rgba(33,230,255,.30), rgba(255,122,24,.14));
+      box-shadow: 0 16px 60px rgba(33,230,255,.10);
+    }
+
+    .divider{
+      height:1px;
+      background: rgba(255,255,255,.10);
+      margin: 12px 0;
+    }
+
+    /* top right heart icon (same SVG, fix “crooked”) */
+    .topHeart .wishPath{
+      transition: fill .18s ease, stroke .18s ease;
+      fill: rgba(33,230,255,0);
+      stroke: rgba(246,248,255,.92);
+      stroke-width:2;
+    }
+    .topHeart.on .wishPath{
+      fill: rgba(33,230,255,.92);
+      stroke: rgba(33,230,255,.92);
     }
   </style>
 </head>
@@ -602,28 +622,28 @@
           <span class="logoDot"></span>
           <span class="title">Studio Wear</span>
         </a>
-        <div class="subtitle">Tech fashion • витрина в Telegram (демо)</div>
+        <div class="subtitle">Liquid glass • tech fashion shop (демо)</div>
       </div>
 
       <div class="topActions">
+        <!-- account -->
         <button class="iconBtn" onclick="openAccount()" aria-label="Аккаунт">
-          <!-- user -->
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21a8 8 0 0 0-16 0"></path>
             <circle cx="12" cy="8" r="4"></circle>
           </svg>
         </button>
 
-        <button class="iconBtn" onclick="toggleWishlistView()" aria-label="Избранное">
-          <!-- heart -->
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 21s-7-4.6-9.5-8.5C.6 9.3 2.4 6 6 6c2 0 3.2 1 4 2 0.8-1 2-2 4-2 3.6 0 5.4 3.3 3.5 6.5C19 16.4 12 21 12 21z"></path>
+        <!-- top wishlist (perfect heart) -->
+        <button class="iconBtn topHeart" id="wishTopBtn" onclick="toggleWishlistView()" aria-label="Избранное">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path class="wishPath" d="M12 21s-7.4-4.7-9.8-8.8C.4 9 2.6 6 6.1 6c2 0 3.3 1.1 3.9 2.1.6-1 1.9-2.1 3.9-2.1 3.5 0 5.7 3 3.9 6.2C19.4 16.3 12 21 12 21z"></path>
           </svg>
         </button>
 
+        <!-- cart -->
         <button class="iconBtn" id="cartBtn" onclick="go('cart')" aria-label="Корзина">
-          <!-- cart -->
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 6h15l-2 9H8L6 6z"></path>
             <path d="M6 6 5 3H2"></path>
             <circle cx="9" cy="20" r="1.6"></circle>
@@ -655,45 +675,11 @@
       </div>
 
       <div class="hint" id="catalogHint">
-        <span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Новый дроп</span>
+        <span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Quick view</span>
       </div>
     </div>
 
     <div class="grid" id="catalog"></div>
-  </div>
-
-  <!-- PRODUCT -->
-  <div id="viewProduct" class="view hidden">
-    <div class="card">
-      <button class="btn2" onclick="go('catalog')" style="margin-top:0;">← Назад</button>
-
-      <div class="pImg" id="pImg" style="height:240px; border-radius:18px; margin-top:12px;">
-        <div class="pBadge" id="pBadge">Studio</div>
-      </div>
-
-      <div style="margin-top:12px;">
-        <div style="font-size: clamp(18px, 4.2vw, 22px); font-weight: 980; letter-spacing:.2px;" id="pName">—</div>
-        <div class="subtitle" style="margin-top:6px;" id="pDesc">—</div>
-
-        <div class="row" style="margin-top:14px;">
-          <button class="chip active" style="cursor:default;" id="pPrice">—</button>
-          <button class="chip" style="cursor:default;" id="pMeta">—</button>
-        </div>
-
-        <div class="row" style="margin-top:12px;">
-          <button class="miniBtn" id="pWishBtn" onclick="toggleWish(window.__currentProductId)" aria-label="Избранное">
-            <!-- heart -->
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 21s-7-4.6-9.5-8.5C.6 9.3 2.4 6 6 6c2 0 3.2 1 4 2 0.8-1 2-2 4-2 3.6 0 5.4 3.3 3.5 6.5C19 16.4 12 21 12 21z"></path>
-            </svg>
-          </button>
-
-          <button class="btn" onclick="addToCart(window.__currentProductId, true)" style="margin-top:0;">
-            Добавить в корзину
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- CART -->
@@ -722,7 +708,7 @@
 
       <div style="font-size:18px; font-weight:980; margin:12px 0 6px;">Оформление (демо)</div>
 
-      <div class="two">
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;" class="two">
         <div>
           <div class="subtitle" style="margin:6px 0;">Имя</div>
           <input id="name" placeholder="Например: Маша" />
@@ -734,7 +720,7 @@
       </div>
 
       <div class="subtitle" style="margin:10px 0 6px;">Комментарий (размер/цвет/доставка)</div>
-      <textarea id="comment" placeholder="Например: размер M, доставка СДЭК"></textarea>
+      <textarea id="comment" placeholder="Например: размер M, цвет black, доставка СДЭК"></textarea>
 
       <button class="btn" onclick="sendOrder()">Отправить заказ в Telegram</button>
       <div class="subtitle" style="margin-top:10px;">
@@ -751,20 +737,18 @@
   <div class="barHint">Без сайта и регистрации • прямо в Telegram</div>
 </div>
 
-<!-- account modal -->
+<!-- ACCOUNT MODAL -->
 <div class="modalWrap" id="accountModal" onclick="closeAccount(event)">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sheetTop">
       <div class="profile">
-        <div class="avatar" id="avatar"></div>
+        <div class="avatar"></div>
         <div style="min-width:0;">
           <div class="pName2" id="accName">Гость</div>
           <div class="pUser2" id="accUser">Откройте внутри Telegram</div>
         </div>
       </div>
-      <button class="iconBtn" style="width:38px;height:38px;box-shadow:none;" onclick="closeAccount()">
-        ✕
-      </button>
+      <button class="iconBtn" style="width:38px;height:38px;box-shadow:none;" onclick="closeAccount()">✕</button>
     </div>
 
     <div class="subtitle">
@@ -782,41 +766,101 @@
   </div>
 </div>
 
+<!-- QUICK VIEW MODAL -->
+<div class="modalWrap" id="qvModal" onclick="closeQV(event)">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheetTop">
+      <div style="font-weight:980; letter-spacing:.2px;">Быстрый просмотр</div>
+      <button class="iconBtn" style="width:38px;height:38px;box-shadow:none;" onclick="closeQV()">✕</button>
+    </div>
+
+    <div class="qvImg">
+      <div class="pBadge" id="qvBadge">Studio</div>
+    </div>
+
+    <div style="margin-top:12px;">
+      <div style="font-size:18px; font-weight:980;" id="qvName">—</div>
+      <div class="subtitle" style="margin-top:6px;" id="qvDesc">—</div>
+
+      <div class="row" style="margin-top:12px; justify-content:space-between;">
+        <div style="font-weight:980; font-size:18px;" id="qvPrice">—</div>
+
+        <div class="row" style="gap:8px;">
+          <button class="wishBtn" id="qvWishBtn" onclick="toggleWish(window.__qvId)" aria-label="Избранное">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path class="wishPath" d="M12 21s-7.4-4.7-9.8-8.8C.4 9 2.6 6 6.1 6c2 0 3.3 1.1 3.9 2.1.6-1 1.9-2.1 3.9-2.1 3.5 0 5.7 3 3.9 6.2C19.4 16.3 12 21 12 21z"></path>
+            </svg>
+          </button>
+
+          <button class="miniBtn" id="qvAddBtn" onclick="addToCart(window.__qvId, false, document.getElementById('qvAddBtn'))" aria-label="В корзину">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 6h15l-2 9H8L6 6z"></path>
+              <path d="M6 6 5 3H2"></path>
+              <circle cx="9" cy="20" r="1.6"></circle>
+              <circle cx="18" cy="20" r="1.6"></circle>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div style="font-weight:950;">Размер</div>
+      <div class="chipGroup" id="sizeChips"></div>
+
+      <div style="margin-top:10px; font-weight:950;">Цвет</div>
+      <div class="chipGroup" id="colorChips"></div>
+
+      <button class="btn" style="margin-top:14px;" onclick="addToCart(window.__qvId, false, document.getElementById('qvAddBtn'))">
+        Добавить выбранное в корзину
+      </button>
+
+      <button class="btn2" style="margin-top:10px;" onclick="goProductFromQV()">
+        Открыть страницу товара
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
   // =============================
-  // НАСТРОЙКИ
+  // SETTINGS
   // =============================
-  const OWNER_USERNAME = "egorkrab"; // <-- поменяй на username владелицы (без @)
+  const OWNER_USERNAME = "egorkrab"; // <- username владелицы (без @)
 
   // =============================
-  // ДАННЫЕ (демо)
+  // DATA (demo)
   // =============================
   const PRODUCTS = [
-    { id:"set1", cat:"sets", badge:"Studio",  name:"Silk Line Set",        desc:"Комплект • мягкая посадка",             price:3490, meta:"XS–L • ivory/black" },
-    { id:"set2", cat:"sets", badge:"Elegant", name:"Contour Set",          desc:"Комплект • подчёркивает линию",         price:3790, meta:"XS–L • black" },
-    { id:"set3", cat:"sets", badge:"Core",    name:"Minimal Set",          desc:"Комплект • базовый студийный",          price:3290, meta:"XS–L • sand" },
+    { id:"set1", cat:"sets", badge:"Studio",  name:"Silk Line Set",        desc:"Комплект • мягкая посадка",             price:3490, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Ice","Black","Sand"] },
+    { id:"set2", cat:"sets", badge:"Elegant", name:"Contour Set",          desc:"Комплект • подчёркивает линию",         price:3790, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Black","Neon Ice"] },
+    { id:"set3", cat:"sets", badge:"Core",    name:"Minimal Set",          desc:"Комплект • базовый студийный",          price:3290, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Sand","Black"] },
 
-    { id:"leo1", cat:"leotards", badge:"Elegant", name:"Contour Leotard",  desc:"Купальник • посадка по фигуре",         price:2590, meta:"XS–L • black" },
-    { id:"leo2", cat:"leotards", badge:"Studio",  name:"Line Leotard",     desc:"Купальник • комфортная ткань",          price:2390, meta:"XS–L • ivory" },
-    { id:"leo3", cat:"leotards", badge:"Soft",    name:"Air Leotard",      desc:"Купальник • мягкая поддержка",          price:2290, meta:"XS–M • sand" },
+    { id:"leo1", cat:"leotards", badge:"Elegant", name:"Contour Leotard",  desc:"Купальник • посадка по фигуре",         price:2590, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Black","Ice"] },
+    { id:"leo2", cat:"leotards", badge:"Studio",  name:"Line Leotard",     desc:"Купальник • комфортная ткань",          price:2390, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Ice","Sand"] },
+    { id:"leo3", cat:"leotards", badge:"Soft",    name:"Air Leotard",      desc:"Купальник • мягкая поддержка",          price:2290, meta:"XS–M", sizes:["XS","S","M"],    colors:["Sand","Ice"] },
 
-    { id:"top1", cat:"tops", badge:"Soft",    name:"Studio Top",           desc:"Топ • мягкая поддержка",                price:1490, meta:"XS–M • 3 цвета" },
-    { id:"top2", cat:"tops", badge:"Core",    name:"Classic Top",          desc:"Топ • базовый силуэт",                  price:1390, meta:"XS–L • black" },
-    { id:"top3", cat:"tops", badge:"Elegant", name:"Line Top",             desc:"Топ • чистая линия",                    price:1590, meta:"XS–L • ivory" },
+    { id:"top1", cat:"tops", badge:"Soft",    name:"Studio Top",           desc:"Топ • мягкая поддержка",                price:1490, meta:"XS–M", sizes:["XS","S","M"],    colors:["Ice","Black","Orange Pop"] },
+    { id:"top2", cat:"tops", badge:"Core",    name:"Classic Top",          desc:"Топ • базовый силуэт",                  price:1390, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Black","Sand"] },
+    { id:"top3", cat:"tops", badge:"Elegant", name:"Line Top",             desc:"Топ • чистая линия",                    price:1590, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Ice","Black"] },
 
-    { id:"leg1", cat:"leggings", badge:"Core",    name:"High Waist Leggings",  desc:"Легинсы • высокая посадка",       price:1990, meta:"XS–L • black" },
-    { id:"leg2", cat:"leggings", badge:"Studio",  name:"Second Skin Leggings",desc:"Легинсы • как вторая кожа",         price:2190, meta:"XS–L • sand" },
-    { id:"leg3", cat:"leggings", badge:"Soft",    name:"Smooth Leggings",      desc:"Легинсы • мягкая ткань",           price:1890, meta:"XS–L • ivory" },
+    { id:"leg1", cat:"leggings", badge:"Core",    name:"High Waist Leggings",  desc:"Легинсы • высокая посадка",       price:1990, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Black","Sand"] },
+    { id:"leg2", cat:"leggings", badge:"Studio",  name:"Second Skin Leggings",desc:"Легинсы • как вторая кожа",         price:2190, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Sand","Black","Ice"] },
+    { id:"leg3", cat:"leggings", badge:"Soft",    name:"Smooth Leggings",      desc:"Легинсы • мягкая ткань",           price:1890, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Ice","Black"] },
   ];
 
-  const CART_KEY = "tech_shop_cart_v1";
-  const WISH_KEY = "tech_shop_wish_v1";
+  const CART_KEY = "liquid_shop_cart_v1";
+  const WISH_KEY = "liquid_shop_wish_v1";
+  const SEL_KEY  = "liquid_shop_sel_v1"; // selections per product: size/color
 
   function getCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || "{}"); }
   function setCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); updateUI(); }
 
   function getWish(){ return JSON.parse(localStorage.getItem(WISH_KEY) || "[]"); }
   function setWish(arr){ localStorage.setItem(WISH_KEY, JSON.stringify(arr)); updateUI(); }
+
+  function getSel(){ return JSON.parse(localStorage.getItem(SEL_KEY) || "{}"); }
+  function setSel(obj){ localStorage.setItem(SEL_KEY, JSON.stringify(obj)); }
 
   // =============================
   // PROFILE (Telegram WebApp)
@@ -917,7 +961,7 @@
   // NAV
   // =============================
   function showView(name){
-    const map = { catalog:"viewCatalog", product:"viewProduct", cart:"viewCart", checkout:"viewCheckout" };
+    const map = { catalog:"viewCatalog", cart:"viewCart", checkout:"viewCheckout" };
     Object.values(map).forEach(id => document.getElementById(id).classList.add("hidden"));
     document.getElementById(map[name]).classList.remove("hidden");
     updateUI();
@@ -927,8 +971,7 @@
   function handleRoute(){
     const h = (location.hash || "#/").replace("#/","");
     const page = h || "catalog";
-    if(page === "product") showView("product");
-    else if(page === "cart") showView("cart");
+    if(page === "cart") showView("cart");
     else if(page === "checkout") showView("checkout");
     else showView("catalog");
   }
@@ -947,16 +990,25 @@
       if(el) el.classList.toggle("active", x===cat);
     });
     wishlistView = false;
+    updateTopHeartState();
     applyFilters();
     haptic("impact");
   }
 
+  function updateTopHeartState(){
+    const btn = document.getElementById("wishTopBtn");
+    btn.classList.toggle("on", wishlistView);
+  }
+
   function toggleWishlistView(){
     wishlistView = !wishlistView;
+    updateTopHeartState();
+
     const hint = document.getElementById("catalogHint");
     hint.innerHTML = wishlistView
-      ? `<span>Избранное</span><span>Сохранено на устройстве</span><span>Tech drop</span>`
-      : `<span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Новый дроп</span>`;
+      ? `<span>Избранное</span><span>Сохранено на устройстве</span><span>Liquid glass</span>`
+      : `<span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Quick view</span>`;
+
     applyFilters();
     showToast(wishlistView ? "Избранное" : "Каталог");
     haptic("impact");
@@ -977,30 +1029,119 @@
   }
 
   // =============================
-  // WISHLIST
+  // WISHLIST (with animation)
   // =============================
   function isWished(id){ return getWish().includes(id); }
+
+  function pulseHeart(btn){
+    if(!btn) return;
+    btn.classList.remove("heartPop");
+    void btn.offsetWidth;
+    btn.classList.add("heartPop");
+  }
+
   function toggleWish(id){
     const arr = getWish();
     const i = arr.indexOf(id);
-    if(i >= 0) arr.splice(i,1); else arr.push(id);
+    if(i >= 0) arr.splice(i,1);
+    else arr.push(id);
     setWish(arr);
+
+    // Re-render to update icons
     applyFilters();
-    showToast(arr.includes(id) ? "Добавлено в избранное" : "Убрано из избранного");
+
+    const on = arr.includes(id);
+    showToast(on ? "Добавлено в избранное" : "Убрано из избранного");
     haptic("success");
-    updateProductWishButton(id);
-  }
-  function updateProductWishButton(id){
-    const btn = document.getElementById("pWishBtn");
-    if(!btn) return;
-    const on = isWished(id);
-    btn.style.borderColor = on ? "rgba(255,255,255,.18)" : "rgba(255,255,255,.10)";
+
+    // if quick view open, sync its heart
+    syncQVWish();
+
+    // animate heart on catalog card (best effort)
+    const btn = document.querySelector(`[data-wish="${id}"]`);
+    if(btn) pulseHeart(btn);
   }
 
   // =============================
-  // RENDER CATALOG (icon cart, fixed hearts)
+  // QUICK VIEW (popup) + size/color
   // =============================
-  function renderCatalog(list = PRODUCTS){
+  function openQV(id){
+    const p = PRODUCTS.find(x=>x.id===id);
+    if(!p) return;
+
+    window.__qvId = id;
+
+    document.getElementById("qvBadge").textContent = p.badge;
+    document.getElementById("qvName").textContent  = p.name;
+    document.getElementById("qvDesc").textContent  = p.desc;
+    document.getElementById("qvPrice").textContent = `${p.price}₽`;
+
+    // chips (persist per product)
+    const sel = getSel();
+    const saved = sel[id] || {};
+    if(!saved.size) saved.size = p.sizes?.[0] || "";
+    if(!saved.color) saved.color = p.colors?.[0] || "";
+
+    renderChips("sizeChips", p.sizes || [], saved.size, (val)=>{
+      saved.size = val;
+      sel[id] = saved;
+      setSel(sel);
+      haptic("impact");
+    });
+
+    renderChips("colorChips", p.colors || [], saved.color, (val)=>{
+      saved.color = val;
+      sel[id] = saved;
+      setSel(sel);
+      haptic("impact");
+    });
+
+    sel[id] = saved;
+    setSel(sel);
+
+    syncQVWish();
+
+    document.getElementById("qvModal").classList.add("show");
+    haptic("impact");
+  }
+
+  function renderChips(containerId, values, selected, onPick){
+    const el = document.getElementById(containerId);
+    el.innerHTML = "";
+    values.forEach(v=>{
+      const b = document.createElement("button");
+      b.className = "opt" + (v === selected ? " on" : "");
+      b.textContent = v;
+      b.onclick = ()=>{
+        [...el.querySelectorAll(".opt")].forEach(x=>x.classList.remove("on"));
+        b.classList.add("on");
+        onPick(v);
+      };
+      el.appendChild(b);
+    });
+  }
+
+  function syncQVWish(){
+    const id = window.__qvId;
+    const btn = document.getElementById("qvWishBtn");
+    if(!btn || !id) return;
+    btn.classList.toggle("on", isWished(id));
+  }
+
+  function closeQV(){
+    document.getElementById("qvModal").classList.remove("show");
+  }
+  function goProductFromQV(){
+    // “страница товара” в этой версии = quick view + можно оставить так.
+    // Если хочешь отдельную страницу товара — добавим следующим шагом.
+    showToast("Пока демо: быстрый просмотр");
+    closeQV();
+  }
+
+  // =============================
+  // RENDER CATALOG (quick view + icon cart)
+  // =============================
+  function renderCatalog(list){
     const el = document.getElementById("catalog");
     el.innerHTML = "";
 
@@ -1018,12 +1159,12 @@
 
       card.innerHTML = `
         <button class="wishBtn ${wished ? "on" : ""}" data-wish="${p.id}" aria-label="Избранное">
-          <svg viewBox="0 0 24 24" fill="${wished ? "rgba(255,255,255,.96)" : "none"}" stroke="${wished ? "rgba(255,255,255,.96)" : "rgba(245,246,250,.92)"}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 21s-7-4.6-9.5-8.5C.6 9.3 2.4 6 6 6c2 0 3.2 1 4 2 0.8-1 2-2 4-2 3.6 0 5.4 3.3 3.5 6.5C19 16.4 12 21 12 21z"></path>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path class="wishPath" d="M12 21s-7.4-4.7-9.8-8.8C.4 9 2.6 6 6.1 6c2 0 3.3 1.1 3.9 2.1.6-1 1.9-2.1 3.9-2.1 3.5 0 5.7 3 3.9 6.2C19.4 16.3 12 21 12 21z"></path>
           </svg>
         </button>
 
-        <div class="pImg" data-open="${p.id}">
+        <div class="pImg" data-qv="${p.id}">
           <div class="pBadge">${p.badge}</div>
         </div>
 
@@ -1032,14 +1173,16 @@
           <div class="pDesc">${p.desc}</div>
           <div class="pBottom">
             <div class="pPrice">${p.price}₽</div>
-            <button class="miniBtn" data-add="${p.id}" aria-label="В корзину">
-              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M6 6h15l-2 9H8L6 6z"></path>
-                <path d="M6 6 5 3H2"></path>
-                <circle cx="9" cy="20" r="1.6"></circle>
-                <circle cx="18" cy="20" r="1.6"></circle>
-              </svg>
-            </button>
+            <div class="row" style="gap:8px; flex-wrap:nowrap;">
+              <button class="miniBtn" data-add="${p.id}" aria-label="В корзину">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 6h15l-2 9H8L6 6z"></path>
+                  <path d="M6 6 5 3H2"></path>
+                  <circle cx="9" cy="20" r="1.6"></circle>
+                  <circle cx="18" cy="20" r="1.6"></circle>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       `;
@@ -1047,17 +1190,16 @@
       el.appendChild(card);
     });
 
-    // open product
-    el.querySelectorAll("[data-open]").forEach(img=>{
-      img.addEventListener("click", ()=> openProduct(img.getAttribute("data-open")));
+    // quick view by clicking image
+    el.querySelectorAll("[data-qv]").forEach(img=>{
+      img.addEventListener("click", ()=> openQV(img.getAttribute("data-qv")));
     });
 
-    // add to cart (icon)
+    // add to cart
     el.querySelectorAll("[data-add]").forEach(btn=>{
       btn.addEventListener("click", (e)=>{
         e.stopPropagation();
-        const id = btn.getAttribute("data-add");
-        addToCart(id, false, btn);
+        addToCart(btn.getAttribute("data-add"), false, btn);
       });
     });
 
@@ -1067,29 +1209,9 @@
         e.stopPropagation();
         const id = btn.getAttribute("data-wish");
         toggleWish(id);
+        pulseHeart(btn);
       });
     });
-  }
-
-  // =============================
-  // PRODUCT PAGE
-  // =============================
-  function openProduct(id){
-    const p = PRODUCTS.find(x=>x.id===id);
-    if(!p) return;
-
-    window.__currentProductId = id;
-
-    document.getElementById("pBadge").textContent = p.badge;
-    document.getElementById("pName").textContent = p.name;
-    document.getElementById("pDesc").textContent = p.desc;
-    document.getElementById("pPrice").textContent = `${p.price}₽`;
-    document.getElementById("pMeta").textContent = p.meta;
-
-    updateProductWishButton(id);
-
-    go("product");
-    haptic("impact");
   }
 
   // =============================
@@ -1100,6 +1222,7 @@
     return Object.values(c).reduce((a,b)=>a+b,0);
   }
 
+  // in cart we store per-item count only (demo). size/color stored separately per product
   function cartSummary(){
     const c = getCart();
     let total = 0;
@@ -1118,15 +1241,13 @@
     c[id] = (c[id] || 0) + 1;
     setCart(c);
 
+    // fly + bump
+    if(fromEl) flyToCart(fromEl);
+    bumpCartBadge();
+
     const p = PRODUCTS.find(x=>x.id===id);
     showToast(p ? `В корзине: ${p.name}` : "Добавлено");
     haptic("success");
-
-    const badge = document.getElementById("cartBadge");
-    if(badge.style.display !== "none") bumpCartBadge();
-
-    if(fromEl) flyToCart(fromEl);
-    else if(fromProductPage) flyToCart(document.getElementById("pImg"));
   }
 
   function removeFromCart(id){
@@ -1150,25 +1271,25 @@
       const { items, total } = cartSummary();
       cartTotal.textContent = `Итого: ${total}₽`;
 
+      const sel = getSel();
+
       if(!items.length){
         cartList.innerHTML = `<div class="subtitle" style="padding:10px 0;">Корзина пустая.</div>`;
         cartTotal.textContent = `Итого: 0₽`;
       } else {
         cartList.innerHTML = items.map(({p, qty})=>{
+          const s = sel[p.id] || {};
+          const sc = (s.size || "—") + " • " + (s.color || "—");
           return `
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.10);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.12);">
               <div style="min-width:0;">
                 <div style="font-weight:980; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.name}</div>
-                <div class="subtitle">${p.price}₽ • ${p.meta}</div>
+                <div class="subtitle">${p.price}₽ • ${sc}</div>
               </div>
               <div class="row" style="gap:8px; flex:0 0 auto; flex-wrap:nowrap;">
-                <button class="miniBtn" onclick="removeFromCart('${p.id}')" aria-label="Минус">
-                  <span style="font-weight:980; font-size:16px; line-height:0;">−</span>
-                </button>
+                <button class="miniBtn" onclick="removeFromCart('${p.id}')" aria-label="Минус"><span style="font-weight:980; font-size:16px; line-height:0;">−</span></button>
                 <button class="chip active" style="padding:8px 10px; cursor:default;">${qty}</button>
-                <button class="miniBtn" onclick="addToCart('${p.id}')" aria-label="Плюс">
-                  <span style="font-weight:980; font-size:16px; line-height:0;">+</span>
-                </button>
+                <button class="miniBtn" onclick="addToCart('${p.id}')" aria-label="Плюс"><span style="font-weight:980; font-size:16px; line-height:0;">+</span></button>
               </div>
             </div>
           `;
@@ -1178,7 +1299,7 @@
   }
 
   // =============================
-  // SEND ORDER
+  // SEND ORDER (include size/color)
   // =============================
   function sendOrder(){
     const { items, total } = cartSummary();
@@ -1188,7 +1309,13 @@
     const phone = document.getElementById("phone").value.trim() || "—";
     const comment = document.getElementById("comment").value.trim() || "—";
 
-    const lines = items.map(({p, qty}) => `${p.name} × ${qty} = ${p.price*qty}₽`).join("\n- ");
+    const sel = getSel();
+
+    const lines = items.map(({p, qty})=>{
+      const s = sel[p.id] || {};
+      const sc = `size: ${s.size || "—"}, color: ${s.color || "—"}`;
+      return `${p.name} (${sc}) × ${qty} = ${p.price*qty}₽`;
+    }).join("\n- ");
 
     const text =
 `🛍️ Заказ (демо)
@@ -1220,8 +1347,10 @@
   function clearLocal(){
     localStorage.removeItem(CART_KEY);
     localStorage.removeItem(WISH_KEY);
+    localStorage.removeItem(SEL_KEY);
     wishlistView = false;
-    document.getElementById("catalogHint").innerHTML = `<span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Новый дроп</span>`;
+    updateTopHeartState();
+    document.getElementById("catalogHint").innerHTML = `<span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Quick view</span>`;
     applyFilters();
     updateUI();
     showToast("Очищено");
@@ -1236,12 +1365,13 @@
       window.Telegram?.WebApp?.expand?.();
     }catch(e){}
 
-    renderCatalog(PRODUCTS);
-    applyFilters();
-    handleRoute();
-    updateUI();
     fillAccountUI();
+    updateTopHeartState();
+    handleRoute();
+    applyFilters();
+    updateUI();
   }
+
   init();
 </script>
 </body>
