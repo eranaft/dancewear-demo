@@ -7,27 +7,43 @@
 
   <style>
     :root{
-      /* light liquid glass */
-      --bg:#f6f8ff;
-      --bg2:#f2f6ff;
+      --radius: 22px;
+      --ease: cubic-bezier(.2,.9,.2,1);
 
-      --glass: rgba(255,255,255,.62);
-      --glass2: rgba(255,255,255,.78);
-      --stroke: rgba(16,24,40,.10);
-      --stroke2: rgba(16,24,40,.14);
-
-      --text:#0b1020;
-      --muted: rgba(11,16,32,.62);
-
-      /* accents */
       --cyan:#00c9ff;
       --orange:#ff7a18;
 
+      /* light (default) */
+      --bg:#f6f8ff;
+      --bg2:#f2f6ff;
+      --glass: rgba(255,255,255,.62);
+      --glass2: rgba(255,255,255,.80);
+      --stroke: rgba(16,24,40,.10);
+      --stroke2: rgba(16,24,40,.14);
+      --text:#0b1020;
+      --muted: rgba(11,16,32,.62);
       --shadow: 0 26px 80px rgba(11,16,32,.12);
       --shadow2: 0 18px 50px rgba(11,16,32,.10);
+      --toastBg: rgba(255,255,255,.78);
+      --toastText: #0b1020;
+      --modalBg: rgba(11,16,32,.22);
+    }
 
-      --radius: 22px;
-      --ease: cubic-bezier(.2,.9,.2,1);
+    /* dark theme overrides */
+    [data-theme="dark"]{
+      --bg:#070a10;
+      --bg2:#0b1220;
+      --glass: rgba(255,255,255,.08);
+      --glass2: rgba(255,255,255,.12);
+      --stroke: rgba(255,255,255,.14);
+      --stroke2: rgba(255,255,255,.22);
+      --text:#f6f8ff;
+      --muted: rgba(246,248,255,.68);
+      --shadow: 0 26px 90px rgba(0,0,0,.55);
+      --shadow2: 0 18px 60px rgba(0,0,0,.42);
+      --toastBg: rgba(0,0,0,.56);
+      --toastText: #fff;
+      --modalBg: rgba(0,0,0,.44);
     }
 
     *{ box-sizing:border-box; }
@@ -45,19 +61,29 @@
       overflow-x:hidden;
     }
 
-    /* soft iOS caustics */
+    /* live “shine” layer */
     body:before{
       content:"";
       position:fixed;
       inset:-20%;
       pointer-events:none;
       background:
-        radial-gradient(900px 420px at 40% 10%, rgba(255,255,255,.65), transparent 60%),
-        radial-gradient(700px 360px at 70% 40%, rgba(255,255,255,.45), transparent 62%),
+        radial-gradient(900px 420px at 40% 10%, rgba(255,255,255,.50), transparent 60%),
+        radial-gradient(700px 360px at 70% 40%, rgba(255,255,255,.32), transparent 62%),
         conic-gradient(from 180deg at 50% 35%, rgba(0,201,255,.08), rgba(255,122,24,.06), rgba(0,201,255,.08));
       filter: blur(18px);
-      opacity:.55;
+      opacity: .55;
       z-index:0;
+      transform: translateZ(0);
+      animation: floatShine 10s var(--ease) infinite alternate;
+    }
+    [data-theme="dark"] body:before{
+      opacity:.45;
+      filter: blur(22px);
+    }
+    @keyframes floatShine{
+      from{ transform: translate3d(-1%, -1%, 0) scale(1); }
+      to{ transform: translate3d(1%, 1%, 0) scale(1.02); }
     }
 
     .container{
@@ -73,7 +99,7 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(246,248,255,.62);
+      background: color-mix(in srgb, var(--bg) 70%, transparent);
       backdrop-filter: blur(18px) saturate(180%);
       border-bottom: 1px solid var(--stroke);
     }
@@ -138,12 +164,13 @@
     }
     .iconBtn:active{ transform: scale(.95); }
     @media (hover:hover){
-      .iconBtn:hover{ transform: translateY(-1px); border-color: var(--stroke2); box-shadow: 0 22px 60px rgba(11,16,32,.12); }
+      .iconBtn:hover{ transform: translateY(-1px); border-color: var(--stroke2); box-shadow: 0 22px 60px rgba(0,0,0,.18); }
+      [data-theme="dark"] .iconBtn:hover{ box-shadow: 0 22px 70px rgba(0,0,0,.44); }
     }
 
-    .icon{ width: 20px; height: 20px; display:block; color: rgba(11,16,32,.88); }
+    .icon{ width: 20px; height: 20px; display:block; color: color-mix(in srgb, var(--text) 92%, transparent); }
 
-    /* cart badge: robust */
+    /* cart badge stable */
     .badge{
       position:absolute;
       top: 0;
@@ -160,9 +187,13 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      box-shadow: 0 12px 26px rgba(11,16,32,.16);
-      border: 2px solid rgba(246,248,255,.85);
+      box-shadow: 0 12px 26px rgba(0,0,0,.18);
+      border: 2px solid color-mix(in srgb, var(--bg) 86%, transparent);
       will-change: transform;
+    }
+    [data-theme="dark"] .badge{
+      border-color: rgba(10,14,22,.75);
+      color:#0a0e16;
     }
     @keyframes bumpBadge{
       0%{ transform: translate(50%,-50%) scale(1); }
@@ -175,7 +206,7 @@
     main{ padding: 14px 0 120px; }
 
     .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.52));
+      background: linear-gradient(180deg, var(--glass2), var(--glass));
       border: 1px solid var(--stroke);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -201,7 +232,7 @@
       width:100%;
       border-radius: 16px;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.64);
+      background: color-mix(in srgb, var(--glass) 85%, transparent);
       padding: 12px 14px;
       color: var(--text);
       outline: none;
@@ -209,19 +240,19 @@
       min-width: 0;
       transition: border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
     }
-    input::placeholder, textarea::placeholder{ color: rgba(11,16,32,.45); }
+    input::placeholder, textarea::placeholder{ color: color-mix(in srgb, var(--text) 45%, transparent); }
     input:focus, textarea:focus{
       border-color: rgba(0,201,255,.45);
       box-shadow: 0 0 0 4px rgba(0,201,255,.18);
-      background: rgba(255,255,255,.82);
+      background: color-mix(in srgb, var(--glass2) 88%, transparent);
     }
     textarea{ min-height: 90px; resize: vertical; }
 
     .chip{
       width:auto;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.62);
-      color: rgba(11,16,32,.92);
+      background: color-mix(in srgb, var(--glass) 85%, transparent);
+      color: color-mix(in srgb, var(--text) 92%, transparent);
       padding: 9px 12px;
       border-radius: 999px;
       font-weight: 950;
@@ -231,14 +262,14 @@
     }
     .chip:active{ transform: scale(.98); }
     .chip.active{
-      background: linear-gradient(135deg, rgba(0,201,255,.28), rgba(255,122,24,.14));
-      border-color: rgba(11,16,32,.14);
+      background: linear-gradient(135deg, rgba(0,201,255,.26), rgba(255,122,24,.12));
+      border-color: var(--stroke2);
       box-shadow: 0 18px 60px rgba(0,201,255,.12);
     }
 
     .hint{
       margin-top:10px;
-      color: rgba(11,16,32,.58);
+      color: var(--muted);
       font-size: 12.5px;
       display:flex;
       gap:10px;
@@ -248,7 +279,7 @@
       padding: 6px 10px;
       border-radius: 999px;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.52);
+      background: color-mix(in srgb, var(--glass) 80%, transparent);
     }
 
     .grid{
@@ -261,27 +292,27 @@
 
     .productCard{
       position: relative;
-      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.56));
+      background: linear-gradient(180deg, var(--glass2), var(--glass));
       border: 1px solid var(--stroke);
       border-radius: var(--radius);
       overflow:hidden;
-      box-shadow: 0 22px 70px rgba(11,16,32,.10);
+      box-shadow: 0 22px 70px rgba(0,0,0,.14);
       transition: transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease);
       display:flex;
       flex-direction:column;
       min-width:0;
       will-change: transform;
     }
+    [data-theme="dark"] .productCard{ box-shadow: 0 22px 90px rgba(0,0,0,.40); }
     @media (hover:hover){
       .productCard:hover{
         transform: translateY(-2px);
-        border-color: rgba(11,16,32,.14);
-        box-shadow: 0 28px 95px rgba(11,16,32,.12);
+        border-color: var(--stroke2);
       }
     }
     .productCard:active{ transform: scale(.99); }
 
-    /* “fake image” variations */
+    /* fake image variations */
     .pImg{
       position: relative;
       height: 150px;
@@ -289,8 +320,27 @@
       align-items:flex-end;
       padding: 12px;
       cursor:pointer;
-      border-bottom: 1px solid rgba(11,16,32,.06);
+      border-bottom: 1px solid color-mix(in srgb, var(--stroke) 65%, transparent);
+      overflow:hidden;
     }
+    .pImg:after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(closest-side, rgba(255,255,255,.55), transparent 60%);
+      opacity: .35;
+      transform: rotate(18deg) translateX(-12%);
+      pointer-events:none;
+      animation: sweep 7s var(--ease) infinite;
+    }
+    [data-theme="dark"] .pImg:after{ opacity:.18; }
+
+    @keyframes sweep{
+      0%{ transform: rotate(18deg) translateX(-30%); }
+      50%{ transform: rotate(18deg) translateX(12%); }
+      100%{ transform: rotate(18deg) translateX(-30%); }
+    }
+
     .imgV1{
       background:
         radial-gradient(240px 140px at 22% 25%, rgba(0,201,255,.26), transparent 62%),
@@ -316,17 +366,29 @@
         linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,255,255,.42));
     }
 
+    [data-theme="dark"] .imgV1,
+    [data-theme="dark"] .imgV2,
+    [data-theme="dark"] .imgV3,
+    [data-theme="dark"] .imgV4{
+      background:
+        radial-gradient(240px 140px at 22% 25%, rgba(0,201,255,.20), transparent 62%),
+        radial-gradient(220px 140px at 78% 60%, rgba(255,122,24,.14), transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+    }
+
     .pBadge{
-      background: rgba(255,255,255,.66);
+      position:relative;
+      background: color-mix(in srgb, var(--glass2) 88%, transparent);
       border: 1px solid var(--stroke);
       padding: 6px 10px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 980;
       letter-spacing:.2px;
-      color: rgba(11,16,32,.88);
-      backdrop-filter: blur(10px);
+      color: color-mix(in srgb, var(--text) 88%, transparent);
+      backdrop-filter: blur(12px);
       user-select:none;
+      z-index:2;
     }
 
     .pBody{
@@ -347,7 +409,7 @@
       white-space: nowrap;
     }
     .pDesc{
-      color: rgba(11,16,32,.62);
+      color: var(--muted);
       font-size: 12.5px;
       line-height: 1.35;
       min-height: 34px;
@@ -370,7 +432,7 @@
       height: 38px;
       border-radius: 999px;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.62);
+      background: color-mix(in srgb, var(--glass) 85%, transparent);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -381,10 +443,11 @@
     }
     .miniBtn:active{ transform: scale(.95); }
     @media (hover:hover){
-      .miniBtn:hover{ border-color: rgba(11,16,32,.16); box-shadow: 0 18px 50px rgba(11,16,32,.10); }
+      .miniBtn:hover{ border-color: var(--stroke2); box-shadow: 0 18px 50px rgba(0,0,0,.14); }
+      [data-theme="dark"] .miniBtn:hover{ box-shadow: 0 18px 60px rgba(0,0,0,.40); }
     }
 
-    /* ===== Perfect Heart (new path) ===== */
+    /* ===== PERFECT HEART (no tail) ===== */
     .wishBtn{
       position:absolute;
       top:10px;
@@ -393,9 +456,9 @@
       height: 38px;
       border-radius: 999px;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.62);
+      background: color-mix(in srgb, var(--glass) 85%, transparent);
       backdrop-filter: blur(14px) saturate(180%);
-      box-shadow: 0 18px 50px rgba(11,16,32,.10);
+      box-shadow: var(--shadow2);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -403,20 +466,21 @@
       user-select:none;
       padding:0;
       transition: transform .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease);
+      z-index:3;
     }
     .wishBtn:active{ transform: scale(.95); }
     .wishBtn svg{ width:20px; height:20px; display:block; }
 
     .wishPath{
-      stroke: rgba(11,16,32,.78);
+      stroke: color-mix(in srgb, var(--text) 78%, transparent);
       stroke-width: 2;
       fill: rgba(0,201,255,0);
-      transition: fill .20s var(--ease), stroke .20s var(--ease);
+      transition: fill .22s var(--ease), stroke .22s var(--ease);
       stroke-linecap: round;
       stroke-linejoin: round;
     }
     .wishBtn.on{
-      border-color: rgba(11,16,32,.14);
+      border-color: var(--stroke2);
       background: linear-gradient(135deg, rgba(0,201,255,.22), rgba(255,122,24,.10));
     }
     .wishBtn.on .wishPath{
@@ -435,7 +499,7 @@
     .hidden{ opacity:0; transform: translateY(8px); pointer-events:none; position:absolute; left:-9999px; }
 
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.58));
+      background: linear-gradient(180deg, var(--glass2), var(--glass));
       border: 1px solid var(--stroke);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -451,12 +515,18 @@
       font-weight: 980;
       letter-spacing: .2px;
       cursor:pointer;
-      color:#0b1020;
+      color: color-mix(in srgb, var(--text) 96%, transparent);
       background:
         radial-gradient(120% 120% at 20% 20%, rgba(255,255,255,.92), rgba(255,255,255,.72)),
-        linear-gradient(135deg, rgba(0,201,255,.70), rgba(255,122,24,.30));
+        linear-gradient(135deg, rgba(0,201,255,.60), rgba(255,122,24,.25));
       box-shadow: 0 18px 70px rgba(0,201,255,.10);
       transition: transform .18s var(--ease), box-shadow .18s var(--ease);
+    }
+    [data-theme="dark"] .btn{
+      color:#0a0e16;
+      background:
+        radial-gradient(120% 120% at 20% 20%, rgba(255,255,255,.92), rgba(255,255,255,.72)),
+        linear-gradient(135deg, rgba(0,201,255,.85), rgba(255,122,24,.35));
     }
     .btn:active{ transform: scale(.98); }
 
@@ -467,8 +537,8 @@
       padding: 14px;
       font-weight: 950;
       cursor:pointer;
-      background: rgba(255,255,255,.60);
-      color: rgba(11,16,32,.92);
+      background: color-mix(in srgb, var(--glass) 85%, transparent);
+      color: color-mix(in srgb, var(--text) 92%, transparent);
       transition: transform .18s var(--ease);
     }
     .btn2:active{ transform: scale(.98); }
@@ -479,16 +549,16 @@
       left: 50%;
       bottom: calc(92px + env(safe-area-inset-bottom));
       transform: translateX(-50%) translateY(10px);
-      background: rgba(255,255,255,.72);
+      background: var(--toastBg);
       border: 1px solid var(--stroke);
-      color: #0b1020;
+      color: var(--toastText);
       padding: 10px 14px;
       border-radius: 999px;
       font-weight: 950;
       font-size: 13px;
       opacity: 0;
       transition: opacity .20s var(--ease), transform .20s var(--ease);
-      box-shadow: 0 26px 90px rgba(11,16,32,.12);
+      box-shadow: 0 26px 90px rgba(0,0,0,.18);
       z-index: 9999;
       white-space: nowrap;
       max-width: calc(100vw - 24px);
@@ -514,13 +584,13 @@
       box-shadow: 0 18px 70px rgba(0,201,255,.18);
     }
 
-    /* ===== Bottom bar (smart hide) ===== */
+    /* ===== Bottom bar smart hide ===== */
     .bar{
       position: fixed;
       left:0; right:0; bottom:0;
       z-index: 60;
       padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
-      background: rgba(246,248,255,.70);
+      background: color-mix(in srgb, var(--bg) 75%, transparent);
       backdrop-filter: blur(18px) saturate(180%);
       border-top: 1px solid var(--stroke);
       transition: transform .22s var(--ease), opacity .22s var(--ease);
@@ -531,13 +601,13 @@
       pointer-events:none;
     }
     .barInner{ max-width: 1040px; margin: 0 auto; display:flex; gap: 10px; align-items:center; }
-    .barHint{ text-align:center; color: rgba(11,16,32,.55); font-size: 12.5px; margin-top: 8px; }
+    .barHint{ text-align:center; color: var(--muted); font-size: 12.5px; margin-top: 8px; }
 
     /* ===== Modals ===== */
     .modalWrap{
       position: fixed;
       inset: 0;
-      background: rgba(11,16,32,.22);
+      background: var(--modalBg);
       backdrop-filter: blur(10px);
       display:none;
       align-items:flex-end;
@@ -549,10 +619,10 @@
 
     .sheet{
       width: min(560px, 100%);
-      background: linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.62));
+      background: linear-gradient(180deg, var(--glass2), var(--glass));
       border: 1px solid var(--stroke);
       border-radius: 26px;
-      box-shadow: 0 34px 120px rgba(11,16,32,.18);
+      box-shadow: 0 34px 120px rgba(0,0,0,.22);
       padding: 14px;
       transform: translateY(14px);
       opacity: 0;
@@ -577,7 +647,7 @@
       width:38px; height:38px;
       border-radius:999px;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.62);
+      background: color-mix(in srgb, var(--glass) 85%, transparent);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -591,15 +661,16 @@
     .qvImg{
       height: 210px;
       border-radius: 18px;
-      border: 1px solid rgba(11,16,32,.08);
+      border: 1px solid color-mix(in srgb, var(--stroke) 70%, transparent);
       display:flex;
       align-items:flex-end;
       padding: 12px;
+      overflow:hidden;
     }
 
     .divider{
       height:1px;
-      background: rgba(11,16,32,.08);
+      background: color-mix(in srgb, var(--stroke) 70%, transparent);
       margin: 12px 0;
     }
 
@@ -613,8 +684,8 @@
       padding: 8px 10px;
       border-radius: 999px;
       border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.62);
-      color: rgba(11,16,32,.92);
+      background: color-mix(in srgb, var(--glass) 85%, transparent);
+      color: color-mix(in srgb, var(--text) 92%, transparent);
       font-weight: 950;
       cursor:pointer;
       transition: transform .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease), box-shadow .18s var(--ease);
@@ -622,19 +693,9 @@
     }
     .opt:active{ transform: scale(.98); }
     .opt.on{
-      border-color: rgba(11,16,32,.14);
+      border-color: var(--stroke2);
       background: linear-gradient(135deg, rgba(0,201,255,.22), rgba(255,122,24,.10));
       box-shadow: 0 16px 60px rgba(0,201,255,.10);
-    }
-
-    /* top wishlist button uses same heart */
-    .topHeart .wishPath{
-      fill: rgba(0,201,255,0);
-      stroke: rgba(11,16,32,.78);
-    }
-    .topHeart.on .wishPath{
-      fill: rgba(0,201,255,.92);
-      stroke: rgba(0,201,255,.92);
     }
   </style>
 </head>
@@ -648,10 +709,17 @@
           <span class="logoDot"></span>
           <span class="title">Studio Wear</span>
         </a>
-        <div class="subtitle">Liquid glass • clean shop (демо)</div>
+        <div class="subtitle">Liquid glass • live UI • demo</div>
       </div>
 
       <div class="topActions">
+        <!-- theme toggle -->
+        <button class="iconBtn" id="themeBtn" onclick="toggleTheme()" aria-label="Тема">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path id="themeIconPath" d="M12 3a1 1 0 0 0 0 18 8 8 0 0 0 0-18z"></path>
+          </svg>
+        </button>
+
         <!-- account -->
         <button class="iconBtn" onclick="openAccount()" aria-label="Аккаунт">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -660,11 +728,10 @@
           </svg>
         </button>
 
-        <!-- wishlist -->
-        <button class="iconBtn topHeart" id="wishTopBtn" onclick="toggleWishlistView()" aria-label="Избранное">
+        <!-- wishlist filter -->
+        <button class="iconBtn" id="wishTopBtn" onclick="toggleWishlistView()" aria-label="Избранное">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <!-- new symmetric heart -->
-            <path class="wishPath" d="M12 20.8s-7.2-4.6-9.7-8.6C.6 9.1 2.7 6.3 6.2 6.3c2 0 3.2 1.1 3.8 2.1.6-1 1.8-2.1 3.8-2.1 3.5 0 5.6 2.8 3.9 5.9-2.5 4-9.7 8.6-9.7 8.6z"></path>
+            <path class="wishPath" d="M12 20s-7-4.5-9.2-8.1C1.2 9.2 3.1 6.6 6.2 6.6c1.8 0 3 1 3.6 1.9.6-.9 1.8-1.9 3.6-1.9 3.1 0 5 2.6 3.4 5.3C19 15.5 12 20 12 20z"></path>
           </svg>
         </button>
 
@@ -766,7 +833,7 @@
 </div>
 
 <!-- ACCOUNT MODAL -->
-<div class="modalWrap" id="accountModal" onclick="closeAccount(event)">
+<div class="modalWrap" id="accountModal" onclick="closeAccount()">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sheetHeader">
       <div class="sheetTitle">Аккаунт</div>
@@ -796,8 +863,9 @@
 </div>
 
 <!-- QUICK VIEW MODAL -->
-<div class="modalWrap" id="qvModal" onclick="closeQV(event)">
+<div class="modalWrap" id="qvModal" onclick="closeQV()">
   <div class="sheet" onclick="event.stopPropagation()">
+    <!-- IMPORTANT: header has ONLY title + close -->
     <div class="sheetHeader">
       <div class="sheetTitle">Быстрый просмотр</div>
       <button class="xBtn" onclick="closeQV()">✕</button>
@@ -811,17 +879,18 @@
       <div style="font-size:18px; font-weight:980;" id="qvName">—</div>
       <div class="subtitle" style="margin-top:6px;" id="qvDesc">—</div>
 
+      <!-- actions row: heart is here (CANNOT overlap close now) -->
       <div class="row" style="margin-top:12px; justify-content:space-between;">
         <div style="font-weight:980; font-size:18px;" id="qvPrice">—</div>
 
         <div class="row" style="gap:8px;">
           <button class="wishBtn" id="qvWishBtn" onclick="toggleWish(window.__qvId, true)" aria-label="Избранное">
             <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path class="wishPath" d="M12 20.8s-7.2-4.6-9.7-8.6C.6 9.1 2.7 6.3 6.2 6.3c2 0 3.2 1.1 3.8 2.1.6-1 1.8-2.1 3.8-2.1 3.5 0 5.6 2.8 3.9 5.9-2.5 4-9.7 8.6-9.7 8.6z"></path>
+              <path class="wishPath" d="M12 20s-7-4.5-9.2-8.1C1.2 9.2 3.1 6.6 6.2 6.6c1.8 0 3 1 3.6 1.9.6-.9 1.8-1.9 3.6-1.9 3.1 0 5 2.6 3.4 5.3C19 15.5 12 20 12 20z"></path>
             </svg>
           </button>
 
-          <button class="miniBtn" id="qvAddBtn" onclick="addToCart(window.__qvId, document.getElementById('qvAddBtn'))" aria-label="В корзину">
+          <button class="miniBtn" id="qvAddBtn" onclick="addToCart(window.__qvId, document.getElementById('qvAddBtn'), true)" aria-label="В корзину">
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M6 6h15l-2 9H8L6 6z"></path>
               <path d="M6 6 5 3H2"></path>
@@ -848,14 +917,33 @@
 </div>
 
 <script>
-  // =============================
-  // SETTINGS
-  // =============================
-  const OWNER_USERNAME = "USERNAME_ВЛАДЕЛИЦЫ_ТУТ"; // <- username владелицы (без @)
+  const OWNER_USERNAME = "egorkrab"; // username владелицы (без @)
 
-  // =============================
-  // DATA (demo) + image variants
-  // =============================
+  // theme
+  const THEME_KEY = "sw_theme_v1";
+  function setTheme(t){
+    document.documentElement.setAttribute("data-theme", t);
+    localStorage.setItem(THEME_KEY, t);
+    updateThemeIcon();
+  }
+  function toggleTheme(){
+    const cur = document.documentElement.getAttribute("data-theme") || "light";
+    setTheme(cur === "light" ? "dark" : "light");
+    showToast(cur === "light" ? "Тёмная тема" : "Светлая тема");
+    haptic("impact");
+  }
+  function updateThemeIcon(){
+    const cur = document.documentElement.getAttribute("data-theme") || "light";
+    const p = document.getElementById("themeIconPath");
+    // sun / moon minimal
+    if(cur === "light"){
+      p.setAttribute("d","M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8z M12 2v1 M12 21v1 M4.2 4.2l.7.7 M19.1 19.1l.7.7 M2 12h1 M21 12h1 M4.2 19.8l.7-.7 M19.1 4.9l.7-.7");
+    } else {
+      p.setAttribute("d","M21 12.7A7.5 7.5 0 0 1 11.3 3a6 6 0 1 0 9.7 9.7z");
+    }
+  }
+
+  // data
   const PRODUCTS = [
     { id:"set1", cat:"sets", badge:"Studio",  img:"imgV1", name:"Silk Line Set",        desc:"Комплект • мягкая посадка",             price:3490, sizes:["XS","S","M","L"], colors:["Ice","Black","Sand"] },
     { id:"set2", cat:"sets", badge:"Elegant", img:"imgV2", name:"Contour Set",          desc:"Комплект • подчёркивает линию",         price:3790, sizes:["XS","S","M","L"], colors:["Black","Neon Ice"] },
@@ -874,9 +962,9 @@
     { id:"leg3", cat:"leggings", badge:"Soft",   img:"imgV4", name:"Smooth Leggings",      desc:"Легинсы • мягкая ткань",             price:1890, sizes:["XS","S","M","L"], colors:["Ice","Black"] },
   ];
 
-  const CART_KEY = "liquid_shop_cart_v2";
-  const WISH_KEY = "liquid_shop_wish_v2";
-  const SEL_KEY  = "liquid_shop_sel_v2";
+  const CART_KEY = "sw_cart_v3";
+  const WISH_KEY = "sw_wish_v3";
+  const SEL_KEY  = "sw_sel_v3";
 
   function getCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || "{}"); }
   function setCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); updateUI(); }
@@ -887,42 +975,7 @@
   function getSel(){ return JSON.parse(localStorage.getItem(SEL_KEY) || "{}"); }
   function setSel(obj){ localStorage.setItem(SEL_KEY, JSON.stringify(obj)); }
 
-  // =============================
-  // PROFILE (Telegram WebApp)
-  // =============================
-  function getTelegramUser(){
-    try{ return window.Telegram?.WebApp?.initDataUnsafe?.user || null; }
-    catch(e){ return null; }
-  }
-  function formatName(u){
-    const f = (u?.first_name || "").trim();
-    const l = (u?.last_name || "").trim();
-    return (f + " " + l).trim() || "Покупатель";
-  }
-  function fillAccountUI(){
-    const u = getTelegramUser();
-    const accName = document.getElementById("accName");
-    const accUser = document.getElementById("accUser");
-    if(u){
-      accName.textContent = formatName(u);
-      accUser.textContent = u.username ? ("@" + u.username) : ("id: " + u.id);
-    } else {
-      accName.textContent = "Гость";
-      accUser.textContent = "Откройте внутри Telegram";
-    }
-  }
-  function tryFillCheckoutFromProfile(){
-    const u = getTelegramUser();
-    if(!u){ showToast("Откройте магазин внутри Telegram"); return; }
-    const name = document.getElementById("name");
-    if(name) name.value = formatName(u);
-    showToast("Заполнил имя из профиля");
-    haptic("success");
-  }
-
-  // =============================
-  // HELPERS
-  // =============================
+  // haptics + toast
   function haptic(type){
     try{
       const H = window.Telegram?.WebApp?.HapticFeedback;
@@ -931,7 +984,6 @@
       if(type === "success") H.notificationOccurred("success");
     }catch(e){}
   }
-
   function showToast(text="Готово"){
     const t = document.getElementById("toast");
     t.textContent = text;
@@ -989,12 +1041,15 @@
     btn.classList.add("heartPop");
   }
 
-  // =============================
-  // NAV + SMART BOTTOM BAR
-  // =============================
+  // routes + bottom bar
   function currentRoute(){
     const h = (location.hash || "#/").replace("#/","");
     return h || "catalog";
+  }
+  function updateBottomBar(){
+    const page = currentRoute();
+    const bar = document.getElementById("bottomBar");
+    bar.classList.toggle("hiddenBar", (page === "cart" || page === "checkout"));
   }
 
   function showView(name){
@@ -1005,9 +1060,7 @@
     updateBottomBar();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
-
   function go(name){ location.hash = name === "catalog" ? "#/" : `#/${name}`; }
-
   function handleRoute(){
     const page = currentRoute();
     if(page === "cart") showView("cart");
@@ -1016,17 +1069,7 @@
   }
   window.addEventListener("hashchange", handleRoute);
 
-  function updateBottomBar(){
-    const page = currentRoute();
-    const bar = document.getElementById("bottomBar");
-    // hide bar on cart/checkout (so it doesn't show "open cart" while already there)
-    const hide = (page === "cart" || page === "checkout");
-    bar.classList.toggle("hiddenBar", hide);
-  }
-
-  // =============================
-  // FILTERS + WISHLIST VIEW
-  // =============================
+  // wishlist view + category
   let currentCategory = "all";
   let wishlistView = false;
 
@@ -1037,19 +1080,14 @@
       if(el) el.classList.toggle("active", x===cat);
     });
     wishlistView = false;
-    updateTopHeartState();
+    document.getElementById("wishTopBtn").classList.remove("on");
     applyFilters();
     haptic("impact");
   }
 
-  function updateTopHeartState(){
-    const btn = document.getElementById("wishTopBtn");
-    btn.classList.toggle("on", wishlistView);
-  }
-
   function toggleWishlistView(){
     wishlistView = !wishlistView;
-    updateTopHeartState();
+    document.getElementById("wishTopBtn").classList.toggle("on", wishlistView);
 
     const hint = document.getElementById("catalogHint");
     hint.innerHTML = wishlistView
@@ -1059,6 +1097,25 @@
     applyFilters();
     showToast(wishlistView ? "Избранное" : "Каталог");
     haptic("impact");
+  }
+
+  function isWished(id){ return getWish().includes(id); }
+
+  function toggleWish(id, fromQV=false){
+    const arr = getWish();
+    const i = arr.indexOf(id);
+    if(i >= 0) arr.splice(i,1);
+    else arr.push(id);
+    setWish(arr);
+
+    // IMPORTANT: heart click should NOT open popup. We only toggle.
+    applyFilters();
+    syncQVWish();
+    showToast(arr.includes(id) ? "В избранном" : "Убрано");
+    haptic("success");
+
+    if(fromQV) pulseHeart(document.getElementById("qvWishBtn"));
+    else pulseHeart(document.querySelector(`[data-wish="${id}"]`));
   }
 
   function applyFilters(){
@@ -1075,38 +1132,7 @@
     renderCatalog(filtered);
   }
 
-  // =============================
-  // WISHLIST
-  // =============================
-  function isWished(id){ return getWish().includes(id); }
-
-  function toggleWish(id, fromQV=false){
-    const arr = getWish();
-    const i = arr.indexOf(id);
-    if(i >= 0) arr.splice(i,1);
-    else arr.push(id);
-    setWish(arr);
-
-    // Update UI
-    applyFilters();
-    syncQVWish();
-    const on = arr.includes(id);
-    showToast(on ? "Добавлено в избранное" : "Убрано из избранного");
-    haptic("success");
-
-    // animate on best visible button
-    if(fromQV){
-      const b = document.getElementById("qvWishBtn");
-      pulseHeart(b);
-    } else {
-      const b = document.querySelector(`[data-wish="${id}"]`);
-      pulseHeart(b);
-    }
-  }
-
-  // =============================
-  // QUICK VIEW + size/color
-  // =============================
+  // quick view chips
   function renderChips(containerId, values, selected, onPick){
     const el = document.getElementById(containerId);
     el.innerHTML = "";
@@ -1150,8 +1176,8 @@
     });
 
     sel[id]=saved; setSel(sel);
-    syncQVWish();
 
+    syncQVWish();
     document.getElementById("qvModal").classList.add("show");
     haptic("impact");
   }
@@ -1164,10 +1190,9 @@
   }
 
   function closeQV(){ document.getElementById("qvModal").classList.remove("show"); }
+  function closeAccount(){ document.getElementById("accountModal").classList.remove("show"); }
 
-  // =============================
-  // CATALOG RENDER
-  // =============================
+  // render catalog (heart click only toggles)
   function renderCatalog(list){
     const el = document.getElementById("catalog");
     el.innerHTML = "";
@@ -1187,7 +1212,8 @@
       card.innerHTML = `
         <button class="wishBtn ${wished ? "on" : ""}" data-wish="${p.id}" aria-label="Избранное">
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path class="wishPath" d="M12 20.8s-7.2-4.6-9.7-8.6C.6 9.1 2.7 6.3 6.2 6.3c2 0 3.2 1.1 3.8 2.1.6-1 1.8-2.1 3.8-2.1 3.5 0 5.6 2.8 3.9 5.9-2.5 4-9.7 8.6-9.7 8.6z"></path>
+            <!-- tail-less symmetric-ish heart -->
+            <path class="wishPath" d="M12 20s-7-4.5-9.2-8.1C1.2 9.2 3.1 6.6 6.2 6.6c1.8 0 3 1 3.6 1.9.6-.9 1.8-1.9 3.6-1.9 3.1 0 5 2.6 3.4 5.3C19 15.5 12 20 12 20z"></path>
           </svg>
         </button>
 
@@ -1214,30 +1240,30 @@
       el.appendChild(card);
     });
 
+    // open QV only by clicking image (NOT hearts)
     el.querySelectorAll("[data-qv]").forEach(img=>{
       img.addEventListener("click", ()=> openQV(img.getAttribute("data-qv")));
     });
 
+    // add to cart
     el.querySelectorAll("[data-add]").forEach(btn=>{
       btn.addEventListener("click", (e)=>{
         e.stopPropagation();
-        addToCart(btn.getAttribute("data-add"), btn);
+        addToCart(btn.getAttribute("data-add"), btn, false);
       });
     });
 
+    // wishlist: click toggles only
     el.querySelectorAll("[data-wish]").forEach(btn=>{
       btn.addEventListener("click", (e)=>{
         e.stopPropagation();
         const id = btn.getAttribute("data-wish");
-        toggleWish(id);
-        pulseHeart(btn);
+        toggleWish(id, false);
       });
     });
   }
 
-  // =============================
-  // CART
-  // =============================
+  // cart
   function cartCount(){
     const c = getCart();
     return Object.values(c).reduce((a,b)=>a+b,0);
@@ -1256,18 +1282,20 @@
     return { items, total };
   }
 
-  function addToCart(id, fromEl=null, fromQV=false){
+  function addToCart(id, fromEl=null, closePopup=false){
     const c = getCart();
     c[id] = (c[id] || 0) + 1;
     setCart(c);
 
-    // fly + bump
     if(fromEl) flyToCart(fromEl);
     bumpCartBadge();
 
     const p = PRODUCTS.find(x=>x.id===id);
     showToast(p ? `В корзине: ${p.name}` : "Добавлено");
     haptic("success");
+
+    // IMPORTANT: if added from popup — close it
+    if(closePopup) closeQV();
   }
 
   function removeFromCart(id){
@@ -1280,13 +1308,11 @@
   }
 
   function updateUI(){
-    // cart badge
     const count = cartCount();
     const badge = document.getElementById("cartBadge");
     badge.textContent = String(count);
     badge.style.display = count > 0 ? "flex" : "none";
 
-    // cart list
     const cartList = document.getElementById("cartList");
     const cartTotal = document.getElementById("cartTotal");
     if(cartList && cartTotal){
@@ -1301,12 +1327,13 @@
       } else {
         cartList.innerHTML = items.map(({p, qty})=>{
           const s = sel[p.id] || {};
-          const sc = `size: ${s.size || (p.sizes?.[0]||"—")} • color: ${s.color || (p.colors?.[0]||"—")}`;
+          const size = s.size || (p.sizes?.[0] || "—");
+          const color = s.color || (p.colors?.[0] || "—");
           return `
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid rgba(11,16,32,.08);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid color-mix(in srgb, var(--stroke) 70%, transparent);">
               <div style="min-width:0;">
                 <div style="font-weight:980; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.name}</div>
-                <div class="subtitle">${p.price}₽ • ${sc}</div>
+                <div class="subtitle">${p.price}₽ • size: ${size} • color: ${color}</div>
               </div>
               <div class="row" style="gap:8px; flex:0 0 auto; flex-wrap:nowrap;">
                 <button class="miniBtn" onclick="removeFromCart('${p.id}')" aria-label="Минус"><span style="font-weight:980; font-size:16px; line-height:0;">−</span></button>
@@ -1322,9 +1349,7 @@
     updateBottomBar();
   }
 
-  // =============================
-  // SEND ORDER (includes size/color)
-  // =============================
+  // order send
   function sendOrder(){
     const { items, total } = cartSummary();
     if(!items.length){ alert("Корзина пустая 😅"); return; }
@@ -1359,57 +1384,64 @@
     haptic("success");
   }
 
-  // =============================
-  // MODALS
-  // =============================
+  // account profile
+  function getTelegramUser(){
+    try{ return window.Telegram?.WebApp?.initDataUnsafe?.user || null; } catch(e){ return null; }
+  }
+  function formatName(u){
+    const f = (u?.first_name || "").trim();
+    const l = (u?.last_name || "").trim();
+    return (f + " " + l).trim() || "Покупатель";
+  }
+  function fillAccountUI(){
+    const u = getTelegramUser();
+    const accName = document.getElementById("accName");
+    const accUser = document.getElementById("accUser");
+    if(u){
+      accName.textContent = formatName(u);
+      accUser.textContent = u.username ? ("@" + u.username) : ("id: " + u.id);
+    } else {
+      accName.textContent = "Гость";
+      accUser.textContent = "Откройте внутри Telegram";
+    }
+  }
   function openAccount(){
     fillAccountUI();
     document.getElementById("accountModal").classList.add("show");
     haptic("impact");
   }
-  function closeAccount(){ document.getElementById("accountModal").classList.remove("show"); }
-
-  function closeAccountEvent(){ closeAccount(); }
-  function closeQVEvent(){ closeQV(); }
+  function tryFillCheckoutFromProfile(){
+    const u = getTelegramUser();
+    if(!u){ showToast("Откройте магазин внутри Telegram"); return; }
+    const name = document.getElementById("name");
+    if(name) name.value = formatName(u);
+    showToast("Заполнил имя из профиля");
+    haptic("success");
+  }
 
   function clearLocal(){
     localStorage.removeItem(CART_KEY);
     localStorage.removeItem(WISH_KEY);
     localStorage.removeItem(SEL_KEY);
     wishlistView = false;
-    updateTopHeartState();
+    document.getElementById("wishTopBtn").classList.remove("on");
     applyFilters();
     updateUI();
     showToast("Очищено");
   }
 
-  // =============================
-  // ROUTE
-  // =============================
-  function handleRoute(){
-    const h = (location.hash || "#/").replace("#/","");
-    const page = h || "catalog";
-    if(page === "cart") showView("cart");
-    else if(page === "checkout") showView("checkout");
-    else showView("catalog");
-  }
-
-  // =============================
-  // INIT
-  // =============================
+  // init
   function init(){
-    try{
-      window.Telegram?.WebApp?.ready?.();
-      window.Telegram?.WebApp?.expand?.();
-    }catch(e){}
+    try{ window.Telegram?.WebApp?.ready?.(); window.Telegram?.WebApp?.expand?.(); }catch(e){}
 
-    fillAccountUI();
-    updateTopHeartState();
+    // theme load
+    const savedTheme = localStorage.getItem(THEME_KEY) || "light";
+    setTheme(savedTheme);
+
     handleRoute();
     applyFilters();
     updateUI();
   }
-  window.addEventListener("hashchange", handleRoute);
 
   init();
 </script>
