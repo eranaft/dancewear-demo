@@ -7,24 +7,27 @@
 
   <style>
     :root{
-      --bg0:#070a10;
-      --bg1:#0b1220;
+      /* light liquid glass */
+      --bg:#f6f8ff;
+      --bg2:#f2f6ff;
 
-      /* liquid glass */
-      --glass: rgba(255,255,255,.08);
-      --glass2: rgba(255,255,255,.12);
-      --line: rgba(255,255,255,.14);
-      --line2: rgba(255,255,255,.22);
+      --glass: rgba(255,255,255,.62);
+      --glass2: rgba(255,255,255,.78);
+      --stroke: rgba(16,24,40,.10);
+      --stroke2: rgba(16,24,40,.14);
 
-      --text:#f6f8ff;
-      --muted: rgba(246,248,255,.68);
+      --text:#0b1020;
+      --muted: rgba(11,16,32,.62);
 
       /* accents */
-      --cyan:#21e6ff;
+      --cyan:#00c9ff;
       --orange:#ff7a18;
 
-      --shadow: 0 26px 90px rgba(0,0,0,.55);
+      --shadow: 0 26px 80px rgba(11,16,32,.12);
+      --shadow2: 0 18px 50px rgba(11,16,32,.10);
+
       --radius: 22px;
+      --ease: cubic-bezier(.2,.9,.2,1);
     }
 
     *{ box-sizing:border-box; }
@@ -34,25 +37,25 @@
       font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial;
       color:var(--text);
       background:
-        radial-gradient(900px 520px at 15% -10%, rgba(33,230,255,.28), transparent 60%),
-        radial-gradient(750px 520px at 95% 0%, rgba(255,122,24,.22), transparent 60%),
-        radial-gradient(700px 420px at 55% 120%, rgba(33,230,255,.14), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
+        radial-gradient(900px 520px at 12% -10%, rgba(0,201,255,.22), transparent 60%),
+        radial-gradient(820px 520px at 95% 0%, rgba(255,122,24,.18), transparent 60%),
+        radial-gradient(720px 420px at 55% 120%, rgba(0,201,255,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
       -webkit-tap-highlight-color: transparent;
       overflow-x:hidden;
     }
 
-    /* subtle iOS-like caustics */
+    /* soft iOS caustics */
     body:before{
       content:"";
       position:fixed;
       inset:-20%;
       pointer-events:none;
       background:
-        radial-gradient(900px 420px at 40% 10%, rgba(255,255,255,.08), transparent 60%),
-        radial-gradient(700px 360px at 70% 40%, rgba(255,255,255,.05), transparent 62%),
-        conic-gradient(from 180deg at 50% 35%, rgba(33,230,255,.08), rgba(255,122,24,.06), rgba(33,230,255,.08));
-      filter: blur(22px);
+        radial-gradient(900px 420px at 40% 10%, rgba(255,255,255,.65), transparent 60%),
+        radial-gradient(700px 360px at 70% 40%, rgba(255,255,255,.45), transparent 62%),
+        conic-gradient(from 180deg at 50% 35%, rgba(0,201,255,.08), rgba(255,122,24,.06), rgba(0,201,255,.08));
+      filter: blur(18px);
       opacity:.55;
       z-index:0;
     }
@@ -70,9 +73,9 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(10,14,22,.55);
-      backdrop-filter: blur(16px) saturate(180%);
-      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: rgba(246,248,255,.62);
+      backdrop-filter: blur(18px) saturate(180%);
+      border-bottom: 1px solid var(--stroke);
     }
 
     .head{
@@ -95,11 +98,11 @@
 
     .logoDot{
       width:10px; height:10px; border-radius:999px;
-      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.15));
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.20));
       box-shadow:
-        0 0 0 6px rgba(33,230,255,.12),
-        0 0 28px rgba(33,230,255,.22),
-        0 0 22px rgba(255,122,24,.18);
+        0 0 0 6px rgba(0,201,255,.10),
+        0 0 26px rgba(0,201,255,.22),
+        0 0 18px rgba(255,122,24,.16);
       flex:0 0 auto;
     }
 
@@ -122,60 +125,58 @@
       width: 40px;
       height: 40px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      box-shadow: 0 18px 52px rgba(0,0,0,.38);
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, var(--glass2), var(--glass));
+      box-shadow: var(--shadow2);
       cursor:pointer;
       display:flex;
       align-items:center;
       justify-content:center;
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease);
       user-select:none;
       overflow:hidden;
     }
     .iconBtn:active{ transform: scale(.95); }
     @media (hover:hover){
-      .iconBtn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); box-shadow: 0 26px 70px rgba(0,0,0,.44); }
+      .iconBtn:hover{ transform: translateY(-1px); border-color: var(--stroke2); box-shadow: 0 22px 60px rgba(11,16,32,.12); }
     }
 
-    /* icons */
-    .icon{ width: 20px; height: 20px; display:block; color: rgba(246,248,255,.92); }
+    .icon{ width: 20px; height: 20px; display:block; color: rgba(11,16,32,.88); }
 
-    /* cart badge centered */
+    /* cart badge: robust */
     .badge{
       position:absolute;
-      top:-7px;
-      left:50%;
-      transform: translateX(-50%);
+      top: 0;
+      right: 0;
+      transform: translate(50%,-50%);
       min-width: 18px;
       height: 18px;
       padding: 0 6px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.96), rgba(255,255,255,.78));
-      color:#0a0e16;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.78));
+      color:#0b1020;
       font-size: 11px;
       font-weight: 980;
       display:flex;
       align-items:center;
       justify-content:center;
-      box-shadow: 0 14px 30px rgba(0,0,0,.40);
-      border: 2px solid rgba(10,14,22,.75);
+      box-shadow: 0 12px 26px rgba(11,16,32,.16);
+      border: 2px solid rgba(246,248,255,.85);
       will-change: transform;
     }
-
     @keyframes bumpBadge{
-      0%{ transform: translateX(-50%) scale(1); }
-      35%{ transform: translateX(-50%) scale(1.18); }
-      100%{ transform: translateX(-50%) scale(1); }
+      0%{ transform: translate(50%,-50%) scale(1); }
+      35%{ transform: translate(50%,-50%) scale(1.18); }
+      100%{ transform: translate(50%,-50%) scale(1); }
     }
-    .bumpBadge{ animation: bumpBadge .28s ease; }
+    .bumpBadge{ animation: bumpBadge .28s var(--ease); }
 
     /* ===== Layout ===== */
     main{ padding: 14px 0 120px; }
 
     .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.52));
+      border: 1px solid var(--stroke);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 12px;
@@ -187,9 +188,9 @@
       position:absolute;
       inset:-2px;
       background:
-        radial-gradient(520px 220px at 20% 0%, rgba(33,230,255,.20), transparent 58%),
-        radial-gradient(520px 220px at 80% 0%, rgba(255,122,24,.16), transparent 58%);
-      opacity:.7;
+        radial-gradient(520px 220px at 20% 0%, rgba(0,201,255,.16), transparent 58%),
+        radial-gradient(520px 220px at 80% 0%, rgba(255,122,24,.12), transparent 58%);
+      opacity:.8;
       pointer-events:none;
     }
     .panel > *{ position:relative; }
@@ -199,45 +200,45 @@
     input, textarea{
       width:100%;
       border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.18);
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.64);
       padding: 12px 14px;
       color: var(--text);
       outline: none;
       font-weight: 650;
       min-width: 0;
-      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+      transition: border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
     }
-    input::placeholder, textarea::placeholder{ color: rgba(246,248,255,.45); }
+    input::placeholder, textarea::placeholder{ color: rgba(11,16,32,.45); }
     input:focus, textarea:focus{
-      border-color: rgba(33,230,255,.45);
-      box-shadow: 0 0 0 4px rgba(33,230,255,.18);
-      background: rgba(0,0,0,.22);
+      border-color: rgba(0,201,255,.45);
+      box-shadow: 0 0 0 4px rgba(0,201,255,.18);
+      background: rgba(255,255,255,.82);
     }
     textarea{ min-height: 90px; resize: vertical; }
 
     .chip{
       width:auto;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.16);
-      color: rgba(246,248,255,.92);
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.62);
+      color: rgba(11,16,32,.92);
       padding: 9px 12px;
       border-radius: 999px;
       font-weight: 950;
       cursor:pointer;
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease);
       user-select:none;
     }
     .chip:active{ transform: scale(.98); }
     .chip.active{
-      background: linear-gradient(135deg, rgba(33,230,255,.45), rgba(255,122,24,.20));
-      border-color: rgba(255,255,255,.24);
-      box-shadow: 0 18px 60px rgba(33,230,255,.14);
+      background: linear-gradient(135deg, rgba(0,201,255,.28), rgba(255,122,24,.14));
+      border-color: rgba(11,16,32,.14);
+      box-shadow: 0 18px 60px rgba(0,201,255,.12);
     }
 
     .hint{
       margin-top:10px;
-      color: rgba(246,248,255,.60);
+      color: rgba(11,16,32,.58);
       font-size: 12.5px;
       display:flex;
       gap:10px;
@@ -246,8 +247,8 @@
     .hint span{
       padding: 6px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.14);
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.52);
     }
 
     .grid{
@@ -260,12 +261,12 @@
 
     .productCard{
       position: relative;
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.56));
+      border: 1px solid var(--stroke);
       border-radius: var(--radius);
       overflow:hidden;
-      box-shadow: 0 22px 90px rgba(0,0,0,.40);
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      box-shadow: 0 22px 70px rgba(11,16,32,.10);
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease);
       display:flex;
       flex-direction:column;
       min-width:0;
@@ -274,34 +275,56 @@
     @media (hover:hover){
       .productCard:hover{
         transform: translateY(-2px);
-        border-color: rgba(255,255,255,.22);
-        box-shadow: 0 28px 120px rgba(0,0,0,.46);
+        border-color: rgba(11,16,32,.14);
+        box-shadow: 0 28px 95px rgba(11,16,32,.12);
       }
     }
     .productCard:active{ transform: scale(.99); }
 
+    /* “fake image” variations */
     .pImg{
       position: relative;
       height: 150px;
-      background:
-        radial-gradient(220px 120px at 25% 25%, rgba(33,230,255,.25), transparent 62%),
-        radial-gradient(200px 120px at 75% 60%, rgba(255,122,24,.18), transparent 60%),
-        linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
       display:flex;
       align-items:flex-end;
       padding: 12px;
       cursor:pointer;
+      border-bottom: 1px solid rgba(11,16,32,.06);
+    }
+    .imgV1{
+      background:
+        radial-gradient(240px 140px at 22% 25%, rgba(0,201,255,.26), transparent 62%),
+        radial-gradient(220px 140px at 78% 60%, rgba(255,122,24,.18), transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,.86), rgba(255,255,255,.42));
+    }
+    .imgV2{
+      background:
+        radial-gradient(260px 140px at 30% 30%, rgba(255,122,24,.20), transparent 62%),
+        radial-gradient(220px 140px at 72% 62%, rgba(0,201,255,.18), transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,255,255,.44));
+    }
+    .imgV3{
+      background:
+        radial-gradient(260px 140px at 24% 28%, rgba(0,201,255,.22), transparent 62%),
+        radial-gradient(240px 140px at 76% 58%, rgba(255,122,24,.14), transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,.90), rgba(255,255,255,.46));
+    }
+    .imgV4{
+      background:
+        radial-gradient(260px 140px at 20% 25%, rgba(255,122,24,.18), transparent 62%),
+        radial-gradient(240px 140px at 80% 58%, rgba(0,201,255,.16), transparent 60%),
+        linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,255,255,.42));
     }
 
     .pBadge{
-      background: rgba(0,0,0,.20);
-      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.66);
+      border: 1px solid var(--stroke);
       padding: 6px 10px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 980;
       letter-spacing:.2px;
-      color: rgba(246,248,255,.92);
+      color: rgba(11,16,32,.88);
       backdrop-filter: blur(10px);
       user-select:none;
     }
@@ -324,7 +347,7 @@
       white-space: nowrap;
     }
     .pDesc{
-      color: rgba(246,248,255,.70);
+      color: rgba(11,16,32,.62);
       font-size: 12.5px;
       line-height: 1.35;
       min-height: 34px;
@@ -342,27 +365,26 @@
       white-space: nowrap;
     }
 
-    /* icon-only add-to-cart */
     .miniBtn{
       width: 38px;
       height: 38px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.16);
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.62);
       display:flex;
       align-items:center;
       justify-content:center;
       cursor:pointer;
-      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+      transition: transform .18s var(--ease), border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
       user-select:none;
       flex: 0 0 auto;
     }
     .miniBtn:active{ transform: scale(.95); }
     @media (hover:hover){
-      .miniBtn:hover{ border-color: rgba(255,255,255,.22); box-shadow: 0 18px 60px rgba(0,0,0,.40); }
+      .miniBtn:hover{ border-color: rgba(11,16,32,.16); box-shadow: 0 18px 50px rgba(11,16,32,.10); }
     }
 
-    /* PERFECT HEART: single SVG + animation */
+    /* ===== Perfect Heart (new path) ===== */
     .wishBtn{
       position:absolute;
       top:10px;
@@ -370,51 +392,51 @@
       width: 38px;
       height: 38px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.18);
-      backdrop-filter: blur(12px) saturate(160%);
-      box-shadow: 0 22px 70px rgba(0,0,0,.45);
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.62);
+      backdrop-filter: blur(14px) saturate(180%);
+      box-shadow: 0 18px 50px rgba(11,16,32,.10);
       display:flex;
       align-items:center;
       justify-content:center;
       cursor:pointer;
       user-select:none;
       padding:0;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      transition: transform .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease);
     }
     .wishBtn:active{ transform: scale(.95); }
     .wishBtn svg{ width:20px; height:20px; display:block; }
 
-    /* stroke + fill animation */
     .wishPath{
-      stroke: rgba(246,248,255,.92);
+      stroke: rgba(11,16,32,.78);
       stroke-width: 2;
-      fill: rgba(33,230,255,0);
-      transition: fill .18s ease, stroke .18s ease;
+      fill: rgba(0,201,255,0);
+      transition: fill .20s var(--ease), stroke .20s var(--ease);
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
     .wishBtn.on{
-      border-color: rgba(255,255,255,.22);
-      background: linear-gradient(135deg, rgba(33,230,255,.20), rgba(255,122,24,.14));
+      border-color: rgba(11,16,32,.14);
+      background: linear-gradient(135deg, rgba(0,201,255,.22), rgba(255,122,24,.10));
     }
     .wishBtn.on .wishPath{
-      fill: rgba(33,230,255,.92);
-      stroke: rgba(33,230,255,.92);
+      fill: rgba(0,201,255,.92);
+      stroke: rgba(0,201,255,.92);
     }
-
     @keyframes heartPop{
       0%{ transform: scale(1); }
-      45%{ transform: scale(1.22); }
+      45%{ transform: scale(1.20); }
       100%{ transform: scale(1); }
     }
-    .heartPop{ animation: heartPop .22s ease; }
+    .heartPop{ animation: heartPop .22s var(--ease); }
 
     /* views */
-    .view{ transition: opacity .18s ease, transform .18s ease; }
+    .view{ transition: opacity .20s var(--ease), transform .20s var(--ease); }
     .hidden{ opacity:0; transform: translateY(8px); pointer-events:none; position:absolute; left:-9999px; }
 
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.58));
+      border: 1px solid var(--stroke);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 14px;
@@ -429,25 +451,25 @@
       font-weight: 980;
       letter-spacing: .2px;
       cursor:pointer;
-      color:#0a0e16;
+      color:#0b1020;
       background:
         radial-gradient(120% 120% at 20% 20%, rgba(255,255,255,.92), rgba(255,255,255,.72)),
-        linear-gradient(135deg, rgba(33,230,255,.85), rgba(255,122,24,.35));
-      box-shadow: 0 20px 80px rgba(33,230,255,.12);
-      transition: transform .18s ease, box-shadow .18s ease;
+        linear-gradient(135deg, rgba(0,201,255,.70), rgba(255,122,24,.30));
+      box-shadow: 0 18px 70px rgba(0,201,255,.10);
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease);
     }
     .btn:active{ transform: scale(.98); }
 
     .btn2{
       width:100%;
-      border:1px solid rgba(255,255,255,.14);
+      border:1px solid var(--stroke);
       border-radius: 18px;
       padding: 14px;
       font-weight: 950;
       cursor:pointer;
-      background: rgba(0,0,0,.16);
-      color: rgba(246,248,255,.92);
-      transition: transform .18s ease;
+      background: rgba(255,255,255,.60);
+      color: rgba(11,16,32,.92);
+      transition: transform .18s var(--ease);
     }
     .btn2:active{ transform: scale(.98); }
 
@@ -457,59 +479,65 @@
       left: 50%;
       bottom: calc(92px + env(safe-area-inset-bottom));
       transform: translateX(-50%) translateY(10px);
-      background: rgba(0,0,0,.56);
-      border: 1px solid rgba(255,255,255,.14);
-      color: #fff;
+      background: rgba(255,255,255,.72);
+      border: 1px solid var(--stroke);
+      color: #0b1020;
       padding: 10px 14px;
       border-radius: 999px;
       font-weight: 950;
       font-size: 13px;
       opacity: 0;
-      transition: opacity .18s ease, transform .18s ease;
-      box-shadow: 0 26px 100px rgba(0,0,0,.55);
+      transition: opacity .20s var(--ease), transform .20s var(--ease);
+      box-shadow: 0 26px 90px rgba(11,16,32,.12);
       z-index: 9999;
       white-space: nowrap;
       max-width: calc(100vw - 24px);
       overflow:hidden;
       text-overflow: ellipsis;
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
     }
     #toast.show{ opacity: 1; transform: translateX(-50%) translateY(0); }
 
     /* appear */
     @keyframes fadeUp{ from{ opacity:0; transform: translateY(10px);} to{ opacity:1; transform: translateY(0);} }
-    .appear{ animation: fadeUp .28s ease both; }
+    .appear{ animation: fadeUp .28s var(--ease) both; }
 
-    /* flying dot */
+    /* fly dot */
     .flyDot{
       position: fixed;
       width: 10px;
       height: 10px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(33,230,255,.90));
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(0,201,255,.90));
       z-index: 10000;
       pointer-events: none;
-      box-shadow: 0 18px 70px rgba(33,230,255,.18);
+      box-shadow: 0 18px 70px rgba(0,201,255,.18);
     }
 
-    /* bottom bar */
+    /* ===== Bottom bar (smart hide) ===== */
     .bar{
       position: fixed;
       left:0; right:0; bottom:0;
       z-index: 60;
       padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
-      background: rgba(10,14,22,.55);
-      backdrop-filter: blur(16px) saturate(180%);
-      border-top: 1px solid rgba(255,255,255,.10);
+      background: rgba(246,248,255,.70);
+      backdrop-filter: blur(18px) saturate(180%);
+      border-top: 1px solid var(--stroke);
+      transition: transform .22s var(--ease), opacity .22s var(--ease);
+    }
+    .bar.hiddenBar{
+      transform: translateY(110%);
+      opacity:0;
+      pointer-events:none;
     }
     .barInner{ max-width: 1040px; margin: 0 auto; display:flex; gap: 10px; align-items:center; }
-    .barHint{ text-align:center; color: rgba(246,248,255,.55); font-size: 12.5px; margin-top: 8px; }
+    .barHint{ text-align:center; color: rgba(11,16,32,.55); font-size: 12.5px; margin-top: 8px; }
 
-    /* ===== Modals (Account + QuickView) ===== */
+    /* ===== Modals ===== */
     .modalWrap{
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.44);
+      background: rgba(11,16,32,.22);
       backdrop-filter: blur(10px);
       display:none;
       align-items:flex-end;
@@ -521,54 +549,60 @@
 
     .sheet{
       width: min(560px, 100%);
-      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.08));
-      border: 1px solid rgba(255,255,255,.16);
+      background: linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.62));
+      border: 1px solid var(--stroke);
       border-radius: 26px;
-      box-shadow: 0 34px 140px rgba(0,0,0,.60);
+      box-shadow: 0 34px 120px rgba(11,16,32,.18);
       padding: 14px;
       transform: translateY(14px);
       opacity: 0;
-      animation: sheetIn .18s ease forwards;
+      animation: sheetIn .20s var(--ease) forwards;
       overflow:hidden;
     }
     @keyframes sheetIn{ to{ transform: translateY(0); opacity:1; } }
 
-    .sheetTop{
+    .sheetHeader{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
       margin-bottom: 10px;
     }
-
-    .profile{ display:flex; gap:10px; align-items:center; min-width: 0; }
-    .avatar{
-      width: 38px;
-      height: 38px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(33,230,255,.22), rgba(255,122,24,.16));
-      border: 1px solid rgba(255,255,255,.16);
-      flex: 0 0 auto;
-      box-shadow: 0 22px 80px rgba(33,230,255,.12);
+    .sheetTitle{
+      font-weight:980;
+      letter-spacing:.2px;
     }
-    .pName2{ font-weight: 980; line-height: 1.2; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .pUser2{ color: rgba(246,248,255,.65); font-size: 12.5px; overflow:hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    /* Quick View content */
+    .xBtn{
+      width:38px; height:38px;
+      border-radius:999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.62);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition: transform .18s var(--ease);
+      user-select:none;
+    }
+    .xBtn:active{ transform: scale(.95); }
+
+    /* Quick View image */
     .qvImg{
       height: 210px;
       border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.14);
-      background:
-        radial-gradient(260px 140px at 25% 25%, rgba(33,230,255,.28), transparent 62%),
-        radial-gradient(240px 140px at 75% 60%, rgba(255,122,24,.18), transparent 60%),
-        linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+      border: 1px solid rgba(11,16,32,.08);
       display:flex;
       align-items:flex-end;
       padding: 12px;
     }
 
-    /* chip groups (sizes/colors) */
+    .divider{
+      height:1px;
+      background: rgba(11,16,32,.08);
+      margin: 12px 0;
+    }
+
     .chipGroup{
       display:flex;
       gap:8px;
@@ -578,37 +612,29 @@
     .opt{
       padding: 8px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.14);
-      color: rgba(246,248,255,.92);
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.62);
+      color: rgba(11,16,32,.92);
       font-weight: 950;
       cursor:pointer;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      transition: transform .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease), box-shadow .18s var(--ease);
       user-select:none;
     }
     .opt:active{ transform: scale(.98); }
     .opt.on{
-      border-color: rgba(255,255,255,.22);
-      background: linear-gradient(135deg, rgba(33,230,255,.30), rgba(255,122,24,.14));
-      box-shadow: 0 16px 60px rgba(33,230,255,.10);
+      border-color: rgba(11,16,32,.14);
+      background: linear-gradient(135deg, rgba(0,201,255,.22), rgba(255,122,24,.10));
+      box-shadow: 0 16px 60px rgba(0,201,255,.10);
     }
 
-    .divider{
-      height:1px;
-      background: rgba(255,255,255,.10);
-      margin: 12px 0;
-    }
-
-    /* top right heart icon (same SVG, fix “crooked”) */
+    /* top wishlist button uses same heart */
     .topHeart .wishPath{
-      transition: fill .18s ease, stroke .18s ease;
-      fill: rgba(33,230,255,0);
-      stroke: rgba(246,248,255,.92);
-      stroke-width:2;
+      fill: rgba(0,201,255,0);
+      stroke: rgba(11,16,32,.78);
     }
     .topHeart.on .wishPath{
-      fill: rgba(33,230,255,.92);
-      stroke: rgba(33,230,255,.92);
+      fill: rgba(0,201,255,.92);
+      stroke: rgba(0,201,255,.92);
     }
   </style>
 </head>
@@ -622,7 +648,7 @@
           <span class="logoDot"></span>
           <span class="title">Studio Wear</span>
         </a>
-        <div class="subtitle">Liquid glass • tech fashion shop (демо)</div>
+        <div class="subtitle">Liquid glass • clean shop (демо)</div>
       </div>
 
       <div class="topActions">
@@ -634,10 +660,11 @@
           </svg>
         </button>
 
-        <!-- top wishlist (perfect heart) -->
+        <!-- wishlist -->
         <button class="iconBtn topHeart" id="wishTopBtn" onclick="toggleWishlistView()" aria-label="Избранное">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path class="wishPath" d="M12 21s-7.4-4.7-9.8-8.8C.4 9 2.6 6 6.1 6c2 0 3.3 1.1 3.9 2.1.6-1 1.9-2.1 3.9-2.1 3.5 0 5.7 3 3.9 6.2C19.4 16.3 12 21 12 21z"></path>
+            <!-- new symmetric heart -->
+            <path class="wishPath" d="M12 20.8s-7.2-4.6-9.7-8.6C.6 9.1 2.7 6.3 6.2 6.3c2 0 3.2 1.1 3.8 2.1.6-1 1.8-2.1 3.8-2.1 3.5 0 5.6 2.8 3.9 5.9-2.5 4-9.7 8.6-9.7 8.6z"></path>
           </svg>
         </button>
 
@@ -675,7 +702,7 @@
       </div>
 
       <div class="hint" id="catalogHint">
-        <span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Quick view</span>
+        <span>Quick view</span><span>Размер/цвет</span><span>Доставка</span><span>Оплата (скоро)</span>
       </div>
     </div>
 
@@ -720,7 +747,7 @@
       </div>
 
       <div class="subtitle" style="margin:10px 0 6px;">Комментарий (размер/цвет/доставка)</div>
-      <textarea id="comment" placeholder="Например: размер M, цвет black, доставка СДЭК"></textarea>
+      <textarea id="comment" placeholder="Например: размер M, цвет Ice, доставка СДЭК"></textarea>
 
       <button class="btn" onclick="sendOrder()">Отправить заказ в Telegram</button>
       <div class="subtitle" style="margin-top:10px;">
@@ -730,7 +757,8 @@
   </div>
 </main>
 
-<div class="bar">
+<!-- bottom bar (smart) -->
+<div class="bar" id="bottomBar">
   <div class="barInner">
     <button class="btn" onclick="go('cart')">Открыть корзину</button>
   </div>
@@ -740,20 +768,21 @@
 <!-- ACCOUNT MODAL -->
 <div class="modalWrap" id="accountModal" onclick="closeAccount(event)">
   <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sheetTop">
-      <div class="profile">
-        <div class="avatar"></div>
-        <div style="min-width:0;">
-          <div class="pName2" id="accName">Гость</div>
-          <div class="pUser2" id="accUser">Откройте внутри Telegram</div>
-        </div>
-      </div>
-      <button class="iconBtn" style="width:38px;height:38px;box-shadow:none;" onclick="closeAccount()">✕</button>
+    <div class="sheetHeader">
+      <div class="sheetTitle">Аккаунт</div>
+      <button class="xBtn" onclick="closeAccount()">✕</button>
     </div>
 
-    <div class="subtitle">
+    <div class="subtitle" style="margin-bottom:10px;">
       Демо-авторизация подтягивает имя из Telegram профиля (если открыто внутри Telegram).
-      Настоящая проверка подписи делается на сервере.
+    </div>
+
+    <div class="row" style="gap:10px; align-items:center;">
+      <div style="width:38px;height:38px;border-radius:999px;background:linear-gradient(135deg,rgba(0,201,255,.20),rgba(255,122,24,.14));border:1px solid var(--stroke);box-shadow:0 18px 60px rgba(0,201,255,.10);"></div>
+      <div style="min-width:0;">
+        <div style="font-weight:980; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="accName">Гость</div>
+        <div class="subtitle" id="accUser">Откройте внутри Telegram</div>
+      </div>
     </div>
 
     <button class="btn2" style="margin-top:12px;" onclick="tryFillCheckoutFromProfile()">
@@ -769,12 +798,12 @@
 <!-- QUICK VIEW MODAL -->
 <div class="modalWrap" id="qvModal" onclick="closeQV(event)">
   <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sheetTop">
-      <div style="font-weight:980; letter-spacing:.2px;">Быстрый просмотр</div>
-      <button class="iconBtn" style="width:38px;height:38px;box-shadow:none;" onclick="closeQV()">✕</button>
+    <div class="sheetHeader">
+      <div class="sheetTitle">Быстрый просмотр</div>
+      <button class="xBtn" onclick="closeQV()">✕</button>
     </div>
 
-    <div class="qvImg">
+    <div class="qvImg" id="qvImg">
       <div class="pBadge" id="qvBadge">Studio</div>
     </div>
 
@@ -786,13 +815,13 @@
         <div style="font-weight:980; font-size:18px;" id="qvPrice">—</div>
 
         <div class="row" style="gap:8px;">
-          <button class="wishBtn" id="qvWishBtn" onclick="toggleWish(window.__qvId)" aria-label="Избранное">
+          <button class="wishBtn" id="qvWishBtn" onclick="toggleWish(window.__qvId, true)" aria-label="Избранное">
             <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path class="wishPath" d="M12 21s-7.4-4.7-9.8-8.8C.4 9 2.6 6 6.1 6c2 0 3.3 1.1 3.9 2.1.6-1 1.9-2.1 3.9-2.1 3.5 0 5.7 3 3.9 6.2C19.4 16.3 12 21 12 21z"></path>
+              <path class="wishPath" d="M12 20.8s-7.2-4.6-9.7-8.6C.6 9.1 2.7 6.3 6.2 6.3c2 0 3.2 1.1 3.8 2.1.6-1 1.8-2.1 3.8-2.1 3.5 0 5.6 2.8 3.9 5.9-2.5 4-9.7 8.6-9.7 8.6z"></path>
             </svg>
           </button>
 
-          <button class="miniBtn" id="qvAddBtn" onclick="addToCart(window.__qvId, false, document.getElementById('qvAddBtn'))" aria-label="В корзину">
+          <button class="miniBtn" id="qvAddBtn" onclick="addToCart(window.__qvId, document.getElementById('qvAddBtn'))" aria-label="В корзину">
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M6 6h15l-2 9H8L6 6z"></path>
               <path d="M6 6 5 3H2"></path>
@@ -811,12 +840,8 @@
       <div style="margin-top:10px; font-weight:950;">Цвет</div>
       <div class="chipGroup" id="colorChips"></div>
 
-      <button class="btn" style="margin-top:14px;" onclick="addToCart(window.__qvId, false, document.getElementById('qvAddBtn'))">
+      <button class="btn" style="margin-top:14px;" onclick="addToCart(window.__qvId, document.getElementById('qvAddBtn'), true)">
         Добавить выбранное в корзину
-      </button>
-
-      <button class="btn2" style="margin-top:10px;" onclick="goProductFromQV()">
-        Открыть страницу товара
       </button>
     </div>
   </div>
@@ -829,29 +854,29 @@
   const OWNER_USERNAME = "egorkrab"; // <- username владелицы (без @)
 
   // =============================
-  // DATA (demo)
+  // DATA (demo) + image variants
   // =============================
   const PRODUCTS = [
-    { id:"set1", cat:"sets", badge:"Studio",  name:"Silk Line Set",        desc:"Комплект • мягкая посадка",             price:3490, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Ice","Black","Sand"] },
-    { id:"set2", cat:"sets", badge:"Elegant", name:"Contour Set",          desc:"Комплект • подчёркивает линию",         price:3790, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Black","Neon Ice"] },
-    { id:"set3", cat:"sets", badge:"Core",    name:"Minimal Set",          desc:"Комплект • базовый студийный",          price:3290, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Sand","Black"] },
+    { id:"set1", cat:"sets", badge:"Studio",  img:"imgV1", name:"Silk Line Set",        desc:"Комплект • мягкая посадка",             price:3490, sizes:["XS","S","M","L"], colors:["Ice","Black","Sand"] },
+    { id:"set2", cat:"sets", badge:"Elegant", img:"imgV2", name:"Contour Set",          desc:"Комплект • подчёркивает линию",         price:3790, sizes:["XS","S","M","L"], colors:["Black","Neon Ice"] },
+    { id:"set3", cat:"sets", badge:"Core",    img:"imgV3", name:"Minimal Set",          desc:"Комплект • базовый студийный",          price:3290, sizes:["XS","S","M","L"], colors:["Sand","Black"] },
 
-    { id:"leo1", cat:"leotards", badge:"Elegant", name:"Contour Leotard",  desc:"Купальник • посадка по фигуре",         price:2590, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Black","Ice"] },
-    { id:"leo2", cat:"leotards", badge:"Studio",  name:"Line Leotard",     desc:"Купальник • комфортная ткань",          price:2390, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Ice","Sand"] },
-    { id:"leo3", cat:"leotards", badge:"Soft",    name:"Air Leotard",      desc:"Купальник • мягкая поддержка",          price:2290, meta:"XS–M", sizes:["XS","S","M"],    colors:["Sand","Ice"] },
+    { id:"leo1", cat:"leotards", badge:"Elegant", img:"imgV4", name:"Contour Leotard",  desc:"Купальник • посадка по фигуре",         price:2590, sizes:["XS","S","M","L"], colors:["Black","Ice"] },
+    { id:"leo2", cat:"leotards", badge:"Studio",  img:"imgV1", name:"Line Leotard",     desc:"Купальник • комфортная ткань",          price:2390, sizes:["XS","S","M","L"], colors:["Ice","Sand"] },
+    { id:"leo3", cat:"leotards", badge:"Soft",    img:"imgV2", name:"Air Leotard",      desc:"Купальник • мягкая поддержка",          price:2290, sizes:["XS","S","M"],     colors:["Sand","Ice"] },
 
-    { id:"top1", cat:"tops", badge:"Soft",    name:"Studio Top",           desc:"Топ • мягкая поддержка",                price:1490, meta:"XS–M", sizes:["XS","S","M"],    colors:["Ice","Black","Orange Pop"] },
-    { id:"top2", cat:"tops", badge:"Core",    name:"Classic Top",          desc:"Топ • базовый силуэт",                  price:1390, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Black","Sand"] },
-    { id:"top3", cat:"tops", badge:"Elegant", name:"Line Top",             desc:"Топ • чистая линия",                    price:1590, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Ice","Black"] },
+    { id:"top1", cat:"tops", badge:"Soft",    img:"imgV3", name:"Studio Top",           desc:"Топ • мягкая поддержка",                price:1490, sizes:["XS","S","M"],     colors:["Ice","Black","Orange Pop"] },
+    { id:"top2", cat:"tops", badge:"Core",    img:"imgV4", name:"Classic Top",          desc:"Топ • базовый силуэт",                  price:1390, sizes:["XS","S","M","L"], colors:["Black","Sand"] },
+    { id:"top3", cat:"tops", badge:"Elegant", img:"imgV1", name:"Line Top",             desc:"Топ • чистая линия",                    price:1590, sizes:["XS","S","M","L"], colors:["Ice","Black"] },
 
-    { id:"leg1", cat:"leggings", badge:"Core",    name:"High Waist Leggings",  desc:"Легинсы • высокая посадка",       price:1990, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Black","Sand"] },
-    { id:"leg2", cat:"leggings", badge:"Studio",  name:"Second Skin Leggings",desc:"Легинсы • как вторая кожа",         price:2190, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Sand","Black","Ice"] },
-    { id:"leg3", cat:"leggings", badge:"Soft",    name:"Smooth Leggings",      desc:"Легинсы • мягкая ткань",           price:1890, meta:"XS–L", sizes:["XS","S","M","L"], colors:["Ice","Black"] },
+    { id:"leg1", cat:"leggings", badge:"Core",   img:"imgV2", name:"High Waist Leggings",  desc:"Легинсы • высокая посадка",         price:1990, sizes:["XS","S","M","L"], colors:["Black","Sand"] },
+    { id:"leg2", cat:"leggings", badge:"Studio", img:"imgV3", name:"Second Skin Leggings",desc:"Легинсы • как вторая кожа",           price:2190, sizes:["XS","S","M","L"], colors:["Sand","Black","Ice"] },
+    { id:"leg3", cat:"leggings", badge:"Soft",   img:"imgV4", name:"Smooth Leggings",      desc:"Легинсы • мягкая ткань",             price:1890, sizes:["XS","S","M","L"], colors:["Ice","Black"] },
   ];
 
-  const CART_KEY = "liquid_shop_cart_v1";
-  const WISH_KEY = "liquid_shop_wish_v1";
-  const SEL_KEY  = "liquid_shop_sel_v1"; // selections per product: size/color
+  const CART_KEY = "liquid_shop_cart_v2";
+  const WISH_KEY = "liquid_shop_wish_v2";
+  const SEL_KEY  = "liquid_shop_sel_v2";
 
   function getCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || "{}"); }
   function setCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); updateUI(); }
@@ -942,14 +967,14 @@
     const dx = endX - startX;
     const dy = endY - startY;
 
-    const duration = 420;
+    const duration = 440;
     const start = performance.now();
 
     function step(t){
       const p = Math.min(1, (t - start)/duration);
       const e = 1 - Math.pow(1 - p, 3);
-      const arc = Math.sin(p * Math.PI) * -60;
-      dot.style.transform = `translate(${dx*e}px, ${dy*e + arc}px) scale(${1 - 0.4*p})`;
+      const arc = Math.sin(p * Math.PI) * -54;
+      dot.style.transform = `translate(${dx*e}px, ${dy*e + arc}px) scale(${1 - 0.35*p})`;
       dot.style.opacity = String(1 - 0.2*p);
       if(p < 1) requestAnimationFrame(step);
       else dot.remove();
@@ -957,25 +982,47 @@
     requestAnimationFrame(step);
   }
 
+  function pulseHeart(btn){
+    if(!btn) return;
+    btn.classList.remove("heartPop");
+    void btn.offsetWidth;
+    btn.classList.add("heartPop");
+  }
+
   // =============================
-  // NAV
+  // NAV + SMART BOTTOM BAR
   // =============================
+  function currentRoute(){
+    const h = (location.hash || "#/").replace("#/","");
+    return h || "catalog";
+  }
+
   function showView(name){
     const map = { catalog:"viewCatalog", cart:"viewCart", checkout:"viewCheckout" };
     Object.values(map).forEach(id => document.getElementById(id).classList.add("hidden"));
     document.getElementById(map[name]).classList.remove("hidden");
     updateUI();
+    updateBottomBar();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+
   function go(name){ location.hash = name === "catalog" ? "#/" : `#/${name}`; }
+
   function handleRoute(){
-    const h = (location.hash || "#/").replace("#/","");
-    const page = h || "catalog";
+    const page = currentRoute();
     if(page === "cart") showView("cart");
     else if(page === "checkout") showView("checkout");
     else showView("catalog");
   }
   window.addEventListener("hashchange", handleRoute);
+
+  function updateBottomBar(){
+    const page = currentRoute();
+    const bar = document.getElementById("bottomBar");
+    // hide bar on cart/checkout (so it doesn't show "open cart" while already there)
+    const hide = (page === "cart" || page === "checkout");
+    bar.classList.toggle("hiddenBar", hide);
+  }
 
   // =============================
   // FILTERS + WISHLIST VIEW
@@ -1007,7 +1054,7 @@
     const hint = document.getElementById("catalogHint");
     hint.innerHTML = wishlistView
       ? `<span>Избранное</span><span>Сохранено на устройстве</span><span>Liquid glass</span>`
-      : `<span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Quick view</span>`;
+      : `<span>Quick view</span><span>Размер/цвет</span><span>Доставка</span><span>Оплата (скоро)</span>`;
 
     applyFilters();
     showToast(wishlistView ? "Избранное" : "Каталог");
@@ -1029,82 +1076,37 @@
   }
 
   // =============================
-  // WISHLIST (with animation)
+  // WISHLIST
   // =============================
   function isWished(id){ return getWish().includes(id); }
 
-  function pulseHeart(btn){
-    if(!btn) return;
-    btn.classList.remove("heartPop");
-    void btn.offsetWidth;
-    btn.classList.add("heartPop");
-  }
-
-  function toggleWish(id){
+  function toggleWish(id, fromQV=false){
     const arr = getWish();
     const i = arr.indexOf(id);
     if(i >= 0) arr.splice(i,1);
     else arr.push(id);
     setWish(arr);
 
-    // Re-render to update icons
+    // Update UI
     applyFilters();
-
+    syncQVWish();
     const on = arr.includes(id);
     showToast(on ? "Добавлено в избранное" : "Убрано из избранного");
     haptic("success");
 
-    // if quick view open, sync its heart
-    syncQVWish();
-
-    // animate heart on catalog card (best effort)
-    const btn = document.querySelector(`[data-wish="${id}"]`);
-    if(btn) pulseHeart(btn);
+    // animate on best visible button
+    if(fromQV){
+      const b = document.getElementById("qvWishBtn");
+      pulseHeart(b);
+    } else {
+      const b = document.querySelector(`[data-wish="${id}"]`);
+      pulseHeart(b);
+    }
   }
 
   // =============================
-  // QUICK VIEW (popup) + size/color
+  // QUICK VIEW + size/color
   // =============================
-  function openQV(id){
-    const p = PRODUCTS.find(x=>x.id===id);
-    if(!p) return;
-
-    window.__qvId = id;
-
-    document.getElementById("qvBadge").textContent = p.badge;
-    document.getElementById("qvName").textContent  = p.name;
-    document.getElementById("qvDesc").textContent  = p.desc;
-    document.getElementById("qvPrice").textContent = `${p.price}₽`;
-
-    // chips (persist per product)
-    const sel = getSel();
-    const saved = sel[id] || {};
-    if(!saved.size) saved.size = p.sizes?.[0] || "";
-    if(!saved.color) saved.color = p.colors?.[0] || "";
-
-    renderChips("sizeChips", p.sizes || [], saved.size, (val)=>{
-      saved.size = val;
-      sel[id] = saved;
-      setSel(sel);
-      haptic("impact");
-    });
-
-    renderChips("colorChips", p.colors || [], saved.color, (val)=>{
-      saved.color = val;
-      sel[id] = saved;
-      setSel(sel);
-      haptic("impact");
-    });
-
-    sel[id] = saved;
-    setSel(sel);
-
-    syncQVWish();
-
-    document.getElementById("qvModal").classList.add("show");
-    haptic("impact");
-  }
-
   function renderChips(containerId, values, selected, onPick){
     const el = document.getElementById(containerId);
     el.innerHTML = "";
@@ -1121,6 +1123,39 @@
     });
   }
 
+  function openQV(id){
+    const p = PRODUCTS.find(x=>x.id===id);
+    if(!p) return;
+
+    window.__qvId = id;
+
+    document.getElementById("qvBadge").textContent = p.badge;
+    document.getElementById("qvName").textContent  = p.name;
+    document.getElementById("qvDesc").textContent  = p.desc;
+    document.getElementById("qvPrice").textContent = `${p.price}₽`;
+
+    const qvImg = document.getElementById("qvImg");
+    qvImg.className = `qvImg ${p.img}`;
+
+    const sel = getSel();
+    const saved = sel[id] || {};
+    if(!saved.size) saved.size = p.sizes?.[0] || "";
+    if(!saved.color) saved.color = p.colors?.[0] || "";
+
+    renderChips("sizeChips", p.sizes || [], saved.size, (val)=>{
+      saved.size = val; sel[id]=saved; setSel(sel); haptic("impact");
+    });
+    renderChips("colorChips", p.colors || [], saved.color, (val)=>{
+      saved.color = val; sel[id]=saved; setSel(sel); haptic("impact");
+    });
+
+    sel[id]=saved; setSel(sel);
+    syncQVWish();
+
+    document.getElementById("qvModal").classList.add("show");
+    haptic("impact");
+  }
+
   function syncQVWish(){
     const id = window.__qvId;
     const btn = document.getElementById("qvWishBtn");
@@ -1128,18 +1163,10 @@
     btn.classList.toggle("on", isWished(id));
   }
 
-  function closeQV(){
-    document.getElementById("qvModal").classList.remove("show");
-  }
-  function goProductFromQV(){
-    // “страница товара” в этой версии = quick view + можно оставить так.
-    // Если хочешь отдельную страницу товара — добавим следующим шагом.
-    showToast("Пока демо: быстрый просмотр");
-    closeQV();
-  }
+  function closeQV(){ document.getElementById("qvModal").classList.remove("show"); }
 
   // =============================
-  // RENDER CATALOG (quick view + icon cart)
+  // CATALOG RENDER
   // =============================
   function renderCatalog(list){
     const el = document.getElementById("catalog");
@@ -1160,11 +1187,11 @@
       card.innerHTML = `
         <button class="wishBtn ${wished ? "on" : ""}" data-wish="${p.id}" aria-label="Избранное">
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path class="wishPath" d="M12 21s-7.4-4.7-9.8-8.8C.4 9 2.6 6 6.1 6c2 0 3.3 1.1 3.9 2.1.6-1 1.9-2.1 3.9-2.1 3.5 0 5.7 3 3.9 6.2C19.4 16.3 12 21 12 21z"></path>
+            <path class="wishPath" d="M12 20.8s-7.2-4.6-9.7-8.6C.6 9.1 2.7 6.3 6.2 6.3c2 0 3.2 1.1 3.8 2.1.6-1 1.8-2.1 3.8-2.1 3.5 0 5.6 2.8 3.9 5.9-2.5 4-9.7 8.6-9.7 8.6z"></path>
           </svg>
         </button>
 
-        <div class="pImg" data-qv="${p.id}">
+        <div class="pImg ${p.img}" data-qv="${p.id}">
           <div class="pBadge">${p.badge}</div>
         </div>
 
@@ -1173,37 +1200,31 @@
           <div class="pDesc">${p.desc}</div>
           <div class="pBottom">
             <div class="pPrice">${p.price}₽</div>
-            <div class="row" style="gap:8px; flex-wrap:nowrap;">
-              <button class="miniBtn" data-add="${p.id}" aria-label="В корзину">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M6 6h15l-2 9H8L6 6z"></path>
-                  <path d="M6 6 5 3H2"></path>
-                  <circle cx="9" cy="20" r="1.6"></circle>
-                  <circle cx="18" cy="20" r="1.6"></circle>
-                </svg>
-              </button>
-            </div>
+            <button class="miniBtn" data-add="${p.id}" aria-label="В корзину">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 6h15l-2 9H8L6 6z"></path>
+                <path d="M6 6 5 3H2"></path>
+                <circle cx="9" cy="20" r="1.6"></circle>
+                <circle cx="18" cy="20" r="1.6"></circle>
+              </svg>
+            </button>
           </div>
         </div>
       `;
-
       el.appendChild(card);
     });
 
-    // quick view by clicking image
     el.querySelectorAll("[data-qv]").forEach(img=>{
       img.addEventListener("click", ()=> openQV(img.getAttribute("data-qv")));
     });
 
-    // add to cart
     el.querySelectorAll("[data-add]").forEach(btn=>{
       btn.addEventListener("click", (e)=>{
         e.stopPropagation();
-        addToCart(btn.getAttribute("data-add"), false, btn);
+        addToCart(btn.getAttribute("data-add"), btn);
       });
     });
 
-    // wishlist
     el.querySelectorAll("[data-wish]").forEach(btn=>{
       btn.addEventListener("click", (e)=>{
         e.stopPropagation();
@@ -1222,7 +1243,6 @@
     return Object.values(c).reduce((a,b)=>a+b,0);
   }
 
-  // in cart we store per-item count only (demo). size/color stored separately per product
   function cartSummary(){
     const c = getCart();
     let total = 0;
@@ -1236,7 +1256,7 @@
     return { items, total };
   }
 
-  function addToCart(id, fromProductPage=false, fromEl=null){
+  function addToCart(id, fromEl=null, fromQV=false){
     const c = getCart();
     c[id] = (c[id] || 0) + 1;
     setCart(c);
@@ -1260,11 +1280,13 @@
   }
 
   function updateUI(){
+    // cart badge
     const count = cartCount();
     const badge = document.getElementById("cartBadge");
     badge.textContent = String(count);
     badge.style.display = count > 0 ? "flex" : "none";
 
+    // cart list
     const cartList = document.getElementById("cartList");
     const cartTotal = document.getElementById("cartTotal");
     if(cartList && cartTotal){
@@ -1279,9 +1301,9 @@
       } else {
         cartList.innerHTML = items.map(({p, qty})=>{
           const s = sel[p.id] || {};
-          const sc = (s.size || "—") + " • " + (s.color || "—");
+          const sc = `size: ${s.size || (p.sizes?.[0]||"—")} • color: ${s.color || (p.colors?.[0]||"—")}`;
           return `
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.12);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid rgba(11,16,32,.08);">
               <div style="min-width:0;">
                 <div style="font-weight:980; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.name}</div>
                 <div class="subtitle">${p.price}₽ • ${sc}</div>
@@ -1296,10 +1318,12 @@
         }).join("");
       }
     }
+
+    updateBottomBar();
   }
 
   // =============================
-  // SEND ORDER (include size/color)
+  // SEND ORDER (includes size/color)
   // =============================
   function sendOrder(){
     const { items, total } = cartSummary();
@@ -1313,8 +1337,9 @@
 
     const lines = items.map(({p, qty})=>{
       const s = sel[p.id] || {};
-      const sc = `size: ${s.size || "—"}, color: ${s.color || "—"}`;
-      return `${p.name} (${sc}) × ${qty} = ${p.price*qty}₽`;
+      const size = s.size || (p.sizes?.[0] || "—");
+      const color = s.color || (p.colors?.[0] || "—");
+      return `${p.name} (size: ${size}, color: ${color}) × ${qty} = ${p.price*qty}₽`;
     }).join("\n- ");
 
     const text =
@@ -1335,7 +1360,7 @@
   }
 
   // =============================
-  // ACCOUNT MODAL
+  // MODALS
   // =============================
   function openAccount(){
     fillAccountUI();
@@ -1344,16 +1369,29 @@
   }
   function closeAccount(){ document.getElementById("accountModal").classList.remove("show"); }
 
+  function closeAccountEvent(){ closeAccount(); }
+  function closeQVEvent(){ closeQV(); }
+
   function clearLocal(){
     localStorage.removeItem(CART_KEY);
     localStorage.removeItem(WISH_KEY);
     localStorage.removeItem(SEL_KEY);
     wishlistView = false;
     updateTopHeartState();
-    document.getElementById("catalogHint").innerHTML = `<span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Quick view</span>`;
     applyFilters();
     updateUI();
     showToast("Очищено");
+  }
+
+  // =============================
+  // ROUTE
+  // =============================
+  function handleRoute(){
+    const h = (location.hash || "#/").replace("#/","");
+    const page = h || "catalog";
+    if(page === "cart") showView("cart");
+    else if(page === "checkout") showView("checkout");
+    else showView("catalog");
   }
 
   // =============================
@@ -1371,6 +1409,7 @@
     applyFilters();
     updateUI();
   }
+  window.addEventListener("hashchange", handleRoute);
 
   init();
 </script>
