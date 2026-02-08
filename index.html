@@ -6,13 +6,17 @@
   <title>Studio Wear • Demo</title>
   <style>
     :root{
-      --bg:#f6f5f3;
-      --card:#ffffff;
-      --text:#141417;
-      --muted:#6e6e77;
-      --accent:#141417;
-      --line: rgba(20,20,23,.10);
-      --shadow: 0 16px 50px rgba(20,20,23,.08);
+      --bg0:#07070a;
+      --bg1:#0b0b10;
+      --glass: rgba(255,255,255,.06);
+      --glass2: rgba(255,255,255,.08);
+      --line: rgba(255,255,255,.10);
+      --line2: rgba(255,255,255,.14);
+      --text:#f5f6fa;
+      --muted: rgba(245,246,250,.68);
+      --accent:#8b5cff;     /* techno purple */
+      --accent2:#25f4ff;    /* cyan */
+      --shadow: 0 18px 70px rgba(0,0,0,.55);
       --radius: 22px;
     }
 
@@ -23,14 +27,33 @@
       font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial;
       color:var(--text);
       background:
-        radial-gradient(900px 600px at 20% -10%, rgba(0,0,0,.05), transparent 60%),
-        radial-gradient(700px 500px at 90% 10%, rgba(0,0,0,.04), transparent 55%),
-        var(--bg);
+        radial-gradient(900px 520px at 15% -10%, rgba(139,92,255,.25), transparent 60%),
+        radial-gradient(750px 520px at 95% 0%, rgba(37,244,255,.16), transparent 60%),
+        radial-gradient(700px 420px at 60% 120%, rgba(139,92,255,.16), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
       -webkit-tap-highlight-color: transparent;
+      overflow-x:hidden;
+    }
+
+    /* subtle tech grid overlay */
+    body:before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(800px 520px at 50% 0%, black 55%, transparent 100%);
+      opacity:.55;
+      z-index:0;
     }
 
     .container{
-      max-width: 980px;
+      position:relative;
+      z-index:1;
+      max-width: 1020px;
       margin: 0 auto;
       padding: 0 14px;
     }
@@ -39,28 +62,50 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(246,245,243,.78);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
+      background: rgba(7,7,10,.62);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
+
     .head{
-      padding: 14px 0 10px;
+      padding: 14px 0 12px;
       display:flex;
       gap:12px;
       align-items:flex-start;
       justify-content:space-between;
     }
+
     .brand{
       display:flex;
       flex-direction:column;
-      gap:4px;
-      min-width: 0;
+      gap:5px;
+      min-width:0;
     }
+
+    .brand a{
+      color:var(--text);
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      width:fit-content;
+    }
+
+    .logoDot{
+      width:10px; height:10px; border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.2));
+      box-shadow:
+        0 0 0 6px rgba(139,92,255,.12),
+        0 0 30px rgba(139,92,255,.25),
+        0 0 18px rgba(37,244,255,.18);
+      flex:0 0 auto;
+    }
+
     .title{
       font-size: clamp(18px, 3.8vw, 22px);
-      font-weight: 950;
-      letter-spacing: .2px;
-      line-height: 1.1;
+      font-weight: 980;
+      letter-spacing: .4px;
+      line-height: 1.05;
     }
     .subtitle{
       color:var(--muted);
@@ -80,54 +125,79 @@
       width: 40px;
       height: 40px;
       border-radius: 999px;
-      border: 1px solid rgba(20,20,23,.10);
-      background: rgba(255,255,255,.75);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 12px 30px rgba(20,20,23,.10);
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      box-shadow: 0 16px 44px rgba(0,0,0,.35);
       cursor:pointer;
       display:flex;
       align-items:center;
       justify-content:center;
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
       user-select:none;
     }
-    .iconBtn:active{ transform: scale(.96); }
+    .iconBtn:active{ transform: scale(.95); }
     @media (hover:hover){
-      .iconBtn:hover{ transform: translateY(-1px); box-shadow: 0 18px 44px rgba(20,20,23,.12); }
+      .iconBtn:hover{
+        transform: translateY(-1px);
+        border-color: rgba(255,255,255,.18);
+        box-shadow: 0 22px 58px rgba(0,0,0,.42);
+      }
     }
 
+    .icon{
+      width: 20px;
+      height: 20px;
+      display:block;
+      color: rgba(245,246,250,.92);
+    }
+
+    /* BADGE fixed: top center */
     .badge{
       position:absolute;
-      top:-6px;
-      right:-6px;
+      top:-7px;
+      left:50%;
+      transform: translateX(-50%);
       min-width: 18px;
       height: 18px;
       padding: 0 6px;
       border-radius: 999px;
-      background: rgba(20,20,23,.92);
-      color:#fff;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.82));
+      color:#0b0b10;
       font-size: 11px;
-      font-weight: 950;
+      font-weight: 980;
       display:flex;
       align-items:center;
       justify-content:center;
-      box-shadow: 0 10px 22px rgba(20,20,23,.18);
-      border: 2px solid rgba(246,245,243,.95);
+      box-shadow: 0 12px 26px rgba(0,0,0,.35);
+      border: 2px solid rgba(7,7,10,.72);
     }
 
-    .bump{ animation: bump .28s ease; }
-    @keyframes bump{ 0%{transform:scale(1)} 35%{transform:scale(1.11)} 100%{transform:scale(1)} }
+    /* bump animation */
+    @keyframes bump{ 0%{transform:translateX(-50%) scale(1)} 35%{transform:translateX(-50%) scale(1.18)} 100%{transform:translateX(-50%) scale(1)} }
+    .bumpBadge{ animation: bump .28s ease; }
 
-    main{ padding: 14px 0 96px; }
+    main{ padding: 14px 0 110px; }
 
-    /* toolbar */
-    .toolbar{
-      background: rgba(255,255,255,.80);
-      border: 1px solid var(--line);
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.10);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 12px;
+      position:relative;
+      overflow:hidden;
     }
+    .panel:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(600px 240px at 20% 0%, rgba(139,92,255,.22), transparent 55%),
+                  radial-gradient(600px 240px at 80% 0%, rgba(37,244,255,.18), transparent 55%);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .panel > *{ position:relative; }
+
     .row{
       display:flex;
       gap:10px;
@@ -138,41 +208,57 @@
     input, textarea{
       width:100%;
       border-radius: 16px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.9);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
       padding: 12px 14px;
       color: var(--text);
       outline: none;
       font-weight: 650;
       min-width: 0;
+      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
     }
+    input::placeholder, textarea::placeholder{ color: rgba(245,246,250,.45); }
     input:focus, textarea:focus{
-      border-color: rgba(20,20,23,.28);
-      box-shadow: 0 0 0 4px rgba(20,20,23,.06);
+      border-color: rgba(139,92,255,.45);
+      box-shadow: 0 0 0 4px rgba(139,92,255,.18);
+      background: rgba(0,0,0,.22);
     }
     textarea{ min-height: 90px; resize: vertical; }
 
     .chip{
       width: auto;
-      border: 1px solid var(--line);
-      background: rgba(20,20,23,.04);
-      color: var(--text);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: rgba(245,246,250,.90);
       padding: 9px 12px;
       border-radius: 999px;
       font-weight: 950;
       cursor:pointer;
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
       user-select:none;
     }
     .chip:active{ transform: scale(.98); }
     .chip.active{
-      background: rgba(20,20,23,.92);
-      color:#fff;
-      border-color: rgba(20,20,23,.92);
-      box-shadow: 0 12px 30px rgba(20,20,23,.18);
+      background: linear-gradient(135deg, rgba(139,92,255,.70), rgba(37,244,255,.18));
+      border-color: rgba(255,255,255,.18);
+      box-shadow: 0 18px 50px rgba(139,92,255,.18);
     }
 
-    /* grid */
+    .hint{
+      margin-top:10px;
+      color: rgba(245,246,250,.60);
+      font-size: 12.5px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .hint span{
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+    }
+
     .grid{
       margin-top: 12px;
       display:grid;
@@ -181,15 +267,14 @@
       align-items: stretch;
     }
 
-    /* product cards */
     .productCard{
       position: relative;
-      background: rgba(255,255,255,.88);
-      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.10);
       border-radius: var(--radius);
       overflow:hidden;
-      box-shadow: var(--shadow);
-      transition: transform .18s ease, box-shadow .18s ease;
+      box-shadow: 0 20px 70px rgba(0,0,0,.35);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
       display:flex;
       flex-direction:column;
       min-width: 0;
@@ -198,7 +283,8 @@
     @media (hover:hover){
       .productCard:hover{
         transform: translateY(-2px);
-        box-shadow: 0 22px 64px rgba(20,20,23,.12);
+        border-color: rgba(255,255,255,.18);
+        box-shadow: 0 26px 90px rgba(0,0,0,.42);
       }
     }
     .productCard:active{ transform: scale(.99); }
@@ -207,9 +293,9 @@
       position: relative;
       height: 150px;
       background:
-        radial-gradient(220px 120px at 30% 25%, rgba(20,20,23,.14), transparent 60%),
-        radial-gradient(180px 120px at 70% 60%, rgba(20,20,23,.10), transparent 55%),
-        linear-gradient(135deg, rgba(20,20,23,.08), rgba(20,20,23,.02));
+        radial-gradient(220px 120px at 30% 25%, rgba(139,92,255,.28), transparent 60%),
+        radial-gradient(180px 120px at 70% 60%, rgba(37,244,255,.18), transparent 55%),
+        linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
       display:flex;
       align-items:flex-end;
       padding: 12px;
@@ -217,13 +303,14 @@
     }
 
     .pBadge{
-      background: rgba(255,255,255,.78);
-      border: 1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.12);
       padding: 6px 10px;
       border-radius: 999px;
       font-size: 12px;
-      font-weight: 950;
+      font-weight: 980;
       letter-spacing:.2px;
+      color: rgba(245,246,250,.92);
       backdrop-filter: blur(10px);
       user-select:none;
     }
@@ -237,7 +324,7 @@
       min-width: 0;
     }
     .pName{
-      font-weight: 950;
+      font-weight: 980;
       letter-spacing: .2px;
       font-size: 15px;
       line-height: 1.2;
@@ -246,11 +333,12 @@
       white-space: nowrap;
     }
     .pDesc{
-      color: var(--muted);
+      color: rgba(245,246,250,.66);
       font-size: 12.5px;
       line-height: 1.35;
       min-height: 34px;
     }
+
     .pBottom{
       margin-top: auto;
       display:flex;
@@ -259,52 +347,60 @@
       gap: 10px;
     }
     .pPrice{
-      font-weight: 950;
+      font-weight: 980;
       letter-spacing: .2px;
       white-space: nowrap;
     }
 
-    .btnSmall{
-      width:auto;
-      border: 1px solid rgba(20,20,23,.10);
-      background: rgba(20,20,23,.06);
-      color: var(--text);
-      border-radius: 14px;
-      padding: 9px 10px;
-      font-weight: 950;
-      cursor:pointer;
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-      user-select:none;
-      white-space: nowrap;
-    }
-    .btnSmall:active{ transform: scale(.98); }
-
-    /* wishlist heart */
-    .wishBtn{
-      position:absolute;
-      top:10px;
-      right:10px;
-      width: 36px;
-      height: 36px;
+    /* icon-only add to cart */
+    .miniBtn{
+      width: 38px;
+      height: 38px;
       border-radius: 999px;
-      border: 1px solid rgba(20,20,23,.10);
-      background: rgba(255,255,255,.78);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 12px 26px rgba(20,20,23,.10);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
       display:flex;
       align-items:center;
       justify-content:center;
       cursor:pointer;
-      transition: transform .18s ease, background .18s ease;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
       user-select:none;
+      flex: 0 0 auto;
+    }
+    .miniBtn:active{ transform: scale(.95); }
+    @media (hover:hover){
+      .miniBtn:hover{
+        border-color: rgba(255,255,255,.18);
+        box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      }
+    }
+
+    /* Wishlist heart (fixed & centered) */
+    .wishBtn{
+      position:absolute;
+      top:10px;
+      right:10px;
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 50px rgba(0,0,0,.35);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      user-select:none;
+      padding:0;
     }
     .wishBtn:active{ transform: scale(.95); }
-    .wishBtn svg{ opacity:.85; }
+    .wishBtn svg{ width:20px; height:20px; display:block; }
     .wishBtn.on{
-      background: rgba(20,20,23,.92);
-      border-color: rgba(20,20,23,.92);
+      background: linear-gradient(135deg, rgba(139,92,255,.62), rgba(37,244,255,.14));
+      border-color: rgba(255,255,255,.18);
     }
-    .wishBtn.on svg{ opacity:1; }
 
     /* pages */
     .view{ transition: opacity .18s ease, transform .18s ease; }
@@ -317,8 +413,8 @@
     }
 
     .card{
-      background: rgba(255,255,255,.84);
-      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.10);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 14px;
@@ -330,25 +426,25 @@
       border:0;
       border-radius: 18px;
       padding: 14px;
-      font-weight: 950;
+      font-weight: 980;
       letter-spacing: .2px;
       cursor:pointer;
-      background: linear-gradient(180deg, #141417, #0f0f12);
+      background: linear-gradient(135deg, rgba(139,92,255,.85), rgba(37,244,255,.18));
       color:#fff;
-      box-shadow: 0 12px 30px rgba(20,20,23,.18);
+      box-shadow: 0 18px 60px rgba(139,92,255,.18);
       transition: transform .18s ease, box-shadow .18s ease;
     }
     .btn:active{ transform: scale(.98); }
 
     .btn2{
       width:100%;
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,.10);
       border-radius: 18px;
       padding: 14px;
       font-weight: 950;
       cursor:pointer;
-      background: rgba(20,20,23,.06);
-      color: var(--text);
+      background: rgba(0,0,0,.18);
+      color: rgba(245,246,250,.92);
       transition: transform .18s ease;
     }
     .btn2:active{ transform: scale(.98); }
@@ -368,12 +464,12 @@
       left:0; right:0; bottom:0;
       z-index: 60;
       padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
-      background: rgba(246,245,243,.82);
+      background: rgba(7,7,10,.65);
       backdrop-filter: blur(14px);
-      border-top: 1px solid var(--line);
+      border-top: 1px solid rgba(255,255,255,.08);
     }
     .barInner{
-      max-width: 980px;
+      max-width: 1020px;
       margin: 0 auto;
       display:flex;
       gap: 10px;
@@ -381,7 +477,7 @@
     }
     .barHint{
       text-align:center;
-      color: var(--muted);
+      color: rgba(245,246,250,.55);
       font-size: 12.5px;
       margin-top: 8px;
     }
@@ -392,7 +488,8 @@
       left: 50%;
       bottom: calc(92px + env(safe-area-inset-bottom));
       transform: translateX(-50%) translateY(10px);
-      background: rgba(20,20,23,.92);
+      background: rgba(0,0,0,.72);
+      border: 1px solid rgba(255,255,255,.12);
       color: #fff;
       padding: 10px 14px;
       border-radius: 999px;
@@ -400,7 +497,7 @@
       font-size: 13px;
       opacity: 0;
       transition: opacity .18s ease, transform .18s ease;
-      box-shadow: 0 12px 30px rgba(0,0,0,.18);
+      box-shadow: 0 18px 60px rgba(0,0,0,.50);
       z-index: 9999;
       white-space: nowrap;
       max-width: calc(100vw - 24px);
@@ -412,7 +509,7 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* stagger appear */
+    /* appear */
     @keyframes fadeUp{
       from{ opacity:0; transform: translateY(10px); }
       to{ opacity:1; transform: translateY(0); }
@@ -425,18 +522,18 @@
       width: 10px;
       height: 10px;
       border-radius: 999px;
-      background: rgba(20,20,23,.86);
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(139,92,255,.85));
       z-index: 10000;
       pointer-events: none;
-      box-shadow: 0 8px 18px rgba(20,20,23,.20);
+      box-shadow: 0 16px 44px rgba(139,92,255,.18);
     }
 
-    /* tiny modal */
+    /* modal */
     .modalWrap{
       position: fixed;
       inset: 0;
-      background: rgba(20,20,23,.22);
-      backdrop-filter: blur(6px);
+      background: rgba(0,0,0,.42);
+      backdrop-filter: blur(8px);
       display:none;
       align-items:flex-end;
       justify-content:center;
@@ -446,18 +543,17 @@
     .modalWrap.show{ display:flex; }
     .sheet{
       width: min(520px, 100%);
-      background: rgba(255,255,255,.92);
-      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.12);
       border-radius: 24px;
-      box-shadow: 0 22px 80px rgba(20,20,23,.18);
+      box-shadow: 0 26px 110px rgba(0,0,0,.55);
       padding: 14px;
       transform: translateY(14px);
       opacity: 0;
       animation: sheetIn .18s ease forwards;
     }
-    @keyframes sheetIn{
-      to{ transform: translateY(0); opacity:1; }
-    }
+    @keyframes sheetIn{ to{ transform: translateY(0); opacity:1; } }
+
     .sheetTop{
       display:flex;
       align-items:center;
@@ -475,27 +571,25 @@
       width: 38px;
       height: 38px;
       border-radius: 999px;
-      background: linear-gradient(135deg, rgba(20,20,23,.10), rgba(20,20,23,.02));
-      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(139,92,255,.22), rgba(37,244,255,.10));
+      border: 1px solid rgba(255,255,255,.12);
       flex: 0 0 auto;
+      box-shadow: 0 18px 60px rgba(139,92,255,.12);
     }
     .pName2{
-      font-weight: 950;
+      font-weight: 980;
       line-height: 1.2;
       overflow:hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
     .pUser2{
-      color: var(--muted);
+      color: rgba(245,246,250,.65);
       font-size: 12.5px;
       overflow:hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-
-    /* svg icons */
-    .icon{ width: 20px; height: 20px; }
   </style>
 </head>
 
@@ -504,29 +598,31 @@
   <div class="container">
     <div class="head">
       <div class="brand">
-        <div class="title">Studio Wear</div>
-        <div class="subtitle">Elegant dancewear • витрина в Telegram (демо)</div>
+        <a href="javascript:void(0)" onclick="go('catalog')" aria-label="На главный экран">
+          <span class="logoDot"></span>
+          <span class="title">Studio Wear</span>
+        </a>
+        <div class="subtitle">Tech fashion • витрина в Telegram (демо)</div>
       </div>
 
       <div class="topActions">
-        <!-- account -->
-        <button class="iconBtn" id="accountBtn" onclick="openAccount()" aria-label="Аккаунт">
-          <!-- user icon -->
+        <button class="iconBtn" onclick="openAccount()" aria-label="Аккаунт">
+          <!-- user -->
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 21a8 8 0 0 0-16 0"></path>
             <circle cx="12" cy="8" r="4"></circle>
           </svg>
         </button>
 
-        <!-- wishlist -->
-        <button class="iconBtn" id="wishTopBtn" onclick="toggleWishlistView()" aria-label="Избранное">
+        <button class="iconBtn" onclick="toggleWishlistView()" aria-label="Избранное">
+          <!-- heart -->
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 21s-7-4.6-9.5-8.5C.6 9.3 2.4 6 6 6c2 0 3.2 1 4 2 0.8-1 2-2 4-2 3.6 0 5.4 3.3 3.5 6.5C19 16.4 12 21 12 21z"></path>
           </svg>
         </button>
 
-        <!-- cart -->
         <button class="iconBtn" id="cartBtn" onclick="go('cart')" aria-label="Корзина">
+          <!-- cart -->
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M6 6h15l-2 9H8L6 6z"></path>
             <path d="M6 6 5 3H2"></path>
@@ -540,15 +636,16 @@
   </div>
 </header>
 
-<div id="toast">Добавлено</div>
+<div id="toast">Готово</div>
 
 <main class="container">
   <!-- CATALOG -->
   <div id="viewCatalog" class="view">
-    <div class="toolbar">
+    <div class="panel">
       <div class="row">
         <input id="search" placeholder="Поиск: топ, легинсы, комплект…" oninput="applyFilters()" />
       </div>
+
       <div class="row" style="margin-top:10px;">
         <button class="chip active" id="chip_all" onclick="setCategory('all')">Все</button>
         <button class="chip" id="chip_sets" onclick="setCategory('sets')">Комплекты</button>
@@ -557,8 +654,8 @@
         <button class="chip" id="chip_leotards" onclick="setCategory('leotards')">Купальники</button>
       </div>
 
-      <div class="subtitle" id="catalogHint" style="margin-top:10px;">
-        Подбор размеров • доставка • оплата будет подключена на следующем шаге
+      <div class="hint" id="catalogHint">
+        <span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Новый дроп</span>
       </div>
     </div>
 
@@ -575,26 +672,26 @@
       </div>
 
       <div style="margin-top:12px;">
-        <div style="font-size: clamp(18px, 4.2vw, 22px); font-weight: 950; letter-spacing:.2px;" id="pName">—</div>
+        <div style="font-size: clamp(18px, 4.2vw, 22px); font-weight: 980; letter-spacing:.2px;" id="pName">—</div>
         <div class="subtitle" style="margin-top:6px;" id="pDesc">—</div>
 
         <div class="row" style="margin-top:14px;">
-          <div class="chip active" style="cursor:default;" id="pPrice">—</div>
-          <div class="chip" style="cursor:default;" id="pMeta">—</div>
+          <button class="chip active" style="cursor:default;" id="pPrice">—</button>
+          <button class="chip" style="cursor:default;" id="pMeta">—</button>
         </div>
 
         <div class="row" style="margin-top:12px;">
-          <button class="btnSmall" id="pWishBtn" onclick="toggleWish(window.__currentProductId)">
-            ♡ В избранное
+          <button class="miniBtn" id="pWishBtn" onclick="toggleWish(window.__currentProductId)" aria-label="Избранное">
+            <!-- heart -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 21s-7-4.6-9.5-8.5C.6 9.3 2.4 6 6 6c2 0 3.2 1 4 2 0.8-1 2-2 4-2 3.6 0 5.4 3.3 3.5 6.5C19 16.4 12 21 12 21z"></path>
+            </svg>
           </button>
-          <button class="btnSmall" onclick="showToast('Подбор размера: напишите в комментарии')">
-            Размеры
+
+          <button class="btn" onclick="addToCart(window.__currentProductId, true)" style="margin-top:0;">
+            Добавить в корзину
           </button>
         </div>
-
-        <button class="btn" onclick="addToCart(window.__currentProductId, true)" style="margin-top:14px;">
-          Добавить в корзину
-        </button>
       </div>
     </div>
   </div>
@@ -603,8 +700,8 @@
   <div id="viewCart" class="view hidden">
     <div class="card">
       <div class="row" style="justify-content:space-between;">
-        <div style="font-size:18px; font-weight:950;">Корзина</div>
-        <div class="chip active" id="cartTotal" style="cursor:default;">Итого: 0₽</div>
+        <div style="font-size:18px; font-weight:980;">Корзина</div>
+        <button class="chip active" id="cartTotal" style="cursor:default;">Итого: 0₽</button>
       </div>
 
       <div id="cartList" style="margin-top:10px;"></div>
@@ -623,7 +720,7 @@
     <div class="card">
       <button class="btn2" onclick="go('cart')" style="margin-top:0;">← Назад</button>
 
-      <div style="font-size:18px; font-weight:950; margin:12px 0 6px;">Оформление (демо)</div>
+      <div style="font-size:18px; font-weight:980; margin:12px 0 6px;">Оформление (демо)</div>
 
       <div class="two">
         <div>
@@ -640,9 +737,8 @@
       <textarea id="comment" placeholder="Например: размер M, доставка СДЭК"></textarea>
 
       <button class="btn" onclick="sendOrder()">Отправить заказ в Telegram</button>
-
       <div class="subtitle" style="margin-top:10px;">
-        * Демо. Реальная оплата и подтверждение подключаются на следующем шаге (СБП/карты).
+        * Демо. Реальная оплата подключается дальше (СБП/карты).
       </div>
     </div>
   </div>
@@ -672,16 +768,16 @@
     </div>
 
     <div class="subtitle">
-      Авторизация в демо берётся из Telegram профиля (если магазин открыт внутри Telegram).
-      Для “настоящей” авторизации мы потом добавим серверную проверку подписи.
+      Демо-авторизация подтягивает имя из Telegram профиля (если открыто внутри Telegram).
+      Настоящая проверка подписи делается на сервере.
     </div>
 
     <button class="btn2" style="margin-top:12px;" onclick="tryFillCheckoutFromProfile()">
-      Заполнить оформление данными профиля
+      Заполнить оформление из профиля
     </button>
 
     <button class="btn2" style="margin-top:10px;" onclick="clearLocal()">
-      Очистить демо-данные (корзина/избранное)
+      Очистить демо-данные
     </button>
   </div>
 </div>
@@ -713,11 +809,8 @@
     { id:"leg3", cat:"leggings", badge:"Soft",    name:"Smooth Leggings",      desc:"Легинсы • мягкая ткань",           price:1890, meta:"XS–L • ivory" },
   ];
 
-  // =============================
-  // STORAGE KEYS
-  // =============================
-  const CART_KEY = "studio_shop_cart_v3";
-  const WISH_KEY = "studio_shop_wish_v3";
+  const CART_KEY = "tech_shop_cart_v1";
+  const WISH_KEY = "tech_shop_wish_v1";
 
   function getCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || "{}"); }
   function setCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); updateUI(); }
@@ -729,17 +822,14 @@
   // PROFILE (Telegram WebApp)
   // =============================
   function getTelegramUser(){
-    try{
-      return window.Telegram?.WebApp?.initDataUnsafe?.user || null;
-    }catch(e){ return null; }
+    try{ return window.Telegram?.WebApp?.initDataUnsafe?.user || null; }
+    catch(e){ return null; }
   }
-
   function formatName(u){
     const f = (u?.first_name || "").trim();
     const l = (u?.last_name || "").trim();
     return (f + " " + l).trim() || "Покупатель";
   }
-
   function fillAccountUI(){
     const u = getTelegramUser();
     const accName = document.getElementById("accName");
@@ -752,7 +842,6 @@
       accUser.textContent = "Откройте внутри Telegram";
     }
   }
-
   function tryFillCheckoutFromProfile(){
     const u = getTelegramUser();
     if(!u){ showToast("Откройте магазин внутри Telegram"); return; }
@@ -782,11 +871,11 @@
     window.__toastTimer = setTimeout(()=>t.classList.remove("show"), 1200);
   }
 
-  function bump(el){
-    if(!el) return;
-    el.classList.remove("bump");
-    void el.offsetWidth;
-    el.classList.add("bump");
+  function bumpCartBadge(){
+    const badge = document.getElementById("cartBadge");
+    badge.classList.remove("bumpBadge");
+    void badge.offsetWidth;
+    badge.classList.add("bumpBadge");
   }
 
   function flyToCart(fromEl){
@@ -825,25 +914,16 @@
   }
 
   // =============================
-  // NAV (pages)
+  // NAV
   // =============================
   function showView(name){
-    const map = {
-      catalog: "viewCatalog",
-      product: "viewProduct",
-      cart: "viewCart",
-      checkout: "viewCheckout",
-    };
+    const map = { catalog:"viewCatalog", product:"viewProduct", cart:"viewCart", checkout:"viewCheckout" };
     Object.values(map).forEach(id => document.getElementById(id).classList.add("hidden"));
     document.getElementById(map[name]).classList.remove("hidden");
     updateUI();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
-
-  function go(name){
-    location.hash = name === "catalog" ? "#/" : `#/${name}`;
-  }
-
+  function go(name){ location.hash = name === "catalog" ? "#/" : `#/${name}`; }
   function handleRoute(){
     const h = (location.hash || "#/").replace("#/","");
     const page = h || "catalog";
@@ -855,7 +935,7 @@
   window.addEventListener("hashchange", handleRoute);
 
   // =============================
-  // CATALOG FILTERS + WISHLIST VIEW
+  // FILTERS + WISHLIST VIEW
   // =============================
   let currentCategory = "all";
   let wishlistView = false;
@@ -874,9 +954,11 @@
   function toggleWishlistView(){
     wishlistView = !wishlistView;
     const hint = document.getElementById("catalogHint");
-    hint.textContent = wishlistView ? "Избранное • сохранено на устройстве" : "Подбор размеров • доставка • оплата будет подключена на следующем шаге";
+    hint.innerHTML = wishlistView
+      ? `<span>Избранное</span><span>Сохранено на устройстве</span><span>Tech drop</span>`
+      : `<span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Новый дроп</span>`;
     applyFilters();
-    showToast(wishlistView ? "Открыто избранное" : "Каталог");
+    showToast(wishlistView ? "Избранное" : "Каталог");
     haptic("impact");
   }
 
@@ -897,35 +979,26 @@
   // =============================
   // WISHLIST
   // =============================
-  function isWished(id){
-    return getWish().includes(id);
-  }
-
+  function isWished(id){ return getWish().includes(id); }
   function toggleWish(id){
     const arr = getWish();
     const i = arr.indexOf(id);
-    if(i >= 0) arr.splice(i,1);
-    else arr.push(id);
+    if(i >= 0) arr.splice(i,1); else arr.push(id);
     setWish(arr);
     applyFilters();
-
-    const on = arr.includes(id);
-    showToast(on ? "Добавлено в избранное" : "Убрано из избранного");
+    showToast(arr.includes(id) ? "Добавлено в избранное" : "Убрано из избранного");
     haptic("success");
-
-    // обновим кнопку на product page
     updateProductWishButton(id);
   }
-
   function updateProductWishButton(id){
     const btn = document.getElementById("pWishBtn");
     if(!btn) return;
     const on = isWished(id);
-    btn.textContent = on ? "♥ В избранном" : "♡ В избранное";
+    btn.style.borderColor = on ? "rgba(255,255,255,.18)" : "rgba(255,255,255,.10)";
   }
 
   // =============================
-  // RENDER CATALOG
+  // RENDER CATALOG (icon cart, fixed hearts)
   // =============================
   function renderCatalog(list = PRODUCTS){
     const el = document.getElementById("catalog");
@@ -945,7 +1018,7 @@
 
       card.innerHTML = `
         <button class="wishBtn ${wished ? "on" : ""}" data-wish="${p.id}" aria-label="Избранное">
-          <svg class="icon" viewBox="0 0 24 24" fill="${wished ? "white" : "none"}" stroke="${wished ? "white" : "currentColor"}" stroke-width="2">
+          <svg viewBox="0 0 24 24" fill="${wished ? "rgba(255,255,255,.96)" : "none"}" stroke="${wished ? "rgba(255,255,255,.96)" : "rgba(245,246,250,.92)"}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 21s-7-4.6-9.5-8.5C.6 9.3 2.4 6 6 6c2 0 3.2 1 4 2 0.8-1 2-2 4-2 3.6 0 5.4 3.3 3.5 6.5C19 16.4 12 21 12 21z"></path>
           </svg>
         </button>
@@ -959,7 +1032,14 @@
           <div class="pDesc">${p.desc}</div>
           <div class="pBottom">
             <div class="pPrice">${p.price}₽</div>
-            <button class="btnSmall" data-add="${p.id}">+ В корзину</button>
+            <button class="miniBtn" data-add="${p.id}" aria-label="В корзину">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 6h15l-2 9H8L6 6z"></path>
+                <path d="M6 6 5 3H2"></path>
+                <circle cx="9" cy="20" r="1.6"></circle>
+                <circle cx="18" cy="20" r="1.6"></circle>
+              </svg>
+            </button>
           </div>
         </div>
       `;
@@ -972,7 +1052,7 @@
       img.addEventListener("click", ()=> openProduct(img.getAttribute("data-open")));
     });
 
-    // add to cart
+    // add to cart (icon)
     el.querySelectorAll("[data-add]").forEach(btn=>{
       btn.addEventListener("click", (e)=>{
         e.stopPropagation();
@@ -1040,8 +1120,10 @@
 
     const p = PRODUCTS.find(x=>x.id===id);
     showToast(p ? `В корзине: ${p.name}` : "Добавлено");
-    bump(document.getElementById("cartBtn"));
     haptic("success");
+
+    const badge = document.getElementById("cartBadge");
+    if(badge.style.display !== "none") bumpCartBadge();
 
     if(fromEl) flyToCart(fromEl);
     else if(fromProductPage) flyToCart(document.getElementById("pImg"));
@@ -1074,15 +1156,19 @@
       } else {
         cartList.innerHTML = items.map(({p, qty})=>{
           return `
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid var(--line);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.10);">
               <div style="min-width:0;">
-                <div style="font-weight:950; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.name}</div>
+                <div style="font-weight:980; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.name}</div>
                 <div class="subtitle">${p.price}₽ • ${p.meta}</div>
               </div>
               <div class="row" style="gap:8px; flex:0 0 auto; flex-wrap:nowrap;">
-                <button class="btnSmall" onclick="removeFromCart('${p.id}')">−</button>
-                <div class="chip active" style="padding:8px 10px; cursor:default;">${qty}</div>
-                <button class="btnSmall" onclick="addToCart('${p.id}')">+</button>
+                <button class="miniBtn" onclick="removeFromCart('${p.id}')" aria-label="Минус">
+                  <span style="font-weight:980; font-size:16px; line-height:0;">−</span>
+                </button>
+                <button class="chip active" style="padding:8px 10px; cursor:default;">${qty}</button>
+                <button class="miniBtn" onclick="addToCart('${p.id}')" aria-label="Плюс">
+                  <span style="font-weight:980; font-size:16px; line-height:0;">+</span>
+                </button>
               </div>
             </div>
           `;
@@ -1116,10 +1202,8 @@
 Комментарий: ${comment}`;
 
     const url = `https://t.me/${OWNER_USERNAME}?text=${encodeURIComponent(text)}`;
-
     if (window.Telegram?.WebApp?.openTelegramLink) window.Telegram.WebApp.openTelegramLink(url);
     else window.open(url, "_blank");
-
     haptic("success");
   }
 
@@ -1131,36 +1215,33 @@
     document.getElementById("accountModal").classList.add("show");
     haptic("impact");
   }
-  function closeAccount(e){
-    document.getElementById("accountModal").classList.remove("show");
-  }
+  function closeAccount(){ document.getElementById("accountModal").classList.remove("show"); }
 
   function clearLocal(){
     localStorage.removeItem(CART_KEY);
     localStorage.removeItem(WISH_KEY);
+    wishlistView = false;
+    document.getElementById("catalogHint").innerHTML = `<span>Подбор размеров</span><span>Доставка</span><span>Оплата (скоро)</span><span>Новый дроп</span>`;
     applyFilters();
     updateUI();
-    showToast("Демо очищено");
+    showToast("Очищено");
   }
 
   // =============================
   // INIT
   // =============================
   function init(){
-    // Telegram WebApp cosmetics
     try{
       window.Telegram?.WebApp?.ready?.();
       window.Telegram?.WebApp?.expand?.();
     }catch(e){}
 
-    // initial
     renderCatalog(PRODUCTS);
     applyFilters();
     handleRoute();
     updateUI();
     fillAccountUI();
   }
-
   init();
 </script>
 </body>
